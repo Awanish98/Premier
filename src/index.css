@@ -1,0 +1,577 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --font-main: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Outfit', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Default: Cinejoy Electric Neon Lime */
+  --bg-primary: #06070a;
+  --bg-secondary: #0d121c;
+  --bg-card: rgba(13, 18, 28, 0.85);
+  --bg-card-hover: rgba(22, 30, 46, 0.96);
+  --accent: #95FF50;
+  --accent-hover: #7ae637;
+  --accent-glow: rgba(149, 255, 80, 0.45);
+  --accent-text: #05080b;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-subtle: rgba(149, 255, 80, 0.16);
+  --glass-bg: rgba(6, 7, 10, 0.88);
+  --badge-bg: rgba(149, 255, 80, 0.15);
+  --header-grad: linear-gradient(180deg, rgba(6, 7, 10, 0.98) 0%, rgba(6, 7, 10, 0) 100%);
+}
+
+[data-theme='cinejoy'] {
+  --bg-primary: #06070a;
+  --bg-secondary: #0d121c;
+  --bg-card: rgba(13, 18, 28, 0.85);
+  --bg-card-hover: rgba(22, 30, 46, 0.96);
+  --accent: #95FF50;
+  --accent-hover: #7ae637;
+  --accent-glow: rgba(149, 255, 80, 0.45);
+  --accent-text: #05080b;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-subtle: rgba(149, 255, 80, 0.16);
+  --glass-bg: rgba(6, 7, 10, 0.92);
+  --badge-bg: rgba(149, 255, 80, 0.15);
+  --header-grad: linear-gradient(180deg, rgba(6, 7, 10, 0.98) 0%, rgba(6, 7, 10, 0) 100%);
+}
+
+[data-theme='prime'] {
+  --bg-primary: #060911;
+  --bg-secondary: #0d1527;
+  --bg-card: rgba(13, 21, 39, 0.8);
+  --bg-card-hover: rgba(26, 38, 66, 0.95);
+  --accent: #00a8e1;
+  --accent-hover: #0089b8;
+  --accent-glow: rgba(0, 168, 225, 0.45);
+  --accent-text: #ffffff;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-subtle: rgba(0, 168, 225, 0.2);
+  --glass-bg: rgba(6, 9, 17, 0.9);
+  --badge-bg: rgba(0, 168, 225, 0.15);
+  --header-grad: linear-gradient(180deg, rgba(6, 9, 17, 0.98) 0%, rgba(6, 9, 17, 0) 100%);
+}
+
+[data-theme='netflix'] {
+  --bg-primary: #080808;
+  --bg-secondary: #141414;
+  --bg-card: rgba(20, 20, 20, 0.85);
+  --bg-card-hover: rgba(38, 38, 38, 0.96);
+  --accent: #e50914;
+  --accent-hover: #b80710;
+  --accent-glow: rgba(229, 9, 20, 0.45);
+  --accent-text: #ffffff;
+  --text-primary: #ffffff;
+  --text-secondary: #a3a3a3;
+  --text-muted: #737373;
+  --border-subtle: rgba(229, 9, 20, 0.2);
+  --glass-bg: rgba(8, 8, 8, 0.92);
+  --badge-bg: rgba(229, 9, 20, 0.2);
+  --header-grad: linear-gradient(180deg, rgba(8, 8, 8, 0.98) 0%, rgba(8, 8, 8, 0) 100%);
+}
+
+[data-theme='disney'] {
+  --bg-primary: #020617;
+  --bg-secondary: #081232;
+  --bg-card: rgba(8, 18, 50, 0.82);
+  --bg-card-hover: rgba(16, 32, 85, 0.96);
+  --accent: #0284c7;
+  --accent-hover: #0369a1;
+  --accent-glow: rgba(2, 132, 199, 0.5);
+  --accent-text: #ffffff;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  --border-subtle: rgba(2, 132, 199, 0.25);
+  --glass-bg: rgba(2, 6, 23, 0.92);
+  --badge-bg: rgba(2, 132, 199, 0.2);
+  --header-grad: linear-gradient(180deg, rgba(2, 6, 23, 0.98) 0%, rgba(2, 6, 23, 0) 100%);
+}
+
+[data-theme='cyberpunk'] {
+  --bg-primary: #070410;
+  --bg-secondary: #110926;
+  --bg-card: rgba(17, 9, 38, 0.82);
+  --bg-card-hover: rgba(32, 18, 70, 0.96);
+  --accent: #a855f7;
+  --accent-hover: #9333ea;
+  --accent-glow: rgba(168, 85, 247, 0.55);
+  --accent-text: #ffffff;
+  --text-primary: #faf5ff;
+  --text-secondary: #c084fc;
+  --text-muted: #7e22ce;
+  --border-subtle: rgba(168, 85, 247, 0.3);
+  --glass-bg: rgba(7, 4, 16, 0.92);
+  --badge-bg: rgba(168, 85, 247, 0.22);
+  --header-grad: linear-gradient(180deg, rgba(7, 4, 16, 0.98) 0%, rgba(7, 4, 16, 0) 100%);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  background-image: 
+    radial-gradient(circle at 75% 15%, rgba(149, 255, 80, 0.04), transparent 45%),
+    radial-gradient(circle at 15% 85%, rgba(13, 21, 39, 0.7), transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Glassmorphic Container */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-nav {
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Glow Accent Button */
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 800;
+  border-radius: 10px;
+  padding: 0.65rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 20px var(--accent-glow);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em;
+}
+
+.btn-accent:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px var(--accent-glow);
+}
+
+.btn-accent:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-primary);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0.65rem 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Content Card Hover Transitions */
+.media-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
+.media-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 24px var(--accent-glow);
+  border-color: var(--accent);
+  z-index: 10;
+}
+
+.media-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.media-card:hover img {
+  transform: scale(1.06);
+}
+
+/* Album Card Hover */
+.album-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.album-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 30px var(--accent-glow);
+}
+
+/* Custom Horizontal Scrolling Container */
+.row-scroll-container {
+  display: flex;
+  gap: 1.15rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0.75rem 0.25rem 1.25rem;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.row-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.row-scroll-container > * {
+  scroll-snap-align: start;
+}
+
+/* Skeleton Loading Shimmer */
+@keyframes shimmerAnimation {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-box {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmerAnimation 1.5s infinite ease-in-out;
+  border-radius: 10px;
+}
+
+/* Live Pulse Indicator */
+.live-pulse {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  animation: pulse-ring 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulse-ring {
+  to {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-toast {
+  animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Mobile Responsiveness Rules */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+  body {
+    padding-bottom: 75px;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}
+
+/* ================= MAGIC UI CORE KEYFRAMES ================= */
+@keyframes border-beam-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    left: -150%;
+  }
+  60%, 100% {
+    left: 150%;
+  }
+}
+
+@keyframes meteor-fall {
+  0% {
+    opacity: 1;
+    transform: rotate(215deg) translateX(0);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(215deg) translateX(-600px);
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - 1.5rem));
+  }
+}
+
+@keyframes marquee-scroll-reverse {
+  from {
+    transform: translateX(calc(-100% - 1.5rem));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused !important;
+}
+
+/* Magic Card Spotlight Base */
+.magic-card {
+  will-change: transform, box-shadow;
+}
+
+.bento-card {
+  will-change: transform, box-shadow, border-color;
+}
+
+/* ================= IMAX CINEMATIC HERO STYLES ================= */
+@keyframes kenBurnsZoom {
+  0% {
+    transform: scale(1.02) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate(-1%, -1%);
+  }
+  100% {
+    transform: scale(1.02) translate(0, 0);
+  }
+}
+
+.hero-ken-burns {
+  animation: kenBurnsZoom 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes heroGlowPulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.1);
+  }
+}
+
+.hero-glow-pulse {
+  animation: heroGlowPulse 8s ease-in-out infinite;
+}
+
+@keyframes soundWave {
+  0%, 100% {
+    height: 4px;
+  }
+  50% {
+    height: 18px;
+  }
+}
+
+.equalizer-bar {
+  width: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: soundWave 0.8s ease-in-out infinite;
+}
+
+.equalizer-bar:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.equalizer-bar:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.equalizer-bar:nth-child(4) {
+  animation-delay: 0.15s;
+}
+
+/* Hero Thumbnail Filmstrip Card */
+.hero-filmstrip-item {
+  position: relative;
+  width: 130px;
+  height: 75px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 2px solid transparent;
+  background: #111;
+}
+
+.hero-filmstrip-item:hover {
+  transform: translateY(-4px) scale(1.04);
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+}
+
+.hero-filmstrip-item.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow), 0 8px 25px rgba(0, 0, 0, 0.9);
+  transform: translateY(-4px) scale(1.05);
+}
+
+.hero-filmstrip-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.hero-filmstrip-item:hover img {
+  transform: scale(1.1);
+}
+
+/* Glass Chevron Controls */
+.hero-nav-arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(10, 14, 23, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+
+.hero-nav-arrow:hover {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+  transform: scale(1.12);
+  box-shadow: 0 0 25px var(--accent-glow);
+}
+
+/* Mobile Adjustments for Hero */
+@media (max-width: 900px) {
+  .hero-filmstrip-container {
+    display: none !important;
+  }
+}
+
