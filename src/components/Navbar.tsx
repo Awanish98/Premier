@@ -55,6 +55,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
   const [isCapsuleCollapsed, setIsCapsuleCollapsed] = useState(false);
   const [collapsedDropdownOpen, setCollapsedDropdownOpen] = useState(false);
 
@@ -417,16 +418,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Search size={16} />
           </button>
 
-          {/* Ask AI Smart Assistant Button (Desktop Only) */}
-          {onOpenAiModal && (
+          {/* Consolidated CineAI & Tools Sleek Capsule Dropdown (Desktop) */}
+          <div style={{ position: 'relative' }}>
             <button
-              onClick={onOpenAiModal}
-              className="desktop-only-ai-btn"
+              onClick={() => setToolsDropdownOpen((prev) => !prev)}
+              className="desktop-only-tools-btn"
               style={{
                 background: isDayMode 
                   ? 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)' 
-                  : 'linear-gradient(135deg, rgba(149, 255, 80, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%)',
-                border: isDayMode ? '1px solid #bfdbfe' : '1px solid var(--accent)',
+                  : 'linear-gradient(135deg, rgba(149, 255, 80, 0.12) 0%, rgba(56, 189, 248, 0.12) 100%)',
+                border: isDayMode ? '1px solid #bfdbfe' : '1px solid rgba(255, 255, 255, 0.16)',
                 color: isDayMode ? '#1e40af' : 'var(--accent)',
                 padding: '0.42rem 0.85rem',
                 borderRadius: '999px',
@@ -436,105 +437,209 @@ export const Navbar: React.FC<NavbarProps> = ({
                 gap: '0.45rem',
                 fontSize: '0.8rem',
                 fontWeight: 800,
-                boxShadow: isDayMode ? '0 2px 10px rgba(37, 99, 235, 0.12)' : '0 0 16px var(--accent-glow)',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: isDayMode ? '0 2px 10px rgba(37, 99, 235, 0.1)' : '0 0 14px var(--accent-glow)',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
               onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-              title="Open CineBot AI Assistant (Ctrl + J)"
+              title="AI Tools, Mood Wheel & Cloudstream Hub"
             >
               <style>{`
                 @media (min-width: 768px) {
-                  .desktop-only-ai-btn { display: flex !important; }
+                  .desktop-only-tools-btn { display: flex !important; }
                   .mobile-quick-search-btn { display: none !important; }
                 }
               `}</style>
-              <Bot size={15} />
-              <span>Ask AI</span>
-              <span
-                style={{
-                  fontSize: '0.62rem',
-                  padding: '1px 5px',
-                  borderRadius: '4px',
-                  background: isDayMode ? 'rgba(30, 64, 175, 0.1)' : 'rgba(255, 255, 255, 0.12)',
-                  fontWeight: 800,
-                  letterSpacing: '0.04em'
-                }}
+              <Sparkles size={14} color="var(--accent)" />
+              <span>AI &amp; Hub</span>
+              <ChevronDown 
+                size={13} 
+                style={{ 
+                  transform: toolsDropdownOpen ? 'rotate(180deg)' : 'none', 
+                  transition: 'transform 0.2s ease' 
+                }} 
+              />
+            </button>
+
+            {/* Glassmorphic Tools Dropdown Menu */}
+            {toolsDropdownOpen && (
+              <div 
+                className="flix-dropdown-panel animate-fade-in" 
+                style={{ width: '260px', right: 0, marginTop: '8px' }}
               >
-                Ctrl+J
-              </span>
-            </button>
-          )}
+                <div style={{ padding: '0.35rem 0.6rem', fontSize: '0.68rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Smart Streaming Suite
+                </div>
 
-          {/* Confused Mood AI Spin Wheel Button (Desktop) */}
-          {onOpenSpinWheel && (
-            <button
-              onClick={onOpenSpinWheel}
-              className="desktop-only-wheel-btn"
-              style={{
-                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%)',
-                border: '1px solid #f59e0b',
-                color: '#fbbf24',
-                padding: '0.42rem 0.85rem',
-                borderRadius: '999px',
-                cursor: 'pointer',
-                display: 'none',
-                alignItems: 'center',
-                gap: '0.45rem',
-                fontSize: '0.8rem',
-                fontWeight: 800,
-                boxShadow: '0 0 16px rgba(245, 158, 11, 0.4)',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-              title="Confused Mood? Spin to Watch!"
-            >
-              <style>{`
-                @media (min-width: 880px) {
-                  .desktop-only-wheel-btn { display: flex !important; }
-                }
-              `}</style>
-              <span>🎡</span>
-              <span>Mood Wheel</span>
-            </button>
-          )}
+                {/* Ask AI Option */}
+                {onOpenAiModal && (
+                  <button
+                    onClick={() => {
+                      setToolsDropdownOpen(false);
+                      onOpenAiModal();
+                    }}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '0.6rem 0.75rem',
+                      borderRadius: '10px',
+                      background: 'transparent',
+                      color: 'var(--text-primary)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                      <Bot size={16} color="#38bdf8" />
+                      <div>
+                        <div>CineBot AI Assistant</div>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                          Chat with Indian cinema expert
+                        </div>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.62rem', padding: '1px 5px', borderRadius: '4px', background: 'rgba(255,255,255,0.1)', color: 'var(--text-secondary)' }}>
+                      Ctrl+J
+                    </span>
+                  </button>
+                )}
 
-          {/* Cloudstream 3 & 4 Ecosystem Hub Button */}
-          {onOpenCloudstream && (
-            <button
-              onClick={onOpenCloudstream}
-              className="desktop-only-cloudstream-btn"
-              style={{
-                background: isDayMode 
-                  ? 'linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%)' 
-                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%)',
-                border: '1px solid #3b82f6',
-                color: '#60a5fa',
-                padding: '0.42rem 0.85rem',
-                borderRadius: '999px',
-                cursor: 'pointer',
-                display: 'none',
-                alignItems: 'center',
-                gap: '0.45rem',
-                fontSize: '0.8rem',
-                fontWeight: 800,
-                boxShadow: '0 0 16px rgba(59, 130, 246, 0.35)',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-              title="Cloudstream 3 & 4 Ecosystem Hub & Extensions"
-            >
-              <style>{`
-                @media (min-width: 1024px) {
-                  .desktop-only-cloudstream-btn { display: flex !important; }
-                }
-              `}</style>
-              <Cloud size={15} />
-              <span>Cloudstream</span>
-            </button>
-          )}
+                {/* Mood Spin Wheel Option */}
+                {onOpenSpinWheel && (
+                  <button
+                    onClick={() => {
+                      setToolsDropdownOpen(false);
+                      onOpenSpinWheel();
+                    }}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '0.6rem 0.75rem',
+                      borderRadius: '10px',
+                      background: 'transparent',
+                      color: 'var(--text-primary)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      marginTop: '2px',
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                      <span style={{ fontSize: '1.05rem' }}>🎡</span>
+                      <div>
+                        <div>Confused Mood Roulette</div>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                          Spin &amp; let AI choose movie
+                        </div>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.62rem', padding: '1px 5px', borderRadius: '4px', background: 'rgba(245, 158, 11, 0.2)', color: '#fbbf24' }}>
+                      Spin
+                    </span>
+                  </button>
+                )}
+
+                {/* Cloudstream Hub Option */}
+                {onOpenCloudstream && (
+                  <button
+                    onClick={() => {
+                      setToolsDropdownOpen(false);
+                      onOpenCloudstream();
+                    }}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '0.6rem 0.75rem',
+                      borderRadius: '10px',
+                      background: 'transparent',
+                      color: 'var(--text-primary)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      marginTop: '2px',
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                      <Cloud size={16} color="#60a5fa" />
+                      <div>
+                        <div>Cloudstream Ecosystem</div>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                          Official repo, TV &amp; extensions
+                        </div>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.62rem', padding: '1px 5px', borderRadius: '4px', background: 'rgba(59, 130, 246, 0.2)', color: '#60a5fa' }}>
+                      TV / Repo
+                    </span>
+                  </button>
+                )}
+
+                {/* APK Download Option */}
+                {onOpenApkModal && (
+                  <button
+                    onClick={() => {
+                      setToolsDropdownOpen(false);
+                      onOpenApkModal();
+                    }}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '0.6rem 0.75rem',
+                      borderRadius: '10px',
+                      background: 'transparent',
+                      color: 'var(--text-primary)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      marginTop: '2px',
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--accent)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                      <Smartphone size={16} color="#34d399" />
+                      <div>
+                        <div>Android &amp; TV APK</div>
+                        <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                          Install dedicated streaming app
+                        </div>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.62rem', padding: '1px 5px', borderRadius: '4px', background: 'rgba(52, 211, 153, 0.2)', color: '#34d399' }}>
+                      APK
+                    </span>
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Day / Night Mode 1-Click Instant Switch */}
           <button

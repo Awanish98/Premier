@@ -12,8 +12,7 @@ import {
   Laugh,
   Headphones,
   Tv,
-  Zap,
-  Cloud
+  Zap
 } from 'lucide-react';
 import type { FlixCategory, SortOption } from '../types';
 
@@ -22,8 +21,6 @@ interface FlixCategoryRailProps {
   onSelectCategory: (cat: FlixCategory) => void;
   sortBy: SortOption;
   onSortChange: (sort: SortOption) => void;
-  onOpenSpinWheel?: () => void;
-  onOpenCloudstream?: () => void;
 }
 
 export const FlixCategoryRail: React.FC<FlixCategoryRailProps> = ({
@@ -31,8 +28,6 @@ export const FlixCategoryRail: React.FC<FlixCategoryRailProps> = ({
   onSelectCategory,
   sortBy,
   onSortChange,
-  onOpenSpinWheel,
-  onOpenCloudstream,
 }) => {
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
 
@@ -76,64 +71,6 @@ export const FlixCategoryRail: React.FC<FlixCategoryRailProps> = ({
         }}
         className="scroll-rail-container"
       >
-        {/* Mood Roulette Special Pill */}
-        {onOpenSpinWheel && (
-          <button
-            onClick={onOpenSpinWheel}
-            style={{
-              background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(236, 72, 153, 0.25) 100%)',
-              border: '1px solid #f59e0b',
-              color: '#fbbf24',
-              borderRadius: '999px',
-              padding: '0.45rem 1.1rem',
-              fontSize: '0.82rem',
-              fontWeight: 900,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 0 16px rgba(245, 158, 11, 0.4)',
-              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-            title="Confused Mood? Spin the Wheel!"
-          >
-            <span style={{ fontSize: '1rem' }}>🎡</span>
-            <span>Mood Roulette</span>
-          </button>
-        )}
-
-        {/* Cloudstream Hub Pill */}
-        {onOpenCloudstream && (
-          <button
-            onClick={onOpenCloudstream}
-            style={{
-              background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%)',
-              border: '1px solid #3b82f6',
-              color: '#60a5fa',
-              borderRadius: '999px',
-              padding: '0.45rem 1.1rem',
-              fontSize: '0.82rem',
-              fontWeight: 800,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 0 16px rgba(59, 130, 246, 0.35)',
-              transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-            title="Cloudstream 3 & 4 Ecosystem & Extensions"
-          >
-            <Cloud size={15} />
-            <span>Cloudstream Hub</span>
-          </button>
-        )}
-
         {categories.map((cat) => {
           const Icon = cat.icon;
           const isActive = activeCategory === cat.id;

@@ -38,7 +38,7 @@ import {
   MASTER_MEDIA_ITEMS
 } from './data/mockCatalog';
 import type { MediaItem, LiveChannel, MediaAlbum, FlixCategory, SortOption } from './types';
-import { Tv, Sparkles, Flame, Clapperboard, Disc, ArrowRight, Play, Clock, Server, Bot } from 'lucide-react';
+import { Tv, Sparkles, Flame, Clapperboard, Disc, ArrowRight, Play, Clock, Server } from 'lucide-react';
 
 export const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
@@ -130,35 +130,34 @@ export const AppContent: React.FC = () => {
               onShowDetails={handleShowDetails}
             />
 
-            {/* Magic UI Infinite Marquee Live Ticker */}
+            {/* Sleek Minimalist Live Platform Ticker */}
             <div
               style={{
-                background: 'var(--bg-card)',
-                backdropFilter: 'blur(16px)',
+                background: 'rgba(255, 255, 255, 0.02)',
                 borderTop: '1px solid var(--border-subtle)',
                 borderBottom: '1px solid var(--border-subtle)',
-                padding: '0.65rem 0',
+                padding: '0.45rem 0',
                 position: 'relative',
                 zIndex: 10,
                 marginBottom: '1.5rem',
               }}
             >
-              <Marquee speed={35} pauseOnHover>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2.5rem', fontSize: '0.82rem', fontWeight: 700 }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: 'var(--accent)' }}>
-                    <Flame size={15} /> <strong>TOP TRENDING:</strong> Stree 2 • Pushpa 2: The Rule • Kalki 2898 AD • Animal
+              <Marquee speed={28} pauseOnHover>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '3rem', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <Flame size={13} color="var(--accent)" /> <strong>Trending in India:</strong> Stree 2 • Pushpa 2 • Kalki 2898 AD • Animal
                   </span>
-                  <span style={{ color: 'var(--border-subtle)' }}>|</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#f59e0b' }}>
-                    <Sparkles size={15} /> <strong>DUAL AUDIO:</strong> 100% Hindi Dubbed & Original Tracks Active in 4K UHD
+                  <span style={{ color: 'var(--border-subtle)' }}>•</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <Sparkles size={13} color="#f59e0b" /> <strong>Dual Audio:</strong> Hindi Dubbed + Original 4K UHD Streams
                   </span>
-                  <span style={{ color: 'var(--border-subtle)' }}>|</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#38bdf8' }}>
-                    <Server size={15} /> <strong>FMHY ENGINES:</strong> VidLink Pro • AutoEmbed Hindi • Embed.su • SmashyStream
+                  <span style={{ color: 'var(--border-subtle)' }}>•</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <Server size={13} color="#38bdf8" /> <strong>Fastest 4K CDN:</strong> VidLink Pro • AutoEmbed Hindi • Embed.su
                   </span>
-                  <span style={{ color: 'var(--border-subtle)' }}>|</span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', color: '#a855f7' }}>
-                    <Tv size={15} /> <strong>ANIME PINNACLE:</strong> Solo Leveling S2 • Jujutsu Kaisen • Demon Slayer
+                  <span style={{ color: 'var(--border-subtle)' }}>•</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <Tv size={13} color="#a855f7" /> <strong>Anime Hub:</strong> Solo Leveling • Jujutsu Kaisen • Demon Slayer
                   </span>
                 </div>
               </Marquee>
@@ -172,8 +171,6 @@ export const AppContent: React.FC = () => {
                 onSelectCategory={handleCategorySelect}
                 sortBy={flixSort}
                 onSortChange={setFlixSort}
-                onOpenSpinWheel={() => setSpinWheelOpen(true)}
-                onOpenCloudstream={() => setCloudstreamOpen(true)}
               />
 
               {/* Flix.id Category Media Cards Grid */}
@@ -592,52 +589,6 @@ export const AppContent: React.FC = () => {
         onClose={() => setCloudstreamOpen(false)}
       />
 
-      {/* Floating CineBot AI Quick Launcher (Desktop bottom right) */}
-      <button
-        onClick={() => setAiModalOpen(true)}
-        className="floating-ai-fab"
-        style={{
-          position: 'fixed',
-          bottom: '2rem',
-          right: '2rem',
-          zIndex: 40,
-          background: 'linear-gradient(135deg, var(--accent) 0%, #38bdf8 100%)',
-          color: 'var(--accent-text)',
-          border: '1px solid rgba(255, 255, 255, 0.4)',
-          borderRadius: '999px',
-          padding: '0.65rem 1.15rem',
-          display: 'none',
-          alignItems: 'center',
-          gap: '0.5rem',
-          fontSize: '0.85rem',
-          fontWeight: 800,
-          cursor: 'pointer',
-          boxShadow: '0 8px 30px var(--accent-glow), 0 0 20px rgba(56, 189, 248, 0.4)',
-          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
-        title="Open CineBot AI (Ctrl + J)"
-      >
-        <style>{`
-          @media (min-width: 768px) {
-            .floating-ai-fab { display: flex !important; }
-          }
-        `}</style>
-        <Bot size={18} />
-        <span>Ask CineBot AI</span>
-        <span
-          style={{
-            fontSize: '0.62rem',
-            padding: '1px 5px',
-            borderRadius: '4px',
-            background: 'rgba(0, 0, 0, 0.25)',
-            color: '#fff',
-            fontWeight: 800,
-          }}
-        >
-          Ctrl+J
-        </span>
-      </button>
-
       {/* Sticky Mobile Bottom Navigation */}
       <MobileBottomNav
         activeTab={activeTab}
@@ -645,7 +596,6 @@ export const AppContent: React.FC = () => {
         onOpenSearch={() => setSearchOpen(true)}
         onOpenApkModal={() => setApkModalOpen(true)}
         onOpenAiModal={() => setAiModalOpen(true)}
-        onOpenSpinWheel={() => setSpinWheelOpen(true)}
       />
 
       {/* Floating Mobile APK Install Banner */}
