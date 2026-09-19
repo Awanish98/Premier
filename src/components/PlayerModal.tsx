@@ -13,7 +13,8 @@ import {
   Gauge,
   ChevronDown,
   Keyboard,
-  Info
+  Info,
+  Cloud
 } from 'lucide-react';
 import type { MediaItem, StreamServer } from '../types';
 import { STREAM_SERVERS, getStreamUrl } from '../services/streamSources';
@@ -24,9 +25,15 @@ interface PlayerModalProps {
   item: MediaItem | null;
   onClose: () => void;
   onShowDetails?: (item: MediaItem) => void;
+  onOpenCloudstream?: () => void;
 }
 
-export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose, onShowDetails }) => {
+export const PlayerModal: React.FC<PlayerModalProps> = ({ 
+  item, 
+  onClose, 
+  onShowDetails,
+  onOpenCloudstream 
+}) => {
   const [selectedServer, setSelectedServer] = useState<StreamServer>(STREAM_SERVERS[0]);
   const [currentSeason, setCurrentSeason] = useState(1);
   const [currentEpisode, setCurrentEpisode] = useState(1);
@@ -420,6 +427,26 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose, onShowD
             >
               <RefreshCw size={16} />
             </button>
+
+            {/* Cloudstream & External TV Hub */}
+            {onOpenCloudstream && (
+              <button
+                onClick={onOpenCloudstream}
+                style={{
+                  background: 'rgba(59, 130, 246, 0.15)',
+                  border: '1px solid rgba(59, 130, 246, 0.4)',
+                  color: '#60a5fa',
+                  borderRadius: '8px',
+                  padding: '0.45rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                title="Open Cloudstream 3 & 4 Ecosystem Hub"
+              >
+                <Cloud size={16} />
+              </button>
+            )}
 
             {/* Theater Mode */}
             <button

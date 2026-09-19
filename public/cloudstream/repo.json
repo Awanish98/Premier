@@ -1,0 +1,8 @@
+{
+  "name": "Premier Indian Cinema & Live TV Repository",
+  "description": "Official Cloudstream extension repository for Premier - Bollywood, South Indian Dub, Hollywood Dual Audio, Hindi Web Series, Anime and Live Sports TV.",
+  "manifestVersion": 1,
+  "pluginLists": [
+    "https://awanish98.github.io/Premier/cloudstream/plugins.json"
+  ]
+}

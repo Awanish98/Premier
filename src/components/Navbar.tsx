@@ -22,7 +22,8 @@ import {
   Minimize2,
   Maximize2,
   Layers,
-  Bot
+  Bot,
+  Cloud
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import type { ThemeMode } from '../types';
@@ -35,6 +36,7 @@ interface NavbarProps {
   onOpenApkModal?: () => void;
   onOpenAiModal?: () => void;
   onOpenSpinWheel?: () => void;
+  onOpenCloudstream?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
@@ -43,7 +45,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSearch,
   onOpenApkModal,
   onOpenAiModal,
-  onOpenSpinWheel
+  onOpenSpinWheel,
+  onOpenCloudstream
 }) => {
   const { theme, setTheme, isDayMode, toggleDayNight, watchlist, showToast } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -494,6 +497,42 @@ export const Navbar: React.FC<NavbarProps> = ({
               `}</style>
               <span>🎡</span>
               <span>Mood Wheel</span>
+            </button>
+          )}
+
+          {/* Cloudstream 3 & 4 Ecosystem Hub Button */}
+          {onOpenCloudstream && (
+            <button
+              onClick={onOpenCloudstream}
+              className="desktop-only-cloudstream-btn"
+              style={{
+                background: isDayMode 
+                  ? 'linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%)' 
+                  : 'linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%)',
+                border: '1px solid #3b82f6',
+                color: '#60a5fa',
+                padding: '0.42rem 0.85rem',
+                borderRadius: '999px',
+                cursor: 'pointer',
+                display: 'none',
+                alignItems: 'center',
+                gap: '0.45rem',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                boxShadow: '0 0 16px rgba(59, 130, 246, 0.35)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+              title="Cloudstream 3 & 4 Ecosystem Hub & Extensions"
+            >
+              <style>{`
+                @media (min-width: 1024px) {
+                  .desktop-only-cloudstream-btn { display: flex !important; }
+                }
+              `}</style>
+              <Cloud size={15} />
+              <span>Cloudstream</span>
             </button>
           )}
 

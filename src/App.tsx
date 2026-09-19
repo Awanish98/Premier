@@ -20,6 +20,7 @@ import { ApkDownloadModal } from './components/ApkDownloadModal';
 import { MobileInstallBanner } from './components/MobileInstallBanner';
 import { AiAssistantModal } from './components/AiAssistantModal';
 import { SpinWheelModal } from './components/SpinWheelModal';
+import { CloudstreamHubModal } from './components/CloudstreamHubModal';
 import { AmbientBackground } from './components/AmbientBackground';
 import { Toast } from './components/Toast';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -47,6 +48,7 @@ export const AppContent: React.FC = () => {
   const [apkModalOpen, setApkModalOpen] = useState<boolean>(false);
   const [aiModalOpen, setAiModalOpen] = useState<boolean>(false);
   const [spinWheelOpen, setSpinWheelOpen] = useState<boolean>(false);
+  const [cloudstreamOpen, setCloudstreamOpen] = useState<boolean>(false);
   const [flixCategory, setFlixCategory] = useState<FlixCategory>('trending');
   const [flixSort, setFlixSort] = useState<SortOption>('trending');
   const { continueWatching } = useTheme();
@@ -113,6 +115,7 @@ export const AppContent: React.FC = () => {
         onOpenApkModal={() => setApkModalOpen(true)}
         onOpenAiModal={() => setAiModalOpen(true)}
         onOpenSpinWheel={() => setSpinWheelOpen(true)}
+        onOpenCloudstream={() => setCloudstreamOpen(true)}
       />
 
       {/* Main Streaming Platform Viewport */}
@@ -170,6 +173,7 @@ export const AppContent: React.FC = () => {
                 sortBy={flixSort}
                 onSortChange={setFlixSort}
                 onOpenSpinWheel={() => setSpinWheelOpen(true)}
+                onOpenCloudstream={() => setCloudstreamOpen(true)}
               />
 
               {/* Flix.id Category Media Cards Grid */}
@@ -542,6 +546,7 @@ export const AppContent: React.FC = () => {
           item={activeMedia} 
           onClose={() => setActiveMedia(null)} 
           onShowDetails={handleShowDetails}
+          onOpenCloudstream={() => setCloudstreamOpen(true)}
         />
       )}
 
@@ -570,6 +575,7 @@ export const AppContent: React.FC = () => {
         onPlayMedia={handlePlayMedia}
         onShowDetails={handleShowDetails}
         onOpenSpinWheel={() => setSpinWheelOpen(true)}
+        onOpenCloudstream={() => setCloudstreamOpen(true)}
       />
 
       {/* Confused Mood AI Spin Wheel (Roulette) Modal */}
@@ -578,6 +584,12 @@ export const AppContent: React.FC = () => {
         onClose={() => setSpinWheelOpen(false)}
         onPlayMedia={handlePlayMedia}
         onShowDetails={handleShowDetails}
+      />
+
+      {/* Cloudstream 3 & 4 Ecosystem & Repository Hub Modal */}
+      <CloudstreamHubModal
+        isOpen={cloudstreamOpen}
+        onClose={() => setCloudstreamOpen(false)}
       />
 
       {/* Floating CineBot AI Quick Launcher (Desktop bottom right) */}

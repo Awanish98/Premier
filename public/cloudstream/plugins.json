@@ -1,0 +1,62 @@
+[
+  {
+    "internalName": "PremierBollywood",
+    "name": "Premier Bollywood & Desi Cinema",
+    "description": "Stream latest Bollywood blockbusters, Hindi cinema, regional blockbusters in 1080p and 4K HDR.",
+    "authors": ["Premier Team"],
+    "version": "1.2.0",
+    "tvTypes": ["Movie", "Series"],
+    "iconUrl": "https://awanish98.github.io/Premier/favicon.svg",
+    "url": "https://awanish98.github.io/Premier/cloudstream/PremierBollywood.js"
+  },
+  {
+    "internalName": "PremierSouthHindi",
+    "name": "Premier South Hindi Dubbed",
+    "description": "Massive collection of Telugu, Tamil, Malayalam & Kannada blockbusters dubbed in Hindi audio.",
+    "authors": ["Premier Team"],
+    "version": "1.2.0",
+    "tvTypes": ["Movie"],
+    "iconUrl": "https://awanish98.github.io/Premier/favicon.svg",
+    "url": "https://awanish98.github.io/Premier/cloudstream/PremierSouthHindi.js"
+  },
+  {
+    "internalName": "PremierHollywoodDual",
+    "name": "Premier Hollywood Dual Audio (Hindi + Eng)",
+    "description": "Hollywood Marvel, DC, Sci-Fi and Action movies with clean Hindi voiceover and Dual Audio.",
+    "authors": ["Premier Team"],
+    "version": "1.1.5",
+    "tvTypes": ["Movie", "Series"],
+    "iconUrl": "https://awanish98.github.io/Premier/favicon.svg",
+    "url": "https://awanish98.github.io/Premier/cloudstream/PremierHollywoodDual.js"
+  },
+  {
+    "internalName": "PremierDesiBinge",
+    "name": "Premier Desi Binge Web Series",
+    "description": "Indian OTT Originals & Web Series with binge navigation and all episodes in HD/4K.",
+    "authors": ["Premier Team"],
+    "version": "1.2.0",
+    "tvTypes": ["Series"],
+    "iconUrl": "https://awanish98.github.io/Premier/favicon.svg",
+    "url": "https://awanish98.github.io/Premier/cloudstream/PremierDesiBinge.js"
+  },
+  {
+    "internalName": "PremierHindiAnime",
+    "name": "Premier Anime in Hindi Dub & Sub",
+    "description": "Popular anime series and movies with Hindi dubbing and English subtitles.",
+    "authors": ["Premier Team"],
+    "version": "1.0.8",
+    "tvTypes": ["Anime", "Movie", "Series"],
+    "iconUrl": "https://awanish98.github.io/Premier/favicon.svg",
+    "url": "https://awanish98.github.io/Premier/cloudstream/PremierHindiAnime.js"
+  },
+  {
+    "internalName": "PremierLiveIPTV",
+    "name": "Premier Live Sports & Indian TV",
+    "description": "Direct M3U8 Live Stream channels for Live Cricket, Star Sports, Sony Sports, News and Hindi Entertainment.",
+    "authors": ["Premier Team"],
+    "version": "2.0.0",
+    "tvTypes": ["LiveStream", "Others"],
+    "iconUrl": "https://awanish98.github.io/Premier/favicon.svg",
+    "url": "https://awanish98.github.io/Premier/cloudstream/PremierLiveIPTV.js"
+  }
+]

@@ -8,7 +8,8 @@ import {
   Play, 
   RotateCcw, 
   Star,
-  Compass
+  Compass,
+  Cloud
 } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { chatWithCinemaAi, type ChatMessage } from '../services/aiService';
@@ -21,6 +22,7 @@ interface AiAssistantModalProps {
   onPlayMedia: (item: MediaItem) => void;
   onShowDetails: (item: MediaItem) => void;
   onOpenSpinWheel?: () => void;
+  onOpenCloudstream?: () => void;
 }
 
 const QUICK_MOOD_PROMPTS = [
@@ -38,6 +40,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
   onPlayMedia,
   onShowDetails,
   onOpenSpinWheel,
+  onOpenCloudstream,
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -281,6 +284,36 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
             >
               <span>🎡</span>
               <span>Confused? Spin Mood Wheel</span>
+            </button>
+          )}
+
+          {onOpenCloudstream && (
+            <button
+              onClick={() => {
+                onClose();
+                onOpenCloudstream();
+              }}
+              style={{
+                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%)',
+                border: '1px solid #3b82f6',
+                color: '#60a5fa',
+                borderRadius: '999px',
+                padding: '0.3rem 0.85rem',
+                fontSize: '0.74rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                boxShadow: '0 0 12px rgba(59, 130, 246, 0.4)',
+                transition: 'transform 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            >
+              <Cloud size={13} />
+              <span>☁️ Cloudstream Repo &amp; Guide</span>
             </button>
           )}
 
