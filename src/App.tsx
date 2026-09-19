@@ -45,7 +45,7 @@ export const AppContent: React.FC = () => {
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [apkModalOpen, setApkModalOpen] = useState<boolean>(false);
   const [aiModalOpen, setAiModalOpen] = useState<boolean>(false);
-  const [flixCategory, setFlixCategory] = useState<FlixCategory>('animation');
+  const [flixCategory, setFlixCategory] = useState<FlixCategory>('trending');
   const [flixSort, setFlixSort] = useState<SortOption>('trending');
   const { continueWatching } = useTheme();
 

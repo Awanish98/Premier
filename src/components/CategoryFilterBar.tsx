@@ -32,8 +32,9 @@ const DEFAULT_GENRES = [
 
 const LANGUAGES = [
   'All',
-  'Dual Audio',
   'Hindi',
+  'Dual Audio',
+  'South Dubbed',
   'English',
   'Japanese',
   'Korean',

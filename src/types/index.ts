@@ -93,14 +93,18 @@ export type ThemeMode = 'cinejoy' | 'prime' | 'netflix' | 'disney' | 'cyberpunk'
 
 export type FlixCategory = 
   | 'trending'
-  | 'action'
-  | 'romance'
-  | 'animation'
-  | 'horror'
-  | 'special'
-  | 'drakor'
   | 'bollywood'
+  | 'comedy'
+  | 'dualaudio'
+  | 'action'
+  | 'webseries'
+  | 'horror'
+  | 'anime'
   | 'scifi'
-  | 'livetv';
+  | 'romance'
+  | 'livetv'
+  | 'special'
+  | 'animation'
+  | 'drakor';
 
 export type SortOption = 'trending' | 'top-rated' | 'newest' | 'title-asc';

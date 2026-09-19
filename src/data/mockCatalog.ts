@@ -564,11 +564,11 @@ export const MASTER_MEDIA_ITEMS: MediaItem[] = [
     imdbId: 'tt27538960',
     title: 'Stree 2: Sarkate Ka Aatank',
     type: 'movie',
-    overview: 'The town of Chanderi is haunted once again, this time by a headless entity named Sarkata that is abducting women.',
+    overview: 'The town of Chanderi is haunted once again, this time by a headless entity named Sarkata that is abducting modern women. Vicky, Bittu, Jana, and Rudra team up with Stree to defeat Sarkata in an epic horror comedy.',
     posterPath: 'https://image.tmdb.org/t/p/w780/nfnhwfUEFuSOxxf4jDdBlY6Lccw.jpg',
     backdropPath: 'https://image.tmdb.org/t/p/original/fVV0A67kDjTTQ4CvUn8LoletRmI.jpg',
     releaseYear: 2024,
-    rating: 8.8,
+    rating: 8.9,
     genres: ['Comedy', 'Horror', 'Supernatural'],
     language: 'Hindi',
     isDualAudio: true,
@@ -578,6 +578,228 @@ export const MASTER_MEDIA_ITEMS: MediaItem[] = [
     platformBadge: 'Prime',
     cast: ['Shraddha Kapoor', 'Rajkummar Rao', 'Pankaj Tripathi', 'Aparshakti Khurana'],
     director: 'Amar Kaushik',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-bhool-bhulaiyaa-3',
+    tmdbId: 1084736,
+    imdbId: 'tt26932400',
+    title: 'Bhool Bhulaiyaa 3',
+    type: 'movie',
+    overview: 'Ruhaan aka Rooh Baba is hired by the royal family of Raktaghat to deal with the vengeful spirit of Manjulika, leading to hilarious chaotic misunderstandings and spooky twists.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/5P0w7ZkG2p9u2T3Xq7K8jN9L2b8.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/iYjPq5M8Y4bK0J8eX9zR1tW2nQ6.jpg',
+    releaseYear: 2024,
+    rating: 8.5,
+    genres: ['Comedy', 'Horror', 'Mystery'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    duration: '2h 38m',
+    trending: true,
+    platformBadge: 'Netflix',
+    cast: ['Kartik Aaryan', 'Vidya Balan', 'Madhuri Dixit', 'Triptii Dimri'],
+    director: 'Anees Bazmee',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-lapataa-ladies',
+    tmdbId: 1157973,
+    imdbId: 'tt28515082',
+    title: 'Laapataa Ladies',
+    type: 'movie',
+    overview: 'In rural India, two young brides get accidentally swapped on a crowded train. A quirky, heartwarming, and witty journey unfolds as their families and a perceptive cop search for them.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/6EwGv2Z1T6Xk0X8eW9L5m2Q1b7.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/rYjWq5M8Y4bK0J8eX9zR1tW2nQ6.jpg',
+    releaseYear: 2024,
+    rating: 9.2,
+    genres: ['Comedy', 'Drama', 'Heartwarming'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    duration: '2h 02m',
+    trending: true,
+    platformBadge: 'Netflix',
+    cast: ['Nitanshi Goel', 'Pratibha Ranta', 'Sparsh Shrivastava', 'Ravi Kishan'],
+    director: 'Kiran Rao',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-12th-fail',
+    tmdbId: 1184918,
+    imdbId: 'tt23849504',
+    title: '12th Fail',
+    type: 'movie',
+    overview: 'Based on the real-life story of IPS Officer Manoj Kumar Sharma, who restarts his academic journey from absolute poverty to clear the world’s toughest competitive exam (UPSC).',
+    posterPath: 'https://image.tmdb.org/t/p/w780/z9eX6Zk1Y9X0T8eW9L5m2Q1b7a.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/jXjWq5M8Y4bK0J8eX9zR1tW2nQ7.jpg',
+    releaseYear: 2023,
+    rating: 9.4,
+    genres: ['Drama', 'Biography', 'Inspirational'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    duration: '2h 27m',
+    trending: true,
+    platformBadge: 'Disney+',
+    cast: ['Vikrant Massey', 'Medha Shankr', 'Anant V Joshi', 'Anshumaan Pushkar'],
+    director: 'Vidhu Vinod Chopra',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-shaitaan',
+    tmdbId: 1228286,
+    imdbId: 'tt28515089',
+    title: 'Shaitaan',
+    type: 'movie',
+    overview: 'A family’s peaceful weekend getaway turns into a living nightmare when a sinister stranger hypnotizes and takes control of their teenage daughter.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/b7X6Zk1Y9X0T8eW9L5m2Q1b7a2.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/kXjWq5M8Y4bK0J8eX9zR1tW2nQ8.jpg',
+    releaseYear: 2024,
+    rating: 8.6,
+    genres: ['Horror', 'Thriller', 'Supernatural'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    duration: '2h 12m',
+    trending: true,
+    platformBadge: 'Netflix',
+    cast: ['Ajay Devgn', 'R. Madhavan', 'Jyotika', 'Janki Bodiwala'],
+    director: 'Vikas Bahl',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-pushpa-2',
+    tmdbId: 889737,
+    imdbId: 'tt16539454',
+    title: 'Pushpa 2: The Rule',
+    type: 'movie',
+    overview: 'Pushpa Raj solidifies his undisputed reign over the red sandalwood smuggling empire while facing escalating rivalry from fierce foes and SP Bhanwar Singh Shekhawat.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/a9X6Zk1Y9X0T8eW9L5m2Q1b7a3.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/mXjWq5M8Y4bK0J8eX9zR1tW2nQ9.jpg',
+    releaseYear: 2024,
+    rating: 9.1,
+    genres: ['Action', 'Crime', 'Thriller'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    duration: '3h 15m',
+    trending: true,
+    platformBadge: 'Netflix',
+    cast: ['Allu Arjun', 'Rashmika Mandanna', 'Fahadh Faasil', 'Jagapathi Babu'],
+    director: 'Sukumar',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-3-idiots',
+    tmdbId: 20453,
+    imdbId: 'tt1187043',
+    title: '3 Idiots',
+    type: 'movie',
+    overview: 'Two friends search for their long lost college friend Rancho while revisiting their engineering days and the unconventional philosophy that changed their lives forever.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/66A9MqXGZ6utpG41L1a0v8Wv9eW.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/uDwB4aM8Y4bK0J8eX9zR1tW2nQ0.jpg',
+    releaseYear: 2009,
+    rating: 9.5,
+    genres: ['Comedy', 'Drama', 'Friendship'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    duration: '2h 50m',
+    trending: true,
+    platformBadge: 'Prime',
+    cast: ['Aamir Khan', 'R. Madhavan', 'Sharman Joshi', 'Kareena Kapoor', 'Boman Irani'],
+    director: 'Rajkumar Hirani',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-herapheri',
+    tmdbId: 35003,
+    imdbId: 'tt0419058',
+    title: 'Phir Hera Pheri',
+    type: 'movie',
+    overview: 'Raju, Shyam, and Baburao get rich through sheer luck, but are tricked into investing in a fake scheme by a con artist, leading to legendary laugh-out-loud chaos across Mumbai.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/d8X6Zk1Y9X0T8eW9L5m2Q1b7a4.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/vXjWq5M8Y4bK0J8eX9zR1tW2nQ1.jpg',
+    releaseYear: 2006,
+    rating: 9.3,
+    genres: ['Comedy', 'Crime', 'Cult Classic'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    duration: '2h 33m',
+    trending: true,
+    platformBadge: 'Prime',
+    cast: ['Akshay Kumar', 'Paresh Rawal', 'Suniel Shetty', 'Bipasha Basu', 'Johnny Lever'],
+    director: 'Neeraj Vora',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-panchayat-s3',
+    tmdbId: 101886,
+    imdbId: 'tt11905962',
+    title: 'Panchayat (Season 3)',
+    type: 'tv',
+    overview: 'An engineering graduate takes up a job as a Panchayat secretary in a remote village called Phulera, dealing with quirky villagers, grassroots politics, and wholesome comedy.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/e8X6Zk1Y9X0T8eW9L5m2Q1b7a5.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/wXjWq5M8Y4bK0J8eX9zR1tW2nQ2.jpg',
+    releaseYear: 2024,
+    rating: 9.4,
+    genres: ['Comedy', 'Drama', 'Village Life'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    totalSeasons: 3,
+    totalEpisodes: 24,
+    trending: true,
+    platformBadge: 'Prime',
+    cast: ['Jitendra Kumar', 'Neena Gupta', 'Raghubir Yadav', 'Faisal Malik', 'Chandan Roy'],
+    director: 'Deepak Kumar Mishra',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-mirzapur-s3',
+    tmdbId: 82512,
+    imdbId: 'tt6473300',
+    title: 'Mirzapur (Season 3)',
+    type: 'tv',
+    overview: 'The iron-fisted Akhandanand Tripathi and Guddu Pandit clash in a battle for supremacy over Purvanchal with raw violence, political games, and revenge.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/f8X6Zk1Y9X0T8eW9L5m2Q1b7a6.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/xXjWq5M8Y4bK0J8eX9zR1tW2nQ3.jpg',
+    releaseYear: 2024,
+    rating: 9.1,
+    genres: ['Crime', 'Action', 'Thriller'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    totalSeasons: 3,
+    totalEpisodes: 29,
+    trending: true,
+    platformBadge: 'Prime',
+    cast: ['Pankaj Tripathi', 'Ali Fazal', 'Shweta Tripathi', 'Rasika Dugal'],
+    director: 'Gurmmeet Singh',
+    albumId: 'pan-india-epics'
+  },
+  {
+    id: 'mov-chhichhore',
+    tmdbId: 588228,
+    imdbId: 'tt8983244',
+    title: 'Chhichhore',
+    type: 'movie',
+    overview: 'A tragic incident forces Anni to reunite with his college hostel buddies, recounting hilarious, nostalgic college memories to prove that being a loser is not the end of life.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/g8X6Zk1Y9X0T8eW9L5m2Q1b7a7.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/yXjWq5M8Y4bK0J8eX9zR1tW2nQ4.jpg',
+    releaseYear: 2019,
+    rating: 9.0,
+    genres: ['Comedy', 'Drama', 'Nostalgia'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    duration: '2h 23m',
+    trending: true,
+    platformBadge: 'Disney+',
+    cast: ['Sushant Singh Rajput', 'Shraddha Kapoor', 'Varun Sharma', 'Prateik Babbar', 'Tahir Raj Bhasin'],
+    director: 'Nitesh Tiwari',
     albumId: 'pan-india-epics'
   },
   {
@@ -1623,103 +1845,28 @@ export const FLIX_DUAL_HERO_ITEMS: MediaItem[] = [
 
 export const FLIX_ANIMATION_ITEMS: MediaItem[] = [
   {
-    id: 'anim-loetoeng',
-    title: 'Loetoeng Kasarung',
+    id: 'anim-hanuman',
+    tmdbId: 1093995,
+    title: 'Hanu-Man',
     type: 'movie',
-    overview: 'A legendary folktale reborn in dazzling 3D animation, detailing the noble monkey who protects a kind-hearted princess.',
-    posterPath: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&auto=format&fit=crop&q=80',
-    backdropPath: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=80',
-    releaseYear: 2023,
-    rating: 7.8,
-    genres: ['Animation', 'Adventure', 'Fantasy'],
-    language: 'Indonesian',
+    overview: 'An underdog in the mythical village of Anjanadri gains the superpowers of Lord Hanuman to fight against modern supervillains and protect his people.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/jF1V0z9k5p9U6u7x8Q4Y1a2b3c.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/o8XSR1SONnjcsv84NRu6Mwsl5io.jpg',
+    releaseYear: 2024,
+    rating: 9.0,
+    genres: ['Animation', 'Mythology', 'Action', 'Superhero'],
+    language: 'Hindi',
     isDualAudio: true,
     hasHindiDubbed: true,
-    platformBadge: 'Disney+',
-    featured: true,
-    trending: true,
-  },
-  {
-    id: 'anim-gajah-langka',
-    title: 'Gajah Langka',
-    type: 'movie',
-    overview: 'A majestic sacred elephant and a young island boy embark on a whimsical journey across tranquil tropical seas.',
-    posterPath: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=600&auto=format&fit=crop&q=80',
-    backdropPath: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop&q=80',
-    releaseYear: 2023,
-    rating: 6.0,
-    genres: ['Animation', 'Adventure', 'Family'],
-    language: 'Indonesian',
-    isDualAudio: true,
-    hasHindiDubbed: true,
-    platformBadge: 'Netflix',
-    featured: true,
-  },
-  {
-    id: 'anim-kang-satay',
-    title: 'Si Kang Satay',
-    type: 'movie',
-    overview: 'A talented young chef creates enchanted Indonesian skewers that bring joyous magic and peace to everyone in his village.',
-    posterPath: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80',
-    backdropPath: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&auto=format&fit=crop&q=80',
-    releaseYear: 2023,
-    rating: 7.1,
-    genres: ['Animation', 'Comedy', 'Family'],
-    language: 'Indonesian',
-    isDualAudio: true,
-    hasHindiDubbed: true,
-    platformBadge: 'Disney+',
-    trending: true,
-  },
-  {
-    id: 'anim-mommy-cat',
-    title: 'Mommy Cat',
-    type: 'movie',
-    overview: 'A sweet heartwarming tale of an extraordinary mother cat raising playful kittens in a cosy bedtime story wonderland.',
-    posterPath: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600&auto=format&fit=crop&q=80',
-    backdropPath: 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=1200&auto=format&fit=crop&q=80',
-    releaseYear: 2023,
-    rating: 7.8,
-    genres: ['Animation', 'Family', 'Cute'],
-    language: 'English',
-    isDualAudio: true,
-    hasHindiDubbed: true,
-    platformBadge: 'Disney+',
-  },
-  {
-    id: 'anim-hijaber-cantiq',
-    title: 'Hijaber Cantiq',
-    type: 'movie',
-    overview: 'A vibrant, modern animated story celebrating contemporary youth, creative dreams, and positive sisterhood vibes.',
-    posterPath: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=80',
-    backdropPath: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1200&auto=format&fit=crop&q=80',
-    releaseYear: 2023,
-    rating: 6.1,
-    genres: ['Animation', 'Drama', 'Lifestyle'],
-    language: 'Indonesian',
-    isDualAudio: true,
     platformBadge: 'Prime',
-  },
-  {
-    id: 'anim-xatra-x',
-    title: 'Xatra- X',
-    type: 'movie',
-    overview: 'A masked superhero of royal heritage takes to the skies to protect the ancient futuristic city from extraterrestrial robots.',
-    posterPath: 'https://images.unsplash.com/photo-1563089145-599997674d42?w=600&auto=format&fit=crop&q=80',
-    backdropPath: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=80',
-    releaseYear: 2022,
-    rating: 6.5,
-    genres: ['Animation', 'Action', 'Sci-Fi'],
-    language: 'English',
-    isDualAudio: true,
-    hasHindiDubbed: true,
-    platformBadge: 'Netflix',
+    featured: true,
+    trending: true,
   },
   {
     id: 'anim-inside-out-2',
     title: 'Inside Out 2',
     type: 'movie',
-    overview: 'Riley enters teenage life and welcomes Anxiety, Envy, Ennui, and Embarrassment to the control console in her mind.',
+    overview: 'Riley enters teenage life and welcomes Anxiety, Envy, Ennui, and Embarrassment to the control console in her mind with Hindi audio.',
     posterPath: 'https://image.tmdb.org/t/p/w780/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg',
     backdropPath: 'https://image.tmdb.org/t/p/original/xg27NrXi7VXCGUr7MG75UqLl6Vg.jpg',
     releaseYear: 2024,
@@ -1729,21 +1876,69 @@ export const FLIX_ANIMATION_ITEMS: MediaItem[] = [
     isDualAudio: true,
     hasHindiDubbed: true,
     platformBadge: 'Disney+',
+    trending: true,
   },
   {
     id: 'anim-spider-verse',
     title: 'Spider-Man: Across the Spider-Verse',
     type: 'movie',
-    overview: 'Miles Morales unites with Gwen Stacy to traverse the Multiverse and challenge the destiny of the Spider-Society.',
+    overview: 'Miles Morales unites with Gwen Stacy across the Multiverse in iconic Hindi Dubbed audio voiced by cricketer Shubman Gill.',
     posterPath: 'https://image.tmdb.org/t/p/w780/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg',
     backdropPath: 'https://image.tmdb.org/t/p/original/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg',
     releaseYear: 2023,
-    rating: 9.2,
+    rating: 9.3,
     genres: ['Animation', 'Action', 'Sci-Fi'],
     language: 'English',
     isDualAudio: true,
     hasHindiDubbed: true,
     platformBadge: 'Netflix',
+    trending: true,
+  },
+  {
+    id: 'anim-kungfu-panda-4',
+    title: 'Kung Fu Panda 4',
+    type: 'movie',
+    overview: 'Po is called to become the Spiritual Leader of the Valley of Peace and must train a new Dragon Warrior while battling The Chameleon.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/kDp1vUBnMpe8ak4rjgl3cLELqjU.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/1XDDXPXGiI8id7MrUxK36ke7gkX.jpg',
+    releaseYear: 2024,
+    rating: 8.4,
+    genres: ['Animation', 'Action', 'Comedy', 'Family'],
+    language: 'English',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    platformBadge: 'Prime',
+    trending: true,
+  },
+  {
+    id: 'anim-despicable-me-4',
+    title: 'Despicable Me 4',
+    type: 'movie',
+    overview: 'Gru and Lucy and their girls welcome a new member to the family, Gru Jr., who is intent on tormenting his dad in hilarious Hindi dub.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/wWba3TaojhK7NdycRhoQpsG0FaH.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/lgkGysTk1fmmZuiOWiK0YF2mYs9.jpg',
+    releaseYear: 2024,
+    rating: 8.3,
+    genres: ['Animation', 'Comedy', 'Family'],
+    language: 'English',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    platformBadge: 'Prime',
+  },
+  {
+    id: 'anim-lion-king',
+    title: 'The Lion King (Hindi Dubbed)',
+    type: 'movie',
+    overview: 'The immortal tale of Simba, Mufasa, and Scar featuring the legendary Hindi voice of Shah Rukh Khan and Aryan Khan in Dolby Atmos 4K.',
+    posterPath: 'https://image.tmdb.org/t/p/w780/dzBtMocZuJbjT1y2fyy9J5IxGeF.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/nRXO2SnOA75V6nn89T32w42vwwb.jpg',
+    releaseYear: 2019,
+    rating: 8.8,
+    genres: ['Animation', 'Drama', 'Adventure', 'Family'],
+    language: 'Hindi',
+    isDualAudio: true,
+    hasHindiDubbed: true,
+    platformBadge: 'Disney+',
   }
 ];
 
@@ -1857,43 +2052,67 @@ export const FLIX_ROMANCE_ITEMS: MediaItem[] = [
 ];
 
 export function getFlixCategoryItems(category: string): MediaItem[] {
-  switch (category.toLowerCase()) {
-    case 'animation':
-      return FLIX_ANIMATION_ITEMS;
+  const cat = category.toLowerCase();
+  
+  switch (cat) {
+    case 'bollywood':
+      return MASTER_MEDIA_ITEMS.filter(
+        (m) => m.language === 'Hindi' || m.albumId === 'pan-india-epics' || m.albumId === 'desi-crime-universe'
+      );
+
+    case 'comedy':
+      return MASTER_MEDIA_ITEMS.filter(
+        (m) => m.genres.some((g) => g.toLowerCase().includes('comedy'))
+      );
+
+    case 'dualaudio':
+      return MASTER_MEDIA_ITEMS.filter(
+        (m) => m.isDualAudio || m.hasHindiDubbed
+      );
+
+    case 'action':
+      return MASTER_MEDIA_ITEMS.filter(
+        (m) => m.genres.some((g) => g.toLowerCase().includes('action') || g.toLowerCase().includes('adventure'))
+      );
+
+    case 'webseries':
+      return MASTER_MEDIA_ITEMS.filter(
+        (m) => m.type === 'tv' && (m.language === 'Hindi' || m.hasHindiDubbed)
+      );
+
+    case 'horror':
+      return MASTER_MEDIA_ITEMS.filter(
+        (m) => m.genres.some((g) => g.toLowerCase().includes('horror') || g.toLowerCase().includes('supernatural') || g.toLowerCase().includes('thriller'))
+      );
+
+    case 'anime':
+      return MASTER_MEDIA_ITEMS.filter(
+        (m) => m.type === 'anime' || m.genres.some((g) => g.toLowerCase().includes('anime'))
+      );
+
+    case 'scifi':
+      return MASTER_MEDIA_ITEMS.filter(
+        (m) => m.genres.some((g) => g.toLowerCase().includes('sci-fi') || g.toLowerCase().includes('fantasy'))
+      );
+
+    case 'romance':
+      return [
+        ...FLIX_ROMANCE_ITEMS,
+        ...MASTER_MEDIA_ITEMS.filter((m) => m.genres.some((g) => g.toLowerCase().includes('romance'))),
+      ];
+
     case 'drakor':
       return FLIX_DRAKOR_ITEMS;
-    case 'romance':
-      return FLIX_ROMANCE_ITEMS;
-    case 'horror':
-      return [
-        FEATURED_HERO_ITEMS.find((m) => m.id === 'hero-stree2') || FLIX_ANIMATION_ITEMS[0],
-        ...POPULAR_MOVIES.filter((m) => m.genres.some((g) => g.toLowerCase().includes('horror') || g.toLowerCase().includes('thriller'))),
-      ];
-    case 'action':
-      return [
-        FEATURED_HERO_ITEMS.find((m) => m.id === 'hero-deadpool-wolverine') || FLIX_ANIMATION_ITEMS[0],
-        ...POPULAR_MOVIES.filter((m) => m.genres.some((g) => g.toLowerCase().includes('action'))),
-        ...DUAL_AUDIO_ITEMS.filter((m) => m.genres.some((g) => g.toLowerCase().includes('action'))),
-      ];
-    case 'bollywood':
-      return [
-        ...DUAL_AUDIO_ITEMS.filter((m) => m.language === 'Hindi' || m.hasHindiDubbed),
-        ...POPULAR_MOVIES.filter((m) => m.language === 'Hindi'),
-      ];
-    case 'scifi':
-    case 'special':
-      return [
-        FEATURED_HERO_ITEMS.find((m) => m.id === 'hero-kalki') || FLIX_ANIMATION_ITEMS[0],
-        FEATURED_HERO_ITEMS.find((m) => m.id === 'hero-dune2') || FLIX_ANIMATION_ITEMS[0],
-        ...POPULAR_MOVIES.filter((m) => m.genres.some((g) => g.toLowerCase().includes('sci-fi'))),
-      ];
+
+    case 'animation':
+      return FLIX_ANIMATION_ITEMS;
+
     case 'trending':
     default:
       return [
-        ...FLIX_ANIMATION_ITEMS.slice(0, 4),
-        ...POPULAR_MOVIES.slice(0, 6),
-        ...POPULAR_ANIME.slice(0, 4),
-      ];
+        ...FEATURED_HERO_ITEMS,
+        ...MASTER_MEDIA_ITEMS.filter((m) => m.trending && (m.language === 'Hindi' || m.isDualAudio)),
+      ].filter((item, idx, arr) => arr.findIndex((x) => x.id === item.id) === idx);
   }
 }
 

@@ -23,11 +23,12 @@ interface AiAssistantModalProps {
 }
 
 const QUICK_MOOD_PROMPTS = [
-  { label: '🔥 Stree 2 jaisa Horror-Comedy', prompt: 'Mujhe Stree 2 jaisi horror comedy movies suggest karo with Hindi audio' },
-  { label: '🧠 Mind-Bending Sci-Fi & Twists', prompt: 'Recommend top mind-bending sci-fi movies with massive plot twists' },
-  { label: '🇮🇳 Best Dual Audio Blockbusters', prompt: 'What are the highest rated Dual Audio (Hindi + English) 4K blockbusters?' },
-  { label: '⚡ Solo Leveling / Fast Anime', prompt: 'Suggest intense, fast-paced action anime like Solo Leveling and Jujutsu Kaisen' },
-  { label: '🍿 Family Weekend Binge', prompt: 'Suggest wholesome, top-rated family entertainer movies with high IMDb scores' },
+  { label: '😂 Hasne wali Mast Comedy', prompt: 'Mujhe mast hasne wali comedy movies batao Hindi me with high IMDb score' },
+  { label: '🇮🇳 Bollywood & Pan-India Hits', prompt: 'Top trending Bollywood aur South Hindi dubbed movies suggest karo' },
+  { label: '🔥 Stree 2 jaisa Horror-Comedy', prompt: 'Mujhe Stree 2 aur Shaitaan jaisi horror thriller movies suggest karo' },
+  { label: '🎧 Hollywood 4K Dual Audio', prompt: 'Top Hollywood blockbuster movies in Hindi Dubbed & Dual Audio 4K stream' },
+  { label: '📺 Superhit Hindi Web Series', prompt: 'Panchayat aur Mirzapur jaisi best Hindi web series batao' },
+  { label: '⚡ Action Anime in Hindi', prompt: 'Solo Leveling aur Jujutsu Kaisen jaise action anime Hindi dubbed me dikhao' },
 ];
 
 export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
@@ -40,7 +41,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
     {
       role: 'assistant',
       content:
-        'Namaste! Mai hoon **CineBot AI**, aapka personal cinema & streaming concierge. 🍿\n\nAapko kis tarah ki movie, series, ya anime dekhni hai? Aap Hindi, Hinglish ya English me pooch sakte hain!',
+        'Namaste! Mai hoon **CineBot AI**, aapka personal Indian Cinema & Streaming Dost. 🍿\n\nAapko kis tarah ki movie ya web series dekhni hai? Comedy, Bollywood, Pan-India, ya Hollywood in Dual Audio (Hindi+English)? Aap Hindi, Hinglish ya English me pooch sakte hain!',
       timestamp: Date.now(),
     },
   ]);
@@ -109,7 +110,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
       {
         role: 'assistant',
         content:
-          'Namaste! Mai hoon **CineBot AI**, aapka personal cinema & streaming concierge. 🍿\n\nAapko kis tarah ki movie, series, ya anime dekhni hai? Aap Hindi, Hinglish ya English me pooch sakte hain!',
+          'Namaste! Mai hoon **CineBot AI**, aapka personal Indian Cinema & Streaming Dost. 🍿\n\nAapko kis tarah ki movie ya web series dekhni hai? Comedy, Bollywood, Pan-India, ya Hollywood in Dual Audio (Hindi+English)? Aap Hindi, Hinglish ya English me pooch sakte hain!',
         timestamp: Date.now(),
       },
     ]);

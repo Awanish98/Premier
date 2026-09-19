@@ -3,15 +3,16 @@ import {
   Flame, 
   Swords, 
   Heart, 
-  ToyBrick, 
   Ghost, 
-  Sparkles, 
-  Moon, 
   Film, 
   Rocket, 
   Radio, 
   SlidersHorizontal,
-  Check
+  Check,
+  Laugh,
+  Headphones,
+  Tv,
+  Zap
 } from 'lucide-react';
 import type { FlixCategory, SortOption } from '../types';
 
@@ -31,16 +32,17 @@ export const FlixCategoryRail: React.FC<FlixCategoryRailProps> = ({
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
 
   const categories: { id: FlixCategory; label: string; icon: React.FC<{ size?: number; className?: string }> }[] = [
-    { id: 'trending', label: 'Trending', icon: Flame },
-    { id: 'action', label: 'Action', icon: Swords },
-    { id: 'romance', label: 'Romance', icon: Heart },
-    { id: 'animation', label: 'Animation', icon: ToyBrick },
-    { id: 'horror', label: 'Horror', icon: Ghost },
-    { id: 'special', label: 'Special', icon: Sparkles },
-    { id: 'drakor', label: 'Drakor', icon: Moon },
-    { id: 'bollywood', label: 'Bollywood & Dual', icon: Film },
-    { id: 'scifi', label: 'Sci-Fi', icon: Rocket },
-    { id: 'livetv', label: 'Live TV', icon: Radio },
+    { id: 'trending', label: '🔥 Trending Now', icon: Flame },
+    { id: 'bollywood', label: '🇮🇳 Bollywood & Pan-India', icon: Film },
+    { id: 'comedy', label: '😂 Hasne Wali Comedy', icon: Laugh },
+    { id: 'dualaudio', label: '🎧 Dual Audio & Hindi Dubbed', icon: Headphones },
+    { id: 'action', label: '💥 Action & Masala', icon: Swords },
+    { id: 'webseries', label: '📺 Desi Web Series', icon: Tv },
+    { id: 'horror', label: '👻 Horror & Thriller', icon: Ghost },
+    { id: 'anime', label: '⚡ Anime in Hindi', icon: Zap },
+    { id: 'scifi', label: '🚀 Sci-Fi Epics', icon: Rocket },
+    { id: 'romance', label: '❤️ Romance & Drama', icon: Heart },
+    { id: 'livetv', label: '📡 24/7 Live TV', icon: Radio },
   ];
 
   const getCategoryTitle = () => {
