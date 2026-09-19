@@ -21,6 +21,8 @@ import { FRANCHISE_ALBUMS, MASTER_MEDIA_ITEMS } from '../data/mockCatalog';
 import type { MediaAlbum, MediaItem } from '../types';
 import { AlbumCard } from './AlbumCard';
 import { useTheme } from '../context/ThemeContext';
+import { BlurFade } from './magicui/BlurFade';
+import { Marquee } from './magicui/Marquee';
 
 interface AlbumSectionProps {
   onPlayMedia: (item: MediaItem) => void;
@@ -231,6 +233,83 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
         </div>
       </div>
 
+      {/* Franchise Universes & Sagas Live Marquee */}
+      <div style={{ marginBottom: '2.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', padding: '0 0.5rem' }}>
+          <Sparkles size={16} color="var(--accent)" />
+          <span style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
+            Featured Sagas & Universes (Click to Explore)
+          </span>
+        </div>
+        <Marquee speed={36} pauseOnHover={true}>
+          {FRANCHISE_ALBUMS.map((album) => {
+            const count = getAlbumMediaItems(album).length;
+            return (
+              <div
+                key={album.id}
+                onClick={() => {
+                  setActiveAlbum(album);
+                  setAlbumSearch('');
+                  setAlbumFilterPhase('all');
+                  setSortOrder('release');
+                }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '0.65rem 1.35rem',
+                  borderRadius: '999px',
+                  background: 'rgba(13, 21, 39, 0.75)',
+                  border: '1px solid var(--border-subtle)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = album.colorTheme || 'var(--accent)';
+                  e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)';
+                  e.currentTarget.style.boxShadow = `0 8px 25px ${album.colorTheme ? album.colorTheme + '44' : 'var(--accent-glow)'}`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.5)';
+                }}
+              >
+                <span
+                  style={{
+                    width: '9px',
+                    height: '9px',
+                    borderRadius: '50%',
+                    background: album.colorTheme || 'var(--accent)',
+                    boxShadow: `0 0 10px ${album.colorTheme || 'var(--accent)'}`,
+                    flexShrink: 0,
+                  }}
+                />
+                <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#fff', whiteSpace: 'nowrap' }}>
+                  {album.title}
+                </span>
+                <span
+                  style={{
+                    fontSize: '0.72rem',
+                    padding: '2px 8px',
+                    borderRadius: '999px',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    color: 'var(--text-secondary)',
+                    fontWeight: 700,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {count} Titles
+                </span>
+              </div>
+            );
+          })}
+        </Marquee>
+      </div>
+
       {/* Category Filter Pills */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.75rem', marginBottom: '2.5rem', scrollbarWidth: 'none' }}>
         {categories.map((cat) => (
@@ -256,7 +335,7 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
         ))}
       </div>
 
-      {/* Albums Grid */}
+      {/* Albums Grid with MagicUI BlurFade Staggered Reveal */}
       <div
         style={{
           display: 'grid',
@@ -264,18 +343,26 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
           gap: '1.75rem',
         }}
       >
-        {filteredAlbums.map((album) => (
-          <AlbumCard
+        {filteredAlbums.map((album, index) => (
+          <BlurFade
             key={album.id}
-            album={album}
-            onClick={(a) => {
-              setActiveAlbum(a);
-              setAlbumSearch('');
-              setAlbumFilterPhase('all');
-              setSortOrder('release');
-            }}
-            onPlayFirst={handlePlayFirst}
-          />
+            delay={0.06 * (index % 8)}
+            inView={true}
+            yOffset={24}
+            blur="8px"
+            duration={0.5}
+          >
+            <AlbumCard
+              album={album}
+              onClick={(a) => {
+                setActiveAlbum(a);
+                setAlbumSearch('');
+                setAlbumFilterPhase('all');
+                setSortOrder('release');
+              }}
+              onPlayFirst={handlePlayFirst}
+            />
+          </BlurFade>
         ))}
       </div>
 
@@ -808,166 +895,174 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
                     const inWatchlist = isInWatchlist(item.id);
 
                     return (
-                      <div
+                      <BlurFade
                         key={item.id}
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.03)',
-                          border: '1px solid var(--border-subtle)',
-                          borderRadius: '14px',
-                          padding: '0.85rem 1.15rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: '1rem',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = activeAlbum.colorTheme || 'var(--accent)';
-                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = 'var(--border-subtle)';
-                          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                        }}
+                        delay={Math.min(0.02 * (index % 12), 0.25)}
+                        inView={false}
+                        yOffset={10}
+                        blur="4px"
+                        duration={0.35}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0, flex: 1 }}>
-                          <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-muted)', width: '28px' }}>
-                            {(index + 1).toString().padStart(2, '0')}
-                          </span>
+                        <div
+                          style={{
+                            background: 'rgba(255, 255, 255, 0.03)',
+                            border: '1px solid var(--border-subtle)',
+                            borderRadius: '14px',
+                            padding: '0.85rem 1.15rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '1rem',
+                            transition: 'all 0.2s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.borderColor = activeAlbum.colorTheme || 'var(--accent)';
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0, flex: 1 }}>
+                            <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-muted)', width: '28px' }}>
+                              {(index + 1).toString().padStart(2, '0')}
+                            </span>
 
-                          <div style={{ position: 'relative', width: '52px', height: '74px', flexShrink: 0, borderRadius: '8px', overflow: 'hidden' }}>
-                            <img
-                              src={item.posterPath}
-                              alt={item.title}
-                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            />
-                            {item.isDualAudio && (
-                              <span
-                                style={{
-                                  position: 'absolute',
-                                  bottom: 2,
-                                  left: 2,
-                                  right: 2,
-                                  background: 'rgba(245, 158, 11, 0.9)',
-                                  color: '#000',
-                                  fontSize: '0.55rem',
-                                  fontWeight: 900,
-                                  textAlign: 'center',
-                                  borderRadius: '3px',
-                                  padding: '1px 0',
-                                }}
-                              >
-                                DUAL
-                              </span>
-                            )}
-                          </div>
-
-                          <div style={{ minWidth: 0, flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
-                              {item.mcuPhase && (
+                            <div style={{ position: 'relative', width: '52px', height: '74px', flexShrink: 0, borderRadius: '8px', overflow: 'hidden' }}>
+                              <img
+                                src={item.posterPath}
+                                alt={item.title}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                              />
+                              {item.isDualAudio && (
                                 <span
                                   style={{
-                                    fontSize: '0.65rem',
-                                    fontWeight: 800,
-                                    padding: '1px 6px',
-                                    borderRadius: '4px',
-                                    background: 'rgba(239, 68, 68, 0.2)',
-                                    color: '#ef4444',
-                                    border: '1px solid rgba(239, 68, 68, 0.4)',
+                                    position: 'absolute',
+                                    bottom: 2,
+                                    left: 2,
+                                    right: 2,
+                                    background: 'rgba(245, 158, 11, 0.9)',
+                                    color: '#000',
+                                    fontSize: '0.55rem',
+                                    fontWeight: 900,
+                                    textAlign: 'center',
+                                    borderRadius: '3px',
+                                    padding: '1px 0',
                                   }}
                                 >
-                                  {item.mcuPhase}
-                                </span>
-                              )}
-                              <span
-                                style={{
-                                  fontSize: '0.65rem',
-                                  fontWeight: 800,
-                                  padding: '1px 5px',
-                                  borderRadius: '3px',
-                                  background: 'var(--badge-bg)',
-                                  color: 'var(--accent)',
-                                }}
-                              >
-                                {item.type.toUpperCase()}
-                              </span>
-                              <span style={{ fontSize: '0.78rem', color: '#fbbf24', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '2px' }}>
-                                <Star size={12} fill="#fbbf24" />
-                                {item.rating.toFixed(1)}
-                              </span>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                                • {item.releaseYear} {item.duration ? `• ${item.duration}` : item.totalSeasons ? `• ${item.totalSeasons} S (${item.totalEpisodes || 0} Ep)` : ''}
-                              </span>
-                              {item.audioTrack && (
-                                <span style={{ fontSize: '0.7rem', color: '#22c55e', fontWeight: 600 }}>
-                                  • {item.audioTrack}
+                                  DUAL
                                 </span>
                               )}
                             </div>
 
-                            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '0.15rem' }}>
-                              {item.title}
-                            </h4>
+                            <div style={{ minWidth: 0, flex: 1 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
+                                {item.mcuPhase && (
+                                  <span
+                                    style={{
+                                      fontSize: '0.65rem',
+                                      fontWeight: 800,
+                                      padding: '1px 6px',
+                                      borderRadius: '4px',
+                                      background: 'rgba(239, 68, 68, 0.2)',
+                                      color: '#ef4444',
+                                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                                    }}
+                                  >
+                                    {item.mcuPhase}
+                                  </span>
+                                )}
+                                <span
+                                  style={{
+                                    fontSize: '0.65rem',
+                                    fontWeight: 800,
+                                    padding: '1px 5px',
+                                    borderRadius: '3px',
+                                    background: 'var(--badge-bg)',
+                                    color: 'var(--accent)',
+                                  }}
+                                >
+                                  {item.type.toUpperCase()}
+                                </span>
+                                <span style={{ fontSize: '0.78rem', color: '#fbbf24', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '2px' }}>
+                                  <Star size={12} fill="#fbbf24" />
+                                  {item.rating.toFixed(1)}
+                                </span>
+                                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                                  • {item.releaseYear} {item.duration ? `• ${item.duration}` : item.totalSeasons ? `• ${item.totalSeasons} S (${item.totalEpisodes || 0} Ep)` : ''}
+                                </span>
+                                {item.audioTrack && (
+                                  <span style={{ fontSize: '0.7rem', color: '#22c55e', fontWeight: 600 }}>
+                                    • {item.audioTrack}
+                                  </span>
+                                )}
+                              </div>
 
-                            <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {item.overview}
-                            </p>
+                              <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: '0.15rem' }}>
+                                {item.title}
+                              </h4>
+
+                              <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {item.overview}
+                              </p>
+                            </div>
                           </div>
-                        </div>
 
-                        {/* Action buttons */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
-                          {onShowMediaDetails && (
+                          {/* Action buttons */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+                            {onShowMediaDetails && (
+                              <button
+                                onClick={() => {
+                                  setActiveAlbum(null);
+                                  onShowMediaDetails(item);
+                                }}
+                                style={{
+                                  background: 'rgba(255, 255, 255, 0.08)',
+                                  border: '1px solid var(--border-subtle)',
+                                  borderRadius: '8px',
+                                  padding: '0.5rem',
+                                  color: '#fff',
+                                  cursor: 'pointer',
+                                }}
+                                title="View Cast & Info"
+                              >
+                                <Info size={16} />
+                              </button>
+                            )}
+
                             <button
                               onClick={() => {
-                                setActiveAlbum(null);
-                                onShowMediaDetails(item);
+                                if (inWatchlist) removeFromWatchlist(item.id);
+                                else addToWatchlist(item);
                               }}
                               style={{
-                                background: 'rgba(255, 255, 255, 0.08)',
+                                background: inWatchlist ? 'var(--accent)' : 'rgba(255, 255, 255, 0.08)',
                                 border: '1px solid var(--border-subtle)',
                                 borderRadius: '8px',
                                 padding: '0.5rem',
                                 color: '#fff',
                                 cursor: 'pointer',
                               }}
-                              title="View Cast & Info"
+                              title={inWatchlist ? 'In Watchlist' : 'Add to Watchlist'}
                             >
-                              <Info size={16} />
+                              {inWatchlist ? <Check size={16} /> : <Plus size={16} />}
                             </button>
-                          )}
 
-                          <button
-                            onClick={() => {
-                              if (inWatchlist) removeFromWatchlist(item.id);
-                              else addToWatchlist(item);
-                            }}
-                            style={{
-                              background: inWatchlist ? 'var(--accent)' : 'rgba(255, 255, 255, 0.08)',
-                              border: '1px solid var(--border-subtle)',
-                              borderRadius: '8px',
-                              padding: '0.5rem',
-                              color: '#fff',
-                              cursor: 'pointer',
-                            }}
-                            title={inWatchlist ? 'In Watchlist' : 'Add to Watchlist'}
-                          >
-                            {inWatchlist ? <Check size={16} /> : <Plus size={16} />}
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              setActiveAlbum(null);
-                              onPlayMedia(item);
-                            }}
-                            className="btn-accent"
-                            style={{ padding: '0.5rem 1.15rem', fontSize: '0.82rem', fontWeight: 800 }}
-                          >
-                            <Play size={14} fill="#fff" />
-                            <span>Play</span>
-                          </button>
+                            <button
+                              onClick={() => {
+                                setActiveAlbum(null);
+                                onPlayMedia(item);
+                              }}
+                              className="btn-accent"
+                              style={{ padding: '0.5rem 1.15rem', fontSize: '0.82rem', fontWeight: 800 }}
+                            >
+                              <Play size={14} fill="#fff" />
+                              <span>Play</span>
+                            </button>
+                          </div>
                         </div>
-                      </div>
+                      </BlurFade>
                     );
                   })}
                 </div>
@@ -980,140 +1075,148 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
                     gap: '1.25rem',
                   }}
                 >
-                  {processedAlbumItems.map((item) => {
+                  {processedAlbumItems.map((item, index) => {
                     const inWatchlist = isInWatchlist(item.id);
 
                     return (
-                      <div
+                      <BlurFade
                         key={item.id}
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.03)',
-                          borderRadius: '12px',
-                          border: '1px solid var(--border-subtle)',
-                          overflow: 'hidden',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          transition: 'all 0.25s ease',
-                          cursor: 'pointer',
-                        }}
-                        onClick={() => {
-                          setActiveAlbum(null);
-                          onPlayMedia(item);
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-4px)';
-                          e.currentTarget.style.borderColor = activeAlbum.colorTheme || 'var(--accent)';
-                          e.currentTarget.style.boxShadow = '0 12px 25px rgba(0,0,0,0.6)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.borderColor = 'var(--border-subtle)';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }}
+                        delay={Math.min(0.02 * (index % 12), 0.25)}
+                        inView={false}
+                        yOffset={10}
+                        blur="4px"
+                        duration={0.35}
                       >
-                        <div style={{ position: 'relative', width: '100%', aspectRatio: '2/3', background: '#000' }}>
-                          <img
-                            src={item.posterPath}
-                            alt={item.title}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                          <div
-                            style={{
-                              position: 'absolute',
-                              top: '8px',
-                              right: '8px',
-                              background: 'rgba(0,0,0,0.7)',
-                              backdropFilter: 'blur(6px)',
-                              borderRadius: '6px',
-                              padding: '2px 6px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '3px',
-                              fontSize: '0.72rem',
-                              color: '#fbbf24',
-                              fontWeight: 800,
-                            }}
-                          >
-                            <Star size={11} fill="#fbbf24" />
-                            {item.rating.toFixed(1)}
-                          </div>
-
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (inWatchlist) removeFromWatchlist(item.id);
-                              else addToWatchlist(item);
-                            }}
-                            style={{
-                              position: 'absolute',
-                              top: '8px',
-                              left: item.mcuPhase ? '65px' : '8px',
-                              background: inWatchlist ? 'var(--accent)' : 'rgba(0,0,0,0.7)',
-                              backdropFilter: 'blur(6px)',
-                              border: '1px solid rgba(255,255,255,0.2)',
-                              borderRadius: '6px',
-                              width: '24px',
-                              height: '24px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              color: '#fff',
-                              cursor: 'pointer',
-                              zIndex: 10,
-                            }}
-                            title={inWatchlist ? 'In Watchlist' : 'Add to Watchlist'}
-                          >
-                            {inWatchlist ? <Check size={13} /> : <Plus size={13} />}
-                          </button>
-
-                          {item.mcuPhase && (
+                        <div
+                          style={{
+                            background: 'rgba(255, 255, 255, 0.03)',
+                            borderRadius: '12px',
+                            border: '1px solid var(--border-subtle)',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            transition: 'all 0.25s ease',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => {
+                            setActiveAlbum(null);
+                            onPlayMedia(item);
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-4px)';
+                            e.currentTarget.style.borderColor = activeAlbum.colorTheme || 'var(--accent)';
+                            e.currentTarget.style.boxShadow = '0 12px 25px rgba(0,0,0,0.6)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                            e.currentTarget.style.boxShadow = 'none';
+                          }}
+                        >
+                          <div style={{ position: 'relative', width: '100%', aspectRatio: '2/3', background: '#000' }}>
+                            <img
+                              src={item.posterPath}
+                              alt={item.title}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
                             <div
                               style={{
                                 position: 'absolute',
                                 top: '8px',
-                                left: '8px',
-                                background: 'rgba(239, 68, 68, 0.85)',
-                                color: '#fff',
-                                borderRadius: '4px',
-                                padding: '2px 5px',
-                                fontSize: '0.62rem',
+                                right: '8px',
+                                background: 'rgba(0,0,0,0.7)',
+                                backdropFilter: 'blur(6px)',
+                                borderRadius: '6px',
+                                padding: '2px 6px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '3px',
+                                fontSize: '0.72rem',
+                                color: '#fbbf24',
                                 fontWeight: 800,
-                                textTransform: 'uppercase',
                               }}
                             >
-                              {item.mcuPhase}
+                              <Star size={11} fill="#fbbf24" />
+                              {item.rating.toFixed(1)}
                             </div>
-                          )}
 
-                          {item.isDualAudio && (
-                            <div
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (inWatchlist) removeFromWatchlist(item.id);
+                                else addToWatchlist(item);
+                              }}
                               style={{
                                 position: 'absolute',
-                                bottom: '8px',
-                                left: '8px',
-                                background: 'rgba(245, 158, 11, 0.9)',
-                                color: '#000',
-                                borderRadius: '4px',
-                                padding: '2px 5px',
-                                fontSize: '0.62rem',
-                                fontWeight: 900,
+                                top: '8px',
+                                left: item.mcuPhase ? '65px' : '8px',
+                                background: inWatchlist ? 'var(--accent)' : 'rgba(0,0,0,0.7)',
+                                backdropFilter: 'blur(6px)',
+                                border: '1px solid rgba(255,255,255,0.2)',
+                                borderRadius: '6px',
+                                width: '24px',
+                                height: '24px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                color: '#fff',
+                                cursor: 'pointer',
+                                zIndex: 10,
                               }}
+                              title={inWatchlist ? 'In Watchlist' : 'Add to Watchlist'}
                             >
-                              DUAL AUDIO
-                            </div>
-                          )}
-                        </div>
+                              {inWatchlist ? <Check size={13} /> : <Plus size={13} />}
+                            </button>
 
-                        <div style={{ padding: '0.75rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                          <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff', lineHeight: 1.3, marginBottom: '0.4rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                            {item.title}
-                          </h4>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                            <span>{item.releaseYear}</span>
-                            <span>{item.duration || `${item.totalEpisodes || 8} Ep`}</span>
+                            {item.mcuPhase && (
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  top: '8px',
+                                  left: '8px',
+                                  background: 'rgba(239, 68, 68, 0.85)',
+                                  color: '#fff',
+                                  borderRadius: '4px',
+                                  padding: '2px 5px',
+                                  fontSize: '0.62rem',
+                                  fontWeight: 800,
+                                  textTransform: 'uppercase',
+                                }}
+                              >
+                                {item.mcuPhase}
+                              </div>
+                            )}
+
+                            {item.isDualAudio && (
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  bottom: '8px',
+                                  left: '8px',
+                                  background: 'rgba(245, 158, 11, 0.9)',
+                                  color: '#000',
+                                  borderRadius: '4px',
+                                  padding: '2px 5px',
+                                  fontSize: '0.62rem',
+                                  fontWeight: 900,
+                                }}
+                              >
+                                DUAL AUDIO
+                              </div>
+                            )}
+                          </div>
+
+                          <div style={{ padding: '0.75rem', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff', lineHeight: 1.3, marginBottom: '0.4rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                              {item.title}
+                            </h4>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                              <span>{item.releaseYear}</span>
+                              <span>{item.duration || `${item.totalEpisodes || 8} Ep`}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </BlurFade>
                     );
                   })}
                 </div>
