@@ -37,11 +37,18 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
   const [isHovered, setIsHovered] = useState(false);
   const [touchStart, setTouchStart] = useState<number | null>(null);
 
-  const { isInWatchlist, addToWatchlist, removeFromWatchlist } = useTheme();
+  const { isInWatchlist, addToWatchlist, removeFromWatchlist, setActiveHeroItem } = useTheme();
   const timerRef = useRef<number | null>(null);
   const progressIntervalRef = useRef<number | null>(null);
 
   const total = items.length;
+
+  // Sync active slide with global ambient background
+  useEffect(() => {
+    if (items && items[currentIndex]) {
+      setActiveHeroItem(items[currentIndex]);
+    }
+  }, [currentIndex, items, setActiveHeroItem]);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % total);

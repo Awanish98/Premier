@@ -14,6 +14,7 @@ import { ProfileSection } from './components/ProfileSection';
 import { WatchlistSection } from './components/WatchlistSection';
 import { SearchOverlay } from './components/SearchOverlay';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { AmbientBackground } from './components/AmbientBackground';
 import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
 import { Marquee } from './components/magicui/Marquee';
@@ -62,7 +63,10 @@ export const AppContent: React.FC = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+      {/* Dynamic Animated Ambient Background Layer */}
+      <AmbientBackground />
+
       {/* Interactive Global Toast Container */}
       <Toast />
 
@@ -74,7 +78,7 @@ export const AppContent: React.FC = () => {
       />
 
       {/* Main Streaming Platform Viewport */}
-      <main style={{ flex: 1, paddingBottom: '5rem' }}>
+      <main style={{ flex: 1, paddingBottom: '5rem', position: 'relative', zIndex: 1 }}>
         {/* ================= TAB: HOME ================= */}
         {activeTab === 'home' && (
           <div>

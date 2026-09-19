@@ -17,6 +17,8 @@ export interface ToastInfo {
 interface ThemeContextType {
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
+  activeHeroItem: MediaItem | null;
+  setActiveHeroItem: (item: MediaItem | null) => void;
   watchlist: MediaItem[];
   addToWatchlist: (item: MediaItem) => void;
   removeFromWatchlist: (itemId: string) => void;
@@ -34,14 +36,15 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<ThemeMode>(() => {
-    return (localStorage.getItem('cinejoy_theme') as ThemeMode) || 'cinejoy';
+    return (localStorage.getItem('premier_theme') as ThemeMode) || (localStorage.getItem('cinejoy_theme') as ThemeMode) || 'cinejoy';
   });
 
+  const [activeHeroItem, setActiveHeroItem] = useState<MediaItem | null>(null);
   const [toast, setToast] = useState<ToastInfo | null>(null);
 
   const [preferences, setPreferences] = useState<UserPreferences>(() => {
     try {
-      const saved = localStorage.getItem('cinejoy_preferences');
+      const saved = localStorage.getItem('premier_preferences') || localStorage.getItem('cinejoy_preferences');
       return saved ? JSON.parse(saved) : {
         audioLanguage: 'Hindi',
         defaultServer: 'vidlink_pro',
@@ -60,7 +63,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [watchlist, setWatchlist] = useState<MediaItem[]>(() => {
     try {
-      const saved = localStorage.getItem('cinejoy_watchlist');
+      const saved = localStorage.getItem('premier_watchlist') || localStorage.getItem('cinejoy_watchlist');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -74,7 +77,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     lastWatchedEpisode?: number;
   }[]>(() => {
     try {
-      const saved = localStorage.getItem('cinejoy_continue_watching');
+      const saved = localStorage.getItem('premier_continue_watching') || localStorage.getItem('cinejoy_continue_watching');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -91,7 +94,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const setTheme = (newTheme: ThemeMode) => {
     setThemeState(newTheme);
-    localStorage.setItem('cinejoy_theme', newTheme);
+    localStorage.setItem('premier_theme', newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     showToast(`Theme switched to ${newTheme.toUpperCase()}`, 'info');
   };
@@ -103,7 +106,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const updatePreferences = (prefs: Partial<UserPreferences>) => {
     setPreferences((prev) => {
       const updated = { ...prev, ...prefs };
-      localStorage.setItem('cinejoy_preferences', JSON.stringify(updated));
+      localStorage.setItem('premier_preferences', JSON.stringify(updated));
       return updated;
     });
     showToast('Preferences updated', 'success');
@@ -113,7 +116,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setWatchlist((prev) => {
       if (prev.some((i) => i.id === item.id)) return prev;
       const updated = [item, ...prev];
-      localStorage.setItem('cinejoy_watchlist', JSON.stringify(updated));
+      localStorage.setItem('premier_watchlist', JSON.stringify(updated));
       return updated;
     });
     showToast(`Added "${item.title}" to Watchlist`, 'success');
@@ -123,7 +126,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setWatchlist((prev) => {
       const target = prev.find((i) => i.id === itemId);
       const updated = prev.filter((i) => i.id !== itemId);
-      localStorage.setItem('cinejoy_watchlist', JSON.stringify(updated));
+      localStorage.setItem('premier_watchlist', JSON.stringify(updated));
       if (target) {
         showToast(`Removed "${target.title}" from Watchlist`, 'info');
       }
@@ -142,7 +145,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         { item, progress, lastWatchedSeason: season || 1, lastWatchedEpisode: episode || 1 },
         ...filtered,
       ].slice(0, 10);
-      localStorage.setItem('cinejoy_continue_watching', JSON.stringify(updated));
+      localStorage.setItem('premier_continue_watching', JSON.stringify(updated));
       return updated;
     });
   };
@@ -150,7 +153,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const removeProgress = (itemId: string) => {
     setContinueWatching((prev) => {
       const updated = prev.filter((entry) => entry.item.id !== itemId);
-      localStorage.setItem('cinejoy_continue_watching', JSON.stringify(updated));
+      localStorage.setItem('premier_continue_watching', JSON.stringify(updated));
       return updated;
     });
     showToast('Removed from Continue Watching', 'info');
@@ -161,6 +164,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       value={{
         theme,
         setTheme,
+        activeHeroItem,
+        setActiveHeroItem,
         watchlist,
         addToWatchlist,
         removeFromWatchlist,

@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenS
   }, [onOpenSearch]);
 
   const themes: { id: ThemeMode; name: string; color: string; tag: string }[] = [
-    { id: 'cinejoy', name: 'Cinejoy Neon', color: '#95FF50', tag: 'Electric Lime' },
+    { id: 'cinejoy', name: 'Premier Emerald', color: '#95FF50', tag: 'Electric Lime' },
     { id: 'prime', name: 'Prime Video', color: '#00a8e1', tag: 'Navy / Cyan' },
     { id: 'netflix', name: 'Netflix Mirror', color: '#e50914', tag: 'Dark / Red' },
     { id: 'disney', name: 'Disney+ / Hotstar', color: '#0072d2', tag: 'Cobalt / Blue' },
@@ -135,23 +135,23 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenS
               <Film size={20} color={theme === 'cinejoy' ? '#05080b' : '#ffffff'} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '1.4rem', fontWeight: 900, letterSpacing: '-0.03em', color: '#ffffff' }}>
-                CINE<span style={{ color: 'var(--accent)', textShadow: '0 0 12px var(--accent-glow)' }}>JOY</span>
+              <span style={{ fontSize: '1.45rem', fontWeight: 900, letterSpacing: '-0.03em', color: '#ffffff' }}>
+                PREM<span style={{ color: 'var(--accent)', textShadow: '0 0 15px var(--accent-glow)' }}>IER</span>
               </span>
               <span 
                 style={{
                   fontSize: '0.65rem',
                   fontWeight: 800,
                   marginLeft: '7px',
-                  padding: '2px 6px',
+                  padding: '2px 7px',
                   borderRadius: '5px',
                   backgroundColor: 'var(--badge-bg)',
                   color: 'var(--accent)',
-                  border: '1px solid var(--border-subtle)',
-                  letterSpacing: '0.05em'
+                  border: '1px solid var(--accent)',
+                  letterSpacing: '0.06em'
                 }}
               >
-                PRO
+                4K CINEMA
               </span>
             </div>
           </div>

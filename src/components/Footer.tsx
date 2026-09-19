@@ -41,21 +41,21 @@ export const Footer: React.FC = () => {
                 <Film size={18} color={theme === 'cinejoy' ? '#05080b' : '#ffffff'} />
               </div>
               <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff' }}>
-                CINE<span style={{ color: 'var(--accent)' }}>JOY</span>
+                PREM<span style={{ color: 'var(--accent)' }}>IER</span>
               </span>
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1rem' }}>
-              Free high-speed streaming platform inspired by Cinejoy & FMHY with 4K UHD & Dual Audio (Hindi + English) playback.
+              Next-generation ultra-premium streaming platform with IMAX 4K UHD, Multi-Server playback, and Dual Audio (Hindi + English).
             </p>
             <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
               <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '4px', background: 'var(--badge-bg)', color: 'var(--accent)', fontWeight: 700 }}>
-                FMHY Engine
+                PREMIER Core
               </span>
               <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '4px', background: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)', fontWeight: 700 }}>
-                iptv-org Live
+                IMAX 4K HDR
               </span>
               <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '4px', background: 'rgba(255,255,255,0.06)', color: 'var(--text-secondary)', fontWeight: 700 }}>
-                NetMirror UI
+                Dual Audio Engine
               </span>
             </div>
           </div>

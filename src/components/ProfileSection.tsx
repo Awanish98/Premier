@@ -20,7 +20,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ onPlayMedia, onS
   } = useTheme();
 
   const themes: { id: ThemeMode; name: string; color: string; tag: string }[] = [
-    { id: 'cinejoy', name: 'Cinejoy Neon', color: '#95FF50', tag: 'Electric Lime' },
+    { id: 'cinejoy', name: 'Premier Emerald', color: '#95FF50', tag: 'Signature Neon' },
     { id: 'prime', name: 'Prime Cinema', color: '#00a8e1', tag: 'Navy / Cyan' },
     { id: 'netflix', name: 'Netflix Mirror', color: '#e50914', tag: 'Dark / Red' },
     { id: 'disney', name: 'Disney+ / Hotstar', color: '#0072d2', tag: 'Cobalt / Blue' },

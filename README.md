@@ -1,32 +1,28 @@
-# React + TypeScript + Vite
+# 🎬 PREMIER — Ultra-HD 4K Streaming & Cinema Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+PREMIER is a next-generation streaming web application featuring IMAX-grade widescreen hero presentations, dynamic atmospheric ambient backgrounds, multi-server streaming integrations, dual audio support, and 24/7 Live IPTV channels.
 
-Currently, two official plugins are available:
+![PREMIER Banner](https://image.tmdb.org/t/p/original/o8XSR1SONnjcsv84NRu6Mwsl5io.jpg)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Key Features
 
-## React Compiler
+- 🌟 **Dynamic Atmospheric Background**: Ambient background lighting that smoothly adapts and morphs colors to match the active blockbuster movie slide (inspired by Cinejoy & Apple TV+).
+- 🎥 **IMAX-Scale Hero Carousel**: Expansive 4K presentations with Ken Burns cinematic zoom, interactive filmstrip thumbnail rail, active countdown progress bar, and embedded 4K official trailers.
+- 🇮🇳 **Dual Audio (Hindi Dubbed + English) 4K**: Dedicated section and badges for Indian cinema, Hollywood dual audio, and multilingual anime.
+- ⚡ **Multi-Server Streaming Embeds**: Integrated support for VidLink Pro, AutoEmbed Hindi, Embed.su, SmashyStream, and SuperEmbed.
+- 📡 **24/7 Live IPTV Television**: Built-in HLS player with real-time news, sports, entertainment, and Indian channels.
+- 🎨 **Multi-Theme Engine**: Premier Emerald, Prime Video Navy, Netflix Mirror Red, Disney+ Cobalt, and Cyberpunk Purple.
+- ⚡ **Universal Search & Watchlist**: Lightning-fast instant search with hotkey (`Ctrl+K` / `Cmd+K`) and persistent local watchlist.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🚀 Live Demo
 
-## Expanding the Oxlint configuration
+- **Live URL**: [https://awanish98.github.io/Premier/](https://awanish98.github.io/Premier/)
+- **Repository**: [https://github.com/Awanish98/Premier](https://github.com/Awanish98/Premier)
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 🛠️ Tech Stack
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+- **Framework**: React 19 + TypeScript + Vite 8
+- **Styling**: Vanilla CSS Design System with Glassmorphism, Aurora Gradients & Magic UI
+- **Icons**: Lucide React
+- **Video Engine**: HLS.js + Embed Stream Provider
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
