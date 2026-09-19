@@ -7,7 +7,11 @@ import {
   VolumeX, 
   Maximize, 
   RefreshCw,
-  Zap
+  Zap,
+  Tv,
+  Check,
+  ShieldCheck,
+  Globe
 } from 'lucide-react';
 import { LIVE_CHANNELS } from '../data/mockCatalog';
 import type { LiveChannel } from '../types';
@@ -21,9 +25,14 @@ export const LiveTvSection: React.FC = () => {
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const [streamError, setStreamError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [serverMode, setServerMode] = useState<'embed' | 'hls' | 'backup'>(
+    LIVE_CHANNELS[0].embedUrl ? 'embed' : 'hls'
+  );
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<Hls | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+  const playerContainerRef = useRef<HTMLDivElement>(null);
 
   const categories = [
     'All',
@@ -37,18 +46,48 @@ export const LiveTvSection: React.FC = () => {
 
   // Quick preset shortcuts for instant 1-click loading
   const quickPresets = [
+    { name: 'ABP News HD', id: 'abp-news' },
     { name: 'Aaj Tak HD', id: 'aaj-tak' },
-    { name: 'DD Sports', id: 'dd-sports' },
+    { name: 'NDTV India', id: 'ndtv-india' },
+    { name: 'DD Sports Live', id: 'dd-sports' },
     { name: 'Red Bull Extreme', id: 'red-bull-tv' },
-    { name: 'Skate 4K Flex', id: 'skate-phantom-4k' },
-    { name: 'Apple 4K HDR', id: 'apple-bipbop-4k' },
-    { name: 'Sintel 4K Cinema', id: 'sintel-open-cinema' },
     { name: 'NASA 4K Live', id: 'nasa-tv' },
+    { name: 'Big Buck Bunny 4K', id: 'big-buck-bunny-4k' },
+    { name: 'Sintel 4K Cinema', id: 'sintel-open-cinema' },
   ];
 
-  // Initialize and load HLS stream whenever activeChannel changes
+  // Channel switch handler: auto pick best server
+  const handleSelectChannel = (channel: LiveChannel) => {
+    setActiveChannel(channel);
+    setStreamError(false);
+    // If channel has official verified 24/7 embed, default to embed for instant guaranteed playback
+    if (channel.embedUrl) {
+      setServerMode('embed');
+    } else {
+      setServerMode('hls');
+    }
+  };
+
+  // Initialize and load HLS stream when in 'hls' or 'backup' mode
   useEffect(() => {
-    if (!activeChannel || !videoRef.current) return;
+    if (!activeChannel) return;
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    if (serverMode === 'embed') {
+      setIsLoading(false);
+      setStreamError(false);
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+      return;
+    }
+
+    if (!videoRef.current) return;
 
     setStreamError(false);
     setIsLoading(true);
@@ -59,23 +98,42 @@ export const LiveTvSection: React.FC = () => {
     }
 
     const video = videoRef.current;
-    const streamUrl = activeChannel.streamUrl;
+    const targetStreamUrl =
+      serverMode === 'backup' && activeChannel.backupStreamUrl
+        ? activeChannel.backupStreamUrl
+        : activeChannel.streamUrl;
+
+    // Fail-safe Watchdog: If HLS takes > 4.5s (due to CORS/network block), failover to embed
+    timeoutRef.current = window.setTimeout(() => {
+      if (isLoading) {
+        if (activeChannel.embedUrl) {
+          setServerMode('embed');
+          setIsLoading(false);
+        } else {
+          setStreamError(true);
+          setIsLoading(false);
+        }
+      }
+    }, 4500);
 
     if (Hls.isSupported()) {
       const hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
         backBufferLength: 60,
+        manifestLoadingTimeOut: 4000,
+        manifestLoadingMaxRetry: 1,
       });
 
       hlsRef.current = hls;
-      hls.loadSource(streamUrl);
+      hls.loadSource(targetStreamUrl);
       hls.attachMedia(video);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
         setIsLoading(false);
+        setStreamError(false);
         video.play().catch(() => {
-          // Autoplay was blocked, muted play fallback
           video.muted = true;
           setIsMuted(true);
           video.play().catch(() => {});
@@ -84,41 +142,46 @@ export const LiveTvSection: React.FC = () => {
 
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
-          switch (data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-              hls.startLoad();
-              break;
-            case Hls.ErrorTypes.MEDIA_ERROR:
-              hls.recoverMediaError();
-              break;
-            default:
-              setStreamError(true);
-              setIsLoading(false);
-              hls.destroy();
-              break;
+          if (timeoutRef.current) clearTimeout(timeoutRef.current);
+          if (activeChannel.embedUrl) {
+            // Auto failover to Server 2 (Official Live Stream)
+            setServerMode('embed');
+            setIsLoading(false);
+          } else {
+            setStreamError(true);
+            setIsLoading(false);
+            hls.destroy();
           }
         }
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       // Native iOS Safari support
-      video.src = streamUrl;
+      video.src = targetStreamUrl;
       video.addEventListener('loadedmetadata', () => {
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
         setIsLoading(false);
+        setStreamError(false);
         video.play().catch(() => {});
       });
       video.addEventListener('error', () => {
-        setStreamError(true);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (activeChannel.embedUrl) {
+          setServerMode('embed');
+        } else {
+          setStreamError(true);
+        }
         setIsLoading(false);
       });
     }
 
     return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
       }
     };
-  }, [activeChannel]);
+  }, [activeChannel, serverMode]);
 
   const handleMuteToggle = () => {
     if (videoRef.current) {
@@ -128,9 +191,9 @@ export const LiveTvSection: React.FC = () => {
   };
 
   const handleFullScreen = () => {
-    if (videoRef.current) {
-      if (videoRef.current.requestFullscreen) {
-        videoRef.current.requestFullscreen();
+    if (playerContainerRef.current) {
+      if (playerContainerRef.current.requestFullscreen) {
+        playerContainerRef.current.requestFullscreen();
       }
     }
   };
@@ -154,6 +217,7 @@ export const LiveTvSection: React.FC = () => {
 
     setChannels([customChannel, ...channels]);
     setActiveChannel(customChannel);
+    setServerMode('hls');
     setCustomM3uUrl('');
   };
 
@@ -176,7 +240,7 @@ export const LiveTvSection: React.FC = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.3rem' }}>
             <span className="live-pulse" />
             <h1 style={{ fontSize: '1.9rem', fontWeight: 900, fontFamily: 'var(--font-display)', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-              Live TV Channels & 4K HLS Streams
+              Live TV Channels & 4K OTT Streams
             </h1>
             <span
               style={{
@@ -194,7 +258,7 @@ export const LiveTvSection: React.FC = () => {
             </span>
           </div>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-            Duniya bhar ke popular free-to-air Indian Hindi news, global sports, cinema streams aur 4K IPTV feeds direct HLS player me dekhein.
+            Duniya bhar ke popular Indian Hindi news, sports cricket, 4K cinema aur international live streams bina buffering ke dekhein.
           </p>
         </div>
 
@@ -202,7 +266,7 @@ export const LiveTvSection: React.FC = () => {
         <form onSubmit={handleCustomStreamLoad} style={{ display: 'flex', gap: '0.5rem', maxWidth: '440px', width: '100%' }}>
           <input
             type="url"
-            placeholder="Paste any custom .m3u8 stream link..."
+            placeholder="Paste any .m3u8 stream link..."
             value={customM3uUrl}
             onChange={(e) => setCustomM3uUrl(e.target.value)}
             style={{
@@ -217,7 +281,7 @@ export const LiveTvSection: React.FC = () => {
             }}
           />
           <button type="submit" className="btn-accent" style={{ padding: '0.55rem 1.1rem', fontSize: '0.84rem', fontWeight: 800 }}>
-            Play M3U8
+            Stream
           </button>
         </form>
       </div>
@@ -234,7 +298,7 @@ export const LiveTvSection: React.FC = () => {
             <button
               key={preset.id}
               onClick={() => {
-                if (target) setActiveChannel(target);
+                if (target) handleSelectChannel(target);
               }}
               style={{
                 background: isActive ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
@@ -256,6 +320,110 @@ export const LiveTvSection: React.FC = () => {
         })}
       </div>
 
+      {/* Multi-Server Selector Row */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: 'rgba(13, 18, 28, 0.95)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: '12px',
+          padding: '0.5rem 0.85rem',
+          marginBottom: '1rem',
+          flexWrap: 'wrap',
+          gap: '0.65rem',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Tv size={16} color="var(--accent)" />
+          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#ffffff' }}>
+            Streaming Source:
+          </span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+          {activeChannel.embedUrl && (
+            <button
+              onClick={() => {
+                setServerMode('embed');
+                setStreamError(false);
+              }}
+              style={{
+                background: serverMode === 'embed' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
+                color: serverMode === 'embed' ? '#05080b' : 'var(--text-secondary)',
+                border: serverMode === 'embed' ? '1px solid var(--accent)' : '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '8px',
+                fontSize: '0.76rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <ShieldCheck size={13} />
+              <span>Server 1: Official Live 24/7 (Instant 1080p)</span>
+              {serverMode === 'embed' && <Check size={12} />}
+            </button>
+          )}
+
+          <button
+            onClick={() => {
+              setServerMode('hls');
+              setStreamError(false);
+            }}
+            style={{
+              background: serverMode === 'hls' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
+              color: serverMode === 'hls' ? '#05080b' : 'var(--text-secondary)',
+              border: serverMode === 'hls' ? '1px solid var(--accent)' : '1px solid rgba(255, 255, 255, 0.1)',
+              padding: '0.35rem 0.75rem',
+              borderRadius: '8px',
+              fontSize: '0.76rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <Zap size={13} />
+            <span>Server 2: HLS Direct Stream</span>
+            {serverMode === 'hls' && <Check size={12} />}
+          </button>
+
+          {activeChannel.backupStreamUrl && (
+            <button
+              onClick={() => {
+                setServerMode('backup');
+                setStreamError(false);
+              }}
+              style={{
+                background: serverMode === 'backup' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
+                color: serverMode === 'backup' ? '#05080b' : 'var(--text-secondary)',
+                border: serverMode === 'backup' ? '1px solid var(--accent)' : '1px solid rgba(255, 255, 255, 0.1)',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '8px',
+                fontSize: '0.76rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <Globe size={13} />
+              <span>Server 3: Mirror Feed</span>
+              {serverMode === 'backup' && <Check size={12} />}
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Main Grid: Left is Video Player, Right is Channel Selector */}
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }} className="livetv-grid">
         <style>{`
@@ -264,8 +432,9 @@ export const LiveTvSection: React.FC = () => {
           }
         `}</style>
 
-        {/* Left Side: Real HLS Stream Video Player */}
+        {/* Left Side: Video Player Container */}
         <div
+          ref={playerContainerRef}
           style={{
             background: 'var(--bg-card)',
             borderRadius: '20px',
@@ -288,30 +457,52 @@ export const LiveTvSection: React.FC = () => {
               justifyContent: 'center',
             }}
           >
-            <video
-              ref={videoRef}
-              controls={false}
-              playsInline
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-            />
+            {serverMode === 'embed' && activeChannel.embedUrl ? (
+              <iframe
+                key={activeChannel.id + '-embed'}
+                src={activeChannel.embedUrl}
+                title={activeChannel.name}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  border: 'none',
+                  position: 'absolute',
+                  inset: 0,
+                }}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                controls={true}
+                playsInline
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              />
+            )}
 
-            {isLoading && (
+            {isLoading && serverMode !== 'embed' && (
               <div
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'rgba(0,0,0,0.65)',
+                  background: 'rgba(0,0,0,0.75)',
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'var(--accent)',
                   gap: '0.6rem',
                   fontSize: '0.92rem',
                   fontWeight: 700,
+                  zIndex: 10,
                 }}
               >
-                <RefreshCw size={24} className="animate-spin" />
-                <span>Buffering Live Stream...</span>
+                <RefreshCw size={26} className="animate-spin" />
+                <span>Connecting to HLS Stream...</span>
+                <span style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
+                  Auto failover to Server 1 in a moment if network is slow
+                </span>
               </div>
             )}
 
@@ -320,7 +511,7 @@ export const LiveTvSection: React.FC = () => {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'rgba(0,0,0,0.88)',
+                  background: 'rgba(0,0,0,0.92)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -328,51 +519,69 @@ export const LiveTvSection: React.FC = () => {
                   padding: '1.5rem',
                   textAlign: 'center',
                   gap: '0.85rem',
+                  zIndex: 10,
                 }}
               >
                 <div style={{ color: '#ef4444', fontSize: '1.15rem', fontWeight: 800 }}>
-                  ⚠️ Live Feed Temporarily Offline or Geo-Restricted
+                  ⚠️ Direct HLS Stream Blocked by ISP or Offline
                 </div>
-                <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', maxWidth: '420px', lineHeight: 1.5 }}>
-                  Yeh channel is samay response nahi de raha hai ya VPN required hai. Kripya list se dusra stream (jaise Aaj Tak, DD Sports ya Sintel 4K) select karein.
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', maxWidth: '440px', lineHeight: 1.5 }}>
+                  Browser CORS policy ya ISP ne direct HLS link block kiya hai. Kripya <strong>Server 1: Official Live 24/7</strong> par switch karein jo 100% chalega!
                 </p>
-                <button
-                  onClick={() => {
-                    const next = channels.find((c) => c.id !== activeChannel.id);
-                    if (next) setActiveChannel(next);
-                  }}
-                  className="btn-accent"
-                  style={{ fontSize: '0.85rem', padding: '0.5rem 1.2rem', fontWeight: 800 }}
-                >
-                  Switch Next Stream
-                </button>
+                <div style={{ display: 'flex', gap: '0.65rem' }}>
+                  {activeChannel.embedUrl && (
+                    <button
+                      onClick={() => {
+                        setServerMode('embed');
+                        setStreamError(false);
+                      }}
+                      className="btn-accent"
+                      style={{ fontSize: '0.85rem', padding: '0.55rem 1.3rem', fontWeight: 800 }}
+                    >
+                      Switch to Server 1 (Official Live)
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      const next = channels.find((c) => c.id !== activeChannel.id);
+                      if (next) handleSelectChannel(next);
+                    }}
+                    className="btn-secondary"
+                    style={{ fontSize: '0.85rem', padding: '0.55rem 1.1rem' }}
+                  >
+                    Next Channel
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* Custom On-Screen Live Watermark & Channel Logo */}
-            <div
-              style={{
-                position: 'absolute',
-                top: '1rem',
-                left: '1rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.6rem',
-                background: 'rgba(0,0,0,0.7)',
-                backdropFilter: 'blur(10px)',
-                padding: '0.35rem 0.8rem',
-                borderRadius: '8px',
-                border: '1px solid rgba(255,255,255,0.15)',
-              }}
-            >
-              <span className="live-pulse" />
-              <span style={{ fontSize: '0.78rem', fontWeight: 900, color: '#fff' }}>LIVE</span>
-              <span style={{ color: 'rgba(255,255,255,0.3)' }}>|</span>
-              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#e2e8f0' }}>{activeChannel.name}</span>
-            </div>
+            {/* Custom On-Screen Live Watermark & Channel Logo (in HLS mode) */}
+            {serverMode !== 'embed' && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  left: '1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.6rem',
+                  background: 'rgba(0,0,0,0.7)',
+                  backdropFilter: 'blur(10px)',
+                  padding: '0.35rem 0.8rem',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  zIndex: 5,
+                }}
+              >
+                <span className="live-pulse" />
+                <span style={{ fontSize: '0.78rem', fontWeight: 900, color: '#fff' }}>LIVE</span>
+                <span style={{ color: 'rgba(255,255,255,0.3)' }}>|</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#e2e8f0' }}>{activeChannel.name}</span>
+              </div>
+            )}
 
             {/* Resolution Badge */}
-            {activeChannel.resolution && (
+            {activeChannel.resolution && serverMode !== 'embed' && (
               <div
                 style={{
                   position: 'absolute',
@@ -386,6 +595,7 @@ export const LiveTvSection: React.FC = () => {
                   color: 'var(--accent)',
                   fontSize: '0.72rem',
                   fontWeight: 900,
+                  zIndex: 5,
                 }}
               >
                 {activeChannel.resolution}
@@ -433,20 +643,22 @@ export const LiveTvSection: React.FC = () => {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <button
-                onClick={handleMuteToggle}
-                style={{
-                  background: 'rgba(255,255,255,0.08)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: '8px',
-                  padding: '0.55rem',
-                  color: '#fff',
-                  cursor: 'pointer',
-                }}
-                title={isMuted ? 'Unmute' : 'Mute'}
-              >
-                {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-              </button>
+              {serverMode !== 'embed' && (
+                <button
+                  onClick={handleMuteToggle}
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: '8px',
+                    padding: '0.55rem',
+                    color: '#fff',
+                    cursor: 'pointer',
+                  }}
+                  title={isMuted ? 'Unmute' : 'Mute'}
+                >
+                  {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                </button>
+              )}
 
               <button
                 onClick={handleFullScreen}
@@ -534,7 +746,7 @@ export const LiveTvSection: React.FC = () => {
                 return (
                   <div
                     key={c.id}
-                    onClick={() => setActiveChannel(c)}
+                    onClick={() => handleSelectChannel(c)}
                     style={{
                       display: 'flex',
                       alignItems: 'center',

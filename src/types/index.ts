@@ -69,6 +69,9 @@ export interface LiveChannel {
   name: string;
   logo: string;
   streamUrl: string;
+  embedUrl?: string;
+  backupStreamUrl?: string;
+  youtubeId?: string;
   category: 'News' | 'Sports' | 'Movies' | 'Entertainment' | 'Kids' | 'Music' | 'Hindi / India' | 'International' | 'Global' | string;
   country: string;
   language: string;
