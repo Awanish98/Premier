@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
-import { FlixDualHero } from './components/FlixDualHero';
+import { HeroBanner } from './components/HeroBanner';
 import { FlixCategoryRail } from './components/FlixCategoryRail';
 import { ContentCard } from './components/ContentCard';
 import { ContentRow } from './components/ContentRow';
@@ -24,7 +24,7 @@ import { Footer } from './components/Footer';
 import { Marquee } from './components/magicui/Marquee';
 import { BentoGrid } from './components/magicui/BentoGrid';
 import { 
-  FLIX_DUAL_HERO_ITEMS,
+  FEATURED_HERO_ITEMS,
   getFlixCategoryItems,
   POPULAR_MOVIES, 
   POPULAR_TV_SHOWS, 
@@ -109,47 +109,13 @@ export const AppContent: React.FC = () => {
       <main style={{ flex: 1, paddingBottom: '5rem', position: 'relative', zIndex: 1 }}>
         {/* ================= TAB: HOME ================= */}
         {activeTab === 'home' && (
-          <div style={{ paddingTop: '5.2rem' }}>
-            <div style={{ maxWidth: '1480px', margin: '0 auto', padding: '0 1rem' }}>
-              
-              {/* Flix.id Dual Panoramic Hero Section */}
-              <FlixDualHero
-                items={FLIX_DUAL_HERO_ITEMS}
-                onPlay={handlePlayMedia}
-                onShowDetails={handleShowDetails}
-              />
-
-              {/* Flix.id Glass Category Pills Rail + Section Header */}
-              <FlixCategoryRail
-                activeCategory={flixCategory}
-                onSelectCategory={handleCategorySelect}
-                sortBy={flixSort}
-                onSortChange={setFlixSort}
-              />
-
-              {/* Flix.id Category Media Cards Grid */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-                  gap: '1.25rem',
-                  marginBottom: '2.5rem',
-                }}
-                className="flix-category-grid"
-              >
-                {sortedCategoryItems.map((item) => (
-                  <ContentCard
-                    key={item.id}
-                    item={item}
-                    onPlay={handlePlayMedia}
-                    onShowDetails={handleShowDetails}
-                    aspectRatio="poster"
-                    isGrid={true}
-                  />
-                ))}
-              </div>
-
-            </div>
+          <div>
+            {/* Cinematic Blockbuster Movie Hero Billboard */}
+            <HeroBanner
+              items={FEATURED_HERO_ITEMS}
+              onPlay={handlePlayMedia}
+              onShowDetails={handleShowDetails}
+            />
 
             {/* Magic UI Infinite Marquee Live Ticker */}
             <div
@@ -185,7 +151,42 @@ export const AppContent: React.FC = () => {
               </Marquee>
             </div>
 
+            <div style={{ maxWidth: '1480px', margin: '0 auto', padding: '0 1rem' }}>
+              
+              {/* Flix.id Glass Category Pills Rail + Section Header */}
+              <FlixCategoryRail
+                activeCategory={flixCategory}
+                onSelectCategory={handleCategorySelect}
+                sortBy={flixSort}
+                onSortChange={setFlixSort}
+              />
+
+              {/* Flix.id Category Media Cards Grid */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+                  gap: '1.25rem',
+                  marginBottom: '2.5rem',
+                }}
+                className="flix-category-grid"
+              >
+                {sortedCategoryItems.map((item) => (
+                  <ContentCard
+                    key={item.id}
+                    item={item}
+                    onPlay={handlePlayMedia}
+                    onShowDetails={handleShowDetails}
+                    aspectRatio="poster"
+                    isGrid={true}
+                  />
+                ))}
+              </div>
+
+            </div>
+
             <div style={{ maxWidth: '1480px', margin: '0 auto', padding: '0 0.5rem' }}>
+
 
               
               {/* Quick Filter Ribbon */}
