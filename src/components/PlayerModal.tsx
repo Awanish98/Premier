@@ -359,15 +359,24 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
 
           {/* Server Selectors Row */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <Server size={16} color="var(--accent)" />
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                Select FMHY Stream Server:
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.65rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Server size={16} color="var(--accent)" />
+                <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                  10+ Ultra-Fast FMHY Streaming Servers:
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.72rem', color: '#22c55e', fontWeight: 700 }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', display: 'inline-block', boxShadow: '0 0 8px #22c55e' }} />
+                <span>Active Server: {selectedServer.name}</span>
+              </div>
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(210px, 1fr))', gap: '0.5rem' }}>
               {STREAM_SERVERS.map((server) => {
                 const isSelected = selectedServer.id === server.id;
+                const isHindi = server.badge?.includes('Hindi') || server.badge?.includes('Dual');
+
                 return (
                   <button
                     key={server.id}
@@ -376,33 +385,50 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                       setKey((prev) => prev + 1);
                     }}
                     style={{
-                      background: isSelected ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
+                      background: isSelected 
+                        ? (isHindi ? 'linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(13, 21, 39, 0.9) 100%)' : 'var(--accent)')
+                        : 'rgba(255, 255, 255, 0.04)',
                       color: isSelected ? '#ffffff' : 'var(--text-primary)',
-                      border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
-                      padding: '0.45rem 0.85rem',
-                      borderRadius: '8px',
-                      fontSize: '0.8rem',
-                      fontWeight: isSelected ? 700 : 500,
+                      border: isSelected 
+                        ? (isHindi ? '1px solid #f59e0b' : '1px solid var(--accent)') 
+                        : '1px solid var(--border-subtle)',
+                      padding: '0.55rem 0.75rem',
+                      borderRadius: '10px',
+                      fontSize: '0.78rem',
+                      fontWeight: isSelected ? 800 : 600,
                       cursor: 'pointer',
                       display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      gap: '0.25rem',
                       transition: 'all 0.2s ease',
-                      boxShadow: isSelected ? '0 0 12px var(--accent-glow)' : 'none',
+                      boxShadow: isSelected ? (isHindi ? '0 0 16px rgba(245, 158, 11, 0.4)' : '0 0 16px var(--accent-glow)') : 'none',
+                      textAlign: 'left',
                     }}
                   >
-                    <span>{server.name}</span>
-                    <span
-                      style={{
-                        fontSize: '0.65rem',
-                        padding: '1px 5px',
-                        borderRadius: '4px',
-                        background: isSelected ? 'rgba(0,0,0,0.3)' : 'rgba(255,255,255,0.1)',
-                        fontWeight: 700,
-                      }}
-                    >
-                      {server.quality}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                      <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 800 }}>
+                        {server.name.split('(')[0]}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: '0.62rem',
+                          padding: '1px 5px',
+                          borderRadius: '4px',
+                          background: isSelected ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.08)',
+                          color: isSelected ? '#fbbf24' : 'var(--accent)',
+                          fontWeight: 800,
+                        }}
+                      >
+                        {server.quality}
+                      </span>
+                    </div>
+
+                    {server.badge && (
+                      <span style={{ fontSize: '0.68rem', color: isSelected ? '#fef08a' : 'var(--text-secondary)' }}>
+                        {server.badge}
+                      </span>
+                    )}
                   </button>
                 );
               })}

@@ -1,4 +1,6 @@
 import type { MediaItem, LiveChannel, MediaAlbum, SortOption } from '../types';
+import { MCU_CATALOG } from './mcuCatalog';
+import { FRANCHISE_MEDIA_ITEMS } from './franchisesCatalog';
 
 export const FEATURED_HERO_ITEMS: MediaItem[] = [
   {
@@ -247,6 +249,21 @@ export const FEATURED_HERO_ITEMS: MediaItem[] = [
 
 export const FRANCHISE_ALBUMS: MediaAlbum[] = [
   {
+    id: 'marvel-universe',
+    title: 'Marvel Cinematic Universe (MCU) Complete Saga',
+    slug: 'marvel-universe',
+    category: 'Marvel Universe',
+    description: 'The ultimate 46-title Marvel Universe chronicle: From Iron Man to Avengers Endgame, Deadpool & Wolverine, and Disney+ Multiverse series in Dual Audio (Hindi + Eng).',
+    tagline: 'The Definitive Infinity & Multiverse Saga in 4K HDR & Hindi Dual Audio',
+    coverPath: 'https://image.tmdb.org/t/p/w780/or06FN3Dka5tukK1e9sl16pB3iy.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg',
+    yearRange: '2008 - 2025',
+    ratingAverage: 8.9,
+    totalItems: MCU_CATALOG.length,
+    colorTheme: '#ef4444',
+    itemIds: MCU_CATALOG.map((m) => m.id),
+  },
+  {
     id: 'pan-india-epics',
     title: 'Pan-India Action & Mythological Epics',
     slug: 'pan-india-epics',
@@ -256,25 +273,10 @@ export const FRANCHISE_ALBUMS: MediaAlbum[] = [
     coverPath: 'https://image.tmdb.org/t/p/w780/rstcAnBeCkxNQjNp3YXrF6IP1tW.jpg',
     backdropPath: 'https://image.tmdb.org/t/p/original/o8XSR1SONnjcsv84NRu6Mwsl5io.jpg',
     yearRange: '2017 - 2024',
-    ratingAverage: 9.0,
-    totalItems: 8,
+    ratingAverage: 9.1,
+    totalItems: 11,
     colorTheme: '#f59e0b',
-    itemIds: ['hero-kalki', 'mov-rrr', 'mov-jawan', 'mov-kgf2', 'mov-salaar', 'mov-animal', 'mov-bahubali2', 'mov-stree2']
-  },
-  {
-    id: 'marvel-universe',
-    title: 'Marvel Cinematic Universe (MCU) Saga',
-    slug: 'marvel-universe',
-    category: 'Marvel Universe',
-    description: 'The complete Multiverse & Infinity Saga chronicle following Earth’s mightiest superheroes.',
-    tagline: 'Assemble with the greatest superheroes across dimensions in Dual Audio (Hindi + Eng)',
-    coverPath: 'https://image.tmdb.org/t/p/w780/ulzhLuWrPK07P1YkdWQLZnQh1JL.jpg',
-    backdropPath: 'https://image.tmdb.org/t/p/original/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg',
-    yearRange: '2008 - 2024',
-    ratingAverage: 8.9,
-    totalItems: 6,
-    colorTheme: '#ef4444',
-    itemIds: ['hero-deadpool-wolverine', 'mov-avengers-endgame', 'mov-infinity-war', 'mov-spiderman-nwh', 'mov-ironman', 'tv-the-boys']
+    itemIds: ['hero-kalki', 'mov-pushpa-2', 'mov-stree-2', 'mov-rrr', 'mov-jawan', 'mov-kgf2', 'mov-salaar', 'mov-animal', 'mov-kantara', 'mov-bahubali2', 'mov-pathaan']
   },
   {
     id: 'nolan-cinematic',
@@ -282,14 +284,44 @@ export const FRANCHISE_ALBUMS: MediaAlbum[] = [
     slug: 'nolan-cinematic',
     category: 'Director Spotlight',
     description: 'Mind-bending narratives, practical effects, temporal paradoxes, and cinematic tours de force.',
-    tagline: 'Time, space, and gravity reshaped through Nolan’s visionary lens',
+    tagline: 'Time, space, and gravity reshaped through Nolan’s visionary lens in IMAX UHD',
     coverPath: 'https://image.tmdb.org/t/p/w780/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg',
     backdropPath: 'https://image.tmdb.org/t/p/original/7CENyUim29IEsaJhUxIGymCRvPu.jpg',
-    yearRange: '2008 - 2023',
-    ratingAverage: 9.1,
-    totalItems: 5,
+    yearRange: '2000 - 2023',
+    ratingAverage: 9.2,
+    totalItems: 10,
     colorTheme: '#06b6d4',
-    itemIds: ['mov-oppenheimer', 'mov-interstellar', 'mov-inception', 'mov-dark-knight', 'mov-tenet']
+    itemIds: ['nolan-oppenheimer', 'nolan-interstellar', 'nolan-inception', 'nolan-dark-knight', 'nolan-tenet', 'nolan-dark-knight-rises', 'nolan-dunkirk', 'nolan-prestige', 'nolan-batman-begins', 'nolan-memento']
+  },
+  {
+    id: 'dc-universe',
+    title: 'DC Extended Universe & Snyderverse',
+    slug: 'dc-universe',
+    category: 'Franchise',
+    description: 'Dark, mythic gods and heroes of DC Comics. Featuring Zack Snyder\'s definitive Justice League, Man of Steel, and The Batman.',
+    tagline: 'Son of Krypton, Bat of Gotham, and the Gods of Olympus',
+    coverPath: 'https://image.tmdb.org/t/p/w780/tnAuB8q5vv7Ax9UAEq4vHgFsUpp.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/pcDc2WJAYGJTTvRSEIpRZwM3bm0.jpg',
+    yearRange: '2013 - 2024',
+    ratingAverage: 8.8,
+    totalItems: 7,
+    colorTheme: '#6366f1',
+    itemIds: ['dc-snyder-justice-league', 'dc-the-batman', 'dc-batman-v-superman', 'dc-man-of-steel', 'dc-wonder-woman', 'dc-joker-2', 'dc-aquaman']
+  },
+  {
+    id: 'spider-universe',
+    title: 'Spider-Verse & Web of Dimensions',
+    slug: 'spider-universe',
+    category: 'Franchise',
+    description: 'Every web-slinger across the multiverse. Miles Morales, Peter Parker trio, and the Sony Spider-Man Universe.',
+    tagline: 'Anyone can wear the mask. Across dimensions and alternate realities.',
+    coverPath: 'https://image.tmdb.org/t/p/w780/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg',
+    backdropPath: 'https://image.tmdb.org/t/p/original/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg',
+    yearRange: '2017 - 2024',
+    ratingAverage: 9.1,
+    totalItems: 6,
+    colorTheme: '#ef4444',
+    itemIds: ['spv-across-spiderverse', 'mcu-spiderman-no-way-home', 'spv-into-spiderverse', 'spv-venom-last-dance', 'mcu-spiderman-far-from-home', 'mcu-spiderman-homecoming']
   },
   {
     id: 'desi-crime-universe',
@@ -339,7 +371,9 @@ export const FRANCHISE_ALBUMS: MediaAlbum[] = [
 ];
 
 export const MASTER_MEDIA_ITEMS: MediaItem[] = [
-  ...FEATURED_HERO_ITEMS,
+  ...MCU_CATALOG,
+  ...FRANCHISE_MEDIA_ITEMS,
+  ...FEATURED_HERO_ITEMS.filter((f) => !MCU_CATALOG.some((m) => m.id === f.id)),
 
   // --- MOVIES ---
   {
