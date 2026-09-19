@@ -23,6 +23,7 @@ import { AlbumCard } from './AlbumCard';
 import { useTheme } from '../context/ThemeContext';
 import { BlurFade } from './magicui/BlurFade';
 import { Marquee } from './magicui/Marquee';
+import { BentoGrid, BentoCard } from './magicui/BentoGrid';
 
 interface AlbumSectionProps {
   onPlayMedia: (item: MediaItem) => void;
@@ -333,6 +334,70 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
             {cat}
           </button>
         ))}
+      </div>
+
+      {/* Featured MagicUI BentoGrid Universes Spotlight (Visible on 'All') */}
+      {selectedCategory === 'All' && (
+        <div style={{ marginBottom: '3.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+              <Sparkles size={20} color="var(--accent)" />
+              <h2 style={{ fontSize: '1.4rem', fontWeight: 900, fontFamily: 'var(--font-display)', color: '#fff' }}>
+                Featured Universes Bento Spotlight
+              </h2>
+            </div>
+            <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 700 }}>
+              Curated Masterpiece Sagas in 4K UHD
+            </span>
+          </div>
+
+          <BentoGrid>
+            {FRANCHISE_ALBUMS.slice(0, 4).map((album, idx) => {
+              const items = getAlbumMediaItems(album);
+              return (
+                <BlurFade key={`bento-${album.id}`} delay={0.08 * idx} inView={true} yOffset={20} blur="6px">
+                  <BentoCard
+                    name={album.title}
+                    description={album.description}
+                    badge={`${album.ratingAverage.toFixed(1)} ★ Avg`}
+                    subBadge={`${items.length} 4K Titles`}
+                    themeColor={album.colorTheme || 'var(--accent)'}
+                    cta="Open Universe Tracklist"
+                    colSpan={idx === 0 ? 2 : 1}
+                    onClick={() => {
+                      setActiveAlbum(album);
+                      setAlbumSearch('');
+                      setAlbumFilterPhase('all');
+                      setSortOrder('release');
+                    }}
+                    background={
+                      <img
+                        src={album.backdropPath || album.coverPath}
+                        alt={album.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                        }}
+                      />
+                    }
+                  />
+                </BlurFade>
+              );
+            })}
+          </BentoGrid>
+        </div>
+      )}
+
+      {/* All Albums Collection Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <Layers size={18} color="var(--accent)" />
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 900, fontFamily: 'var(--font-display)', color: '#fff' }}>
+            {selectedCategory === 'All' ? 'All Franchise Collections' : `${selectedCategory} Collections`} ({filteredAlbums.length})
+          </h2>
+        </div>
       </div>
 
       {/* Albums Grid with MagicUI BlurFade Staggered Reveal */}
