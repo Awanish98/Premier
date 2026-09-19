@@ -19,6 +19,7 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 import { ApkDownloadModal } from './components/ApkDownloadModal';
 import { MobileInstallBanner } from './components/MobileInstallBanner';
 import { AiAssistantModal } from './components/AiAssistantModal';
+import { SpinWheelModal } from './components/SpinWheelModal';
 import { AmbientBackground } from './components/AmbientBackground';
 import { Toast } from './components/Toast';
 import { LoadingScreen } from './components/LoadingScreen';
@@ -45,6 +46,7 @@ export const AppContent: React.FC = () => {
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [apkModalOpen, setApkModalOpen] = useState<boolean>(false);
   const [aiModalOpen, setAiModalOpen] = useState<boolean>(false);
+  const [spinWheelOpen, setSpinWheelOpen] = useState<boolean>(false);
   const [flixCategory, setFlixCategory] = useState<FlixCategory>('trending');
   const [flixSort, setFlixSort] = useState<SortOption>('trending');
   const { continueWatching } = useTheme();
@@ -110,6 +112,7 @@ export const AppContent: React.FC = () => {
         onOpenSearch={() => setSearchOpen(true)}
         onOpenApkModal={() => setApkModalOpen(true)}
         onOpenAiModal={() => setAiModalOpen(true)}
+        onOpenSpinWheel={() => setSpinWheelOpen(true)}
       />
 
       {/* Main Streaming Platform Viewport */}
@@ -166,6 +169,7 @@ export const AppContent: React.FC = () => {
                 onSelectCategory={handleCategorySelect}
                 sortBy={flixSort}
                 onSortChange={setFlixSort}
+                onOpenSpinWheel={() => setSpinWheelOpen(true)}
               />
 
               {/* Flix.id Category Media Cards Grid */}
@@ -534,7 +538,11 @@ export const AppContent: React.FC = () => {
 
       {/* Embedded Multi-Server Stream Player Modal */}
       {activeMedia && (
-        <PlayerModal item={activeMedia} onClose={() => setActiveMedia(null)} />
+        <PlayerModal 
+          item={activeMedia} 
+          onClose={() => setActiveMedia(null)} 
+          onShowDetails={handleShowDetails}
+        />
       )}
 
       {/* Comprehensive Media Details Modal */}
@@ -559,6 +567,15 @@ export const AppContent: React.FC = () => {
       <AiAssistantModal
         isOpen={aiModalOpen}
         onClose={() => setAiModalOpen(false)}
+        onPlayMedia={handlePlayMedia}
+        onShowDetails={handleShowDetails}
+        onOpenSpinWheel={() => setSpinWheelOpen(true)}
+      />
+
+      {/* Confused Mood AI Spin Wheel (Roulette) Modal */}
+      <SpinWheelModal
+        isOpen={spinWheelOpen}
+        onClose={() => setSpinWheelOpen(false)}
         onPlayMedia={handlePlayMedia}
         onShowDetails={handleShowDetails}
       />
@@ -616,6 +633,7 @@ export const AppContent: React.FC = () => {
         onOpenSearch={() => setSearchOpen(true)}
         onOpenApkModal={() => setApkModalOpen(true)}
         onOpenAiModal={() => setAiModalOpen(true)}
+        onOpenSpinWheel={() => setSpinWheelOpen(true)}
       />
 
       {/* Floating Mobile APK Install Banner */}

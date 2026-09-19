@@ -20,6 +20,7 @@ interface AiAssistantModalProps {
   onClose: () => void;
   onPlayMedia: (item: MediaItem) => void;
   onShowDetails: (item: MediaItem) => void;
+  onOpenSpinWheel?: () => void;
 }
 
 const QUICK_MOOD_PROMPTS = [
@@ -36,6 +37,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
   onClose,
   onPlayMedia,
   onShowDetails,
+  onOpenSpinWheel,
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -251,6 +253,36 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
             <Compass size={14} />
             <span>Try Prompt:</span>
           </div>
+
+          {onOpenSpinWheel && (
+            <button
+              onClick={() => {
+                onClose();
+                onOpenSpinWheel();
+              }}
+              style={{
+                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(236, 72, 153, 0.25) 100%)',
+                border: '1px solid #f59e0b',
+                color: '#fbbf24',
+                borderRadius: '999px',
+                padding: '0.3rem 0.85rem',
+                fontSize: '0.74rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.3rem',
+                boxShadow: '0 0 12px rgba(245, 158, 11, 0.4)',
+                transition: 'transform 0.15s ease',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            >
+              <span>🎡</span>
+              <span>Confused? Spin Mood Wheel</span>
+            </button>
+          )}
 
           {QUICK_MOOD_PROMPTS.map((qp, idx) => (
             <button

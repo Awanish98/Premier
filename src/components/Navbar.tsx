@@ -34,6 +34,7 @@ interface NavbarProps {
   onOpenSearch: () => void;
   onOpenApkModal?: () => void;
   onOpenAiModal?: () => void;
+  onOpenSpinWheel?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
@@ -41,7 +42,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   setActiveTab, 
   onOpenSearch,
   onOpenApkModal,
-  onOpenAiModal
+  onOpenAiModal,
+  onOpenSpinWheel
 }) => {
   const { theme, setTheme, isDayMode, toggleDayNight, watchlist, showToast } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -458,6 +460,40 @@ export const Navbar: React.FC<NavbarProps> = ({
               >
                 Ctrl+J
               </span>
+            </button>
+          )}
+
+          {/* Confused Mood AI Spin Wheel Button (Desktop) */}
+          {onOpenSpinWheel && (
+            <button
+              onClick={onOpenSpinWheel}
+              className="desktop-only-wheel-btn"
+              style={{
+                background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%)',
+                border: '1px solid #f59e0b',
+                color: '#fbbf24',
+                padding: '0.42rem 0.85rem',
+                borderRadius: '999px',
+                cursor: 'pointer',
+                display: 'none',
+                alignItems: 'center',
+                gap: '0.45rem',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                boxShadow: '0 0 16px rgba(245, 158, 11, 0.4)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+              title="Confused Mood? Spin to Watch!"
+            >
+              <style>{`
+                @media (min-width: 880px) {
+                  .desktop-only-wheel-btn { display: flex !important; }
+                }
+              `}</style>
+              <span>🎡</span>
+              <span>Mood Wheel</span>
             </button>
           )}
 

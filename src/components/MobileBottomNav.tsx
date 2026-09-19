@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Bookmark, Bot, Radio, Film } from 'lucide-react';
+import { Home, Bookmark, Bot, Radio, Film, RotateCw } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface MobileBottomNavProps {
@@ -8,19 +8,22 @@ interface MobileBottomNavProps {
   onOpenSearch?: () => void;
   onOpenApkModal?: () => void;
   onOpenAiModal?: () => void;
+  onOpenSpinWheel?: () => void;
 }
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ 
   activeTab, 
   setActiveTab, 
   onOpenSearch,
-  onOpenAiModal
+  onOpenAiModal,
+  onOpenSpinWheel
 }) => {
   const { watchlist, isDayMode } = useTheme();
 
   const items = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'movies', label: 'Movies', icon: Film },
+    { id: 'wheel', label: 'Roulette', icon: RotateCw, isWheel: true, isHero: false },
     { id: 'ai', label: 'Ask AI', icon: Bot, isAi: true, isHero: true },
     { id: 'livetv', label: 'Live TV', icon: Radio, isLive: true },
     { id: 'watchlist', label: 'Watchlist', icon: Bookmark, badge: watchlist.length },
@@ -52,6 +55,34 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
       {items.map((item) => {
         const Icon = item.icon;
         const isActive = activeTab === item.id;
+
+        if (item.isWheel) {
+          return (
+            <button
+              key={item.id}
+              onClick={() => {
+                if (onOpenSpinWheel) onOpenSpinWheel();
+              }}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.18rem',
+                color: '#f59e0b',
+                fontSize: '0.7rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                padding: '0.25rem 0.45rem',
+                touchAction: 'manipulation',
+              }}
+            >
+              <span style={{ fontSize: '1.15rem' }}>🎡</span>
+              <span>Roulette</span>
+            </button>
+          );
+        }
 
         if (item.isHero) {
           // Elevated Center AI Connoisseur Action Button
