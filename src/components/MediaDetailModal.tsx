@@ -1,8 +1,9 @@
-import React from 'react';
-import { X, Play, Plus, Check, Star, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, Play, Plus, Check, Star, Sparkles, Bot, Loader2, Lightbulb } from 'lucide-react';
 import type { MediaItem } from '../types';
 import { useTheme } from '../context/ThemeContext';
 import { MASTER_MEDIA_ITEMS } from '../data/mockCatalog';
+import { getAiMovieInsights, type MovieAiInsights } from '../services/aiService';
 import { BorderBeam } from './magicui/BorderBeam';
 import { ShimmerButton } from './magicui/ShimmerButton';
 import { AnimatedBadge } from './magicui/AnimatedBadge';
@@ -15,6 +16,8 @@ interface MediaDetailModalProps {
 
 export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClose, onPlay }) => {
   const { isInWatchlist, addToWatchlist, removeFromWatchlist } = useTheme();
+  const [aiInsights, setAiInsights] = useState<MovieAiInsights | null>(null);
+  const [loadingAi, setLoadingAi] = useState(false);
 
   if (!item) return null;
 
@@ -25,6 +28,19 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
       removeFromWatchlist(item.id);
     } else {
       addToWatchlist(item);
+    }
+  };
+
+  const fetchAiTrivia = async () => {
+    if (aiInsights || loadingAi) return;
+    setLoadingAi(true);
+    try {
+      const insights = await getAiMovieInsights(item);
+      setAiInsights(insights);
+    } catch (err) {
+      console.error('Failed to get AI trivia', err);
+    } finally {
+      setLoadingAi(false);
     }
   };
 
@@ -276,6 +292,115 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                 Multi-Server (VidLink Pro, VidSrc, AutoEmbed)
               </p>
             </div>
+          </div>
+
+          {/* AI Cinema Insights & Trivia Section */}
+          <div
+            style={{
+              background: 'var(--bg-card)',
+              borderRadius: '16px',
+              padding: '1.25rem',
+              border: '1px solid var(--accent)',
+              boxShadow: '0 0 25px var(--accent-glow)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                <Bot size={20} color="var(--accent)" />
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                  ✨ AI Cinema Insights & Behind-the-Scenes
+                </h3>
+              </div>
+              
+              {!aiInsights && (
+                <button
+                  onClick={fetchAiTrivia}
+                  disabled={loadingAi}
+                  style={{
+                    background: 'linear-gradient(135deg, var(--accent) 0%, #38bdf8 100%)',
+                    color: 'var(--accent-text)',
+                    border: 'none',
+                    borderRadius: '999px',
+                    padding: '0.45rem 1.1rem',
+                    fontSize: '0.8rem',
+                    fontWeight: 800,
+                    cursor: loadingAi ? 'wait' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    boxShadow: '0 4px 15px var(--accent-glow)',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  {loadingAi ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />}
+                  <span>{loadingAi ? 'AI Generating Facts...' : 'Reveal AI Trivia'}</span>
+                </button>
+              )}
+            </div>
+
+            {loadingAi && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '1rem', color: 'var(--text-secondary)', fontSize: '0.88rem' }}>
+                <Loader2 size={18} className="animate-spin" color="var(--accent)" />
+                <span>Brewing secret trivia, Easter eggs, and cinema insights with AI...</span>
+              </div>
+            )}
+
+            {aiInsights && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }} className="animate-fade-in">
+                {/* Why You Should Watch */}
+                <div style={{ background: 'rgba(255,255,255,0.04)', padding: '0.85rem 1rem', borderRadius: '10px', borderLeft: '3px solid var(--accent)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
+                    <Lightbulb size={16} color="var(--accent)" />
+                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)', textTransform: 'uppercase' }}>
+                      Why You Must Watch
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.55 }}>
+                    {aiInsights.whyWatch}
+                  </p>
+                </div>
+
+                {/* Trivia Bullet Points */}
+                {aiInsights.trivia && aiInsights.trivia.length > 0 && (
+                  <div>
+                    <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', display: 'block', marginBottom: '0.45rem' }}>
+                      🎬 Did You Know? (Trivia)
+                    </span>
+                    <ul style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                      {aiInsights.trivia.map((t, idx) => (
+                        <li key={idx} style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                          {t}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Secret Easter Eggs */}
+                {aiInsights.easterEggs && aiInsights.easterEggs.length > 0 && (
+                  <div>
+                    <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#fbbf24', textTransform: 'uppercase', display: 'block', marginBottom: '0.45rem' }}>
+                      🥚 Hidden Easter Eggs
+                    </span>
+                    <ul style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                      {aiInsights.easterEggs.map((egg, idx) => (
+                        <li key={idx} style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                          {egg}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {!aiInsights && !loadingAi && (
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0 }}>
+                Click "Reveal AI Trivia" to uncover unreleased Easter eggs, production secrets, and AI commentary.
+              </p>
+            )}
           </div>
 
           {/* Related / More Like This */}

@@ -21,7 +21,8 @@ import {
   Check,
   Minimize2,
   Maximize2,
-  Layers
+  Layers,
+  Bot
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import type { ThemeMode } from '../types';
@@ -31,13 +32,15 @@ interface NavbarProps {
   setActiveTab: (tab: string) => void;
   onOpenSearch: () => void;
   onOpenApkModal?: () => void;
+  onOpenAiModal?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ 
   activeTab, 
   setActiveTab, 
   onOpenSearch,
-  onOpenApkModal 
+  onOpenApkModal,
+  onOpenAiModal
 }) => {
   const { theme, setTheme, isDayMode, toggleDayNight, watchlist, showToast } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,17 +60,20 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Keyboard shortcut: Ctrl+K or Cmd+K to open search
+  // Keyboard shortcut: Ctrl+K or Cmd+K to open search, Ctrl+J to open AI Assistant
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         onOpenSearch();
+      } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'j') {
+        e.preventDefault();
+        if (onOpenAiModal) onOpenAiModal();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onOpenSearch]);
+  }, [onOpenSearch, onOpenAiModal]);
 
   const themes: { id: ThemeMode; name: string; color: string; tag: string }[] = [
     { id: 'day', name: 'Flix Daylight', color: '#d5dfe9', tag: 'Frosted Silk' },
@@ -431,9 +437,51 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
         </div>
 
-        {/* Right: Day/Night Switch + Notifications + Profile Avatar Pill */}
+        {/* Right: Day/Night Switch + AI Assistant + Notifications + Profile Avatar Pill */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           
+          {/* Ask AI Smart Assistant Button */}
+          {onOpenAiModal && (
+            <button
+              onClick={onOpenAiModal}
+              style={{
+                background: isDayMode 
+                  ? 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)' 
+                  : 'linear-gradient(135deg, rgba(149, 255, 80, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%)',
+                border: isDayMode ? '1px solid #bfdbfe' : '1px solid var(--accent)',
+                color: isDayMode ? '#1e40af' : 'var(--accent)',
+                padding: '0.42rem 0.85rem',
+                borderRadius: '999px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                boxShadow: isDayMode ? '0 2px 10px rgba(37, 99, 235, 0.12)' : '0 0 16px var(--accent-glow)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+              title="Open CineBot AI Assistant (Ctrl + J)"
+            >
+              <Bot size={15} />
+              <span>Ask AI</span>
+              <span
+                style={{
+                  fontSize: '0.62rem',
+                  padding: '1px 5px',
+                  borderRadius: '4px',
+                  background: isDayMode ? 'rgba(30, 64, 175, 0.1)' : 'rgba(255, 255, 255, 0.12)',
+                  fontWeight: 800,
+                  letterSpacing: '0.04em'
+                }}
+              >
+                Ctrl+J
+              </span>
+            </button>
+          )}
+
           {/* Day / Night Mode 1-Click Instant Switch */}
           <button
             onClick={toggleDayNight}
@@ -883,6 +931,42 @@ export const Navbar: React.FC<NavbarProps> = ({
               );
             })}
           </div>
+
+          {/* CineBot AI Quick Launcher */}
+          {onOpenAiModal && (
+            <button
+              onClick={() => {
+                onOpenAiModal();
+                setMobileMenuOpen(false);
+              }}
+              style={{
+                width: '100%',
+                padding: '0.8rem 1rem',
+                borderRadius: '12px',
+                background: isDayMode 
+                  ? 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)' 
+                  : 'linear-gradient(135deg, rgba(149, 255, 80, 0.18) 0%, rgba(56, 189, 248, 0.18) 100%)',
+                border: isDayMode ? '1px solid #bfdbfe' : '1px solid var(--accent)',
+                color: isDayMode ? '#1e40af' : 'var(--accent)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '0.5rem',
+                cursor: 'pointer',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <Bot size={18} />
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontSize: '0.88rem', fontWeight: 800 }}>✨ CineBot AI Cinema Assistant</div>
+                  <div style={{ fontSize: '0.68rem', opacity: 0.8 }}>Mood recommendations & smart trivia</div>
+                </div>
+              </div>
+              <span style={{ fontSize: '0.68rem', fontWeight: 800, padding: '2px 8px', borderRadius: '999px', background: isDayMode ? '#2563eb' : 'var(--accent)', color: isDayMode ? '#ffffff' : 'var(--accent-text)' }}>
+                ASK NOW
+              </span>
+            </button>
+          )}
 
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
             <button

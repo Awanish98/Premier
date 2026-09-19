@@ -18,6 +18,7 @@ import { SearchOverlay } from './components/SearchOverlay';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { ApkDownloadModal } from './components/ApkDownloadModal';
 import { MobileInstallBanner } from './components/MobileInstallBanner';
+import { AiAssistantModal } from './components/AiAssistantModal';
 import { AmbientBackground } from './components/AmbientBackground';
 import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
@@ -34,7 +35,7 @@ import {
   MASTER_MEDIA_ITEMS
 } from './data/mockCatalog';
 import type { MediaItem, LiveChannel, MediaAlbum, FlixCategory, SortOption } from './types';
-import { Tv, Sparkles, Flame, Clapperboard, Disc, ArrowRight, Play, Clock, Server } from 'lucide-react';
+import { Tv, Sparkles, Flame, Clapperboard, Disc, ArrowRight, Play, Clock, Server, Bot } from 'lucide-react';
 
 export const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('home');
@@ -42,6 +43,7 @@ export const AppContent: React.FC = () => {
   const [detailMedia, setDetailMedia] = useState<MediaItem | null>(null);
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [apkModalOpen, setApkModalOpen] = useState<boolean>(false);
+  const [aiModalOpen, setAiModalOpen] = useState<boolean>(false);
   const [flixCategory, setFlixCategory] = useState<FlixCategory>('animation');
   const [flixSort, setFlixSort] = useState<SortOption>('trending');
   const { continueWatching } = useTheme();
@@ -103,6 +105,7 @@ export const AppContent: React.FC = () => {
         setActiveTab={setActiveTab}
         onOpenSearch={() => setSearchOpen(true)}
         onOpenApkModal={() => setApkModalOpen(true)}
+        onOpenAiModal={() => setAiModalOpen(true)}
       />
 
       {/* Main Streaming Platform Viewport */}
@@ -539,13 +542,68 @@ export const AppContent: React.FC = () => {
         />
       )}
 
-      {/* Global Universal Search Overlay */}
+      {/* Global Universal Search Overlay with AI Smart Search */}
       <SearchOverlay
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
         onPlayMedia={handlePlayMedia}
         onPlayChannel={handlePlayChannel}
+        onOpenAiAssistant={() => setAiModalOpen(true)}
       />
+
+      {/* CineBot AI Cinema Assistant Modal */}
+      <AiAssistantModal
+        isOpen={aiModalOpen}
+        onClose={() => setAiModalOpen(false)}
+        onPlayMedia={handlePlayMedia}
+        onShowDetails={handleShowDetails}
+      />
+
+      {/* Floating CineBot AI Quick Launcher (Desktop bottom right) */}
+      <button
+        onClick={() => setAiModalOpen(true)}
+        className="floating-ai-fab"
+        style={{
+          position: 'fixed',
+          bottom: '2rem',
+          right: '2rem',
+          zIndex: 40,
+          background: 'linear-gradient(135deg, var(--accent) 0%, #38bdf8 100%)',
+          color: 'var(--accent-text)',
+          border: '1px solid rgba(255, 255, 255, 0.4)',
+          borderRadius: '999px',
+          padding: '0.65rem 1.15rem',
+          display: 'none',
+          alignItems: 'center',
+          gap: '0.5rem',
+          fontSize: '0.85rem',
+          fontWeight: 800,
+          cursor: 'pointer',
+          boxShadow: '0 8px 30px var(--accent-glow), 0 0 20px rgba(56, 189, 248, 0.4)',
+          transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+        title="Open CineBot AI (Ctrl + J)"
+      >
+        <style>{`
+          @media (min-width: 768px) {
+            .floating-ai-fab { display: flex !important; }
+          }
+        `}</style>
+        <Bot size={18} />
+        <span>Ask CineBot AI</span>
+        <span
+          style={{
+            fontSize: '0.62rem',
+            padding: '1px 5px',
+            borderRadius: '4px',
+            background: 'rgba(0, 0, 0, 0.25)',
+            color: '#fff',
+            fontWeight: 800,
+          }}
+        >
+          Ctrl+J
+        </span>
+      </button>
 
       {/* Sticky Mobile Bottom Navigation */}
       <MobileBottomNav
@@ -553,6 +611,7 @@ export const AppContent: React.FC = () => {
         setActiveTab={setActiveTab}
         onOpenSearch={() => setSearchOpen(true)}
         onOpenApkModal={() => setApkModalOpen(true)}
+        onOpenAiModal={() => setAiModalOpen(true)}
       />
 
       {/* Floating Mobile APK Install Banner */}

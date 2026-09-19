@@ -5,5 +5,6 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   base: './',
   plugins: [react()],
+  envPrefix: ['VITE_', 'GEMINI_', 'GROQ_', 'XAI_'],
 })
 

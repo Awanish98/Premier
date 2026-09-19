@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Compass, Bookmark, Search, Smartphone } from 'lucide-react';
+import { Home, Compass, Bookmark, Search, Bot, Smartphone } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface MobileBottomNavProps {
@@ -7,22 +7,25 @@ interface MobileBottomNavProps {
   setActiveTab: (tab: string) => void;
   onOpenSearch?: () => void;
   onOpenApkModal?: () => void;
+  onOpenAiModal?: () => void;
 }
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ 
   activeTab, 
   setActiveTab, 
   onOpenSearch,
-  onOpenApkModal 
+  onOpenApkModal,
+  onOpenAiModal
 }) => {
   const { watchlist, isDayMode } = useTheme();
 
   const items = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'discover', label: 'Discover', icon: Compass },
+    { id: 'ai', label: 'Ask AI', icon: Bot, isAi: true, badgeText: 'AI' },
     { id: 'search', label: 'Search', icon: Search, isAction: true },
     { id: 'watchlist', label: 'Watchlist', icon: Bookmark, badge: watchlist.length },
-    { id: 'install', label: 'Install App', icon: Smartphone, isInstall: true },
+    { id: 'install', label: 'Install', icon: Smartphone, isInstall: true },
   ];
 
   return (
@@ -57,6 +60,8 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             onClick={() => {
               if (item.isInstall && onOpenApkModal) {
                 onOpenApkModal();
+              } else if (item.isAi && onOpenAiModal) {
+                onOpenAiModal();
               } else if (item.isAction && onOpenSearch) {
                 onOpenSearch();
               } else {
@@ -71,12 +76,18 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.2rem',
-              color: item.isInstall ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--text-secondary)',
+              color: item.isAi 
+                ? (isDayMode ? '#2563eb' : 'var(--accent)') 
+                : item.isInstall 
+                ? 'var(--accent)' 
+                : isActive 
+                ? 'var(--accent)' 
+                : 'var(--text-secondary)',
               fontSize: '0.72rem',
-              fontWeight: isActive || item.isInstall ? 800 : 500,
+              fontWeight: isActive || item.isInstall || item.isAi ? 800 : 500,
               cursor: 'pointer',
               position: 'relative',
-              padding: '0.3rem 0.5rem',
+              padding: '0.3rem 0.4rem',
               transition: 'all 0.2s ease',
               touchAction: 'manipulation',
             }}
@@ -84,7 +95,15 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             <div style={{ position: 'relative' }}>
               <Icon 
                 size={20} 
-                color={item.isInstall ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--text-secondary)'} 
+                color={
+                  item.isAi 
+                    ? (isDayMode ? '#2563eb' : 'var(--accent)') 
+                    : item.isInstall 
+                    ? 'var(--accent)' 
+                    : isActive 
+                    ? 'var(--accent)' 
+                    : 'var(--text-secondary)'
+                } 
               />
               {item.badge !== undefined && item.badge > 0 && (
                 <span
@@ -105,6 +124,24 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                   }}
                 >
                   {item.badge}
+                </span>
+              )}
+              {item.badgeText && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '-5px',
+                    right: '-8px',
+                    background: isDayMode ? '#2563eb' : 'var(--accent)',
+                    color: isDayMode ? '#ffffff' : 'var(--accent-text)',
+                    fontSize: '0.52rem',
+                    fontWeight: 900,
+                    padding: '1px 3px',
+                    borderRadius: '3px',
+                    boxShadow: isDayMode ? 'none' : '0 0 6px var(--accent)',
+                  }}
+                >
+                  {item.badgeText}
                 </span>
               )}
               {item.isInstall && (
