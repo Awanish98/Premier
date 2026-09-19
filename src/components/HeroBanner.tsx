@@ -147,11 +147,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: 'clamp(560px, 85vh, 880px)',
+        minHeight: 'clamp(580px, 86vh, 900px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: 'clamp(4.5rem, 8vh, 6.5rem) clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 3vh, 2.5rem)',
+        padding: 'clamp(6.2rem, 11vh, 8.2rem) clamp(1rem, 3vw, 2rem) clamp(1.25rem, 3vh, 2.5rem)',
         overflow: 'hidden',
         background: '#040508',
       }}

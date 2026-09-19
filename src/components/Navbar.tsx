@@ -41,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 30);
+      setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -80,9 +80,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   const notifications = [
-    { id: 1, title: '🔥 Stree 2 Dual Audio 4K Added', time: '10m ago', unread: true },
-    { id: 2, title: '⭐ Solo Leveling Season 2 EP 11 Live', time: '1h ago', unread: true },
-    { id: 3, title: '⚡ VidLink Pro Fast Server Optimized', time: '3h ago', unread: false },
+    { id: 1, title: '🔥 DC Extended Universe (28 Titles) Added', time: '5m ago', unread: true },
+    { id: 2, title: '🦸 Complete MCU Phase 1-5 (46 Titles) Live', time: '20m ago', unread: true },
+    { id: 3, title: '⚡ VidLink Pro 4K & AutoEmbed Hindi Active', time: '1h ago', unread: false },
   ];
 
   return (
@@ -94,26 +94,26 @@ export const Navbar: React.FC<NavbarProps> = ({
         right: 0,
         zIndex: 50,
         transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-        background: isScrolled ? 'var(--glass-bg)' : 'rgba(6, 7, 10, 0.85)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        borderBottom: isScrolled ? '1px solid var(--border-subtle)' : '1px solid rgba(255, 255, 255, 0.08)',
-        boxShadow: isScrolled ? '0 10px 30px rgba(0, 0, 0, 0.6)' : '0 4px 20px rgba(0, 0, 0, 0.4)',
+        background: isScrolled ? 'rgba(5, 7, 12, 0.92)' : 'rgba(5, 7, 12, 0.78)',
+        backdropFilter: 'blur(28px)',
+        WebkitBackdropFilter: 'blur(28px)',
+        borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(255, 255, 255, 0.04)',
+        boxShadow: isScrolled ? '0 12px 35px rgba(0, 0, 0, 0.7)' : '0 4px 20px rgba(0, 0, 0, 0.4)',
       }}
     >
       <div 
         style={{ 
-          maxWidth: '1480px', 
+          maxWidth: '1520px', 
           margin: '0 auto', 
-          padding: '0.75rem 1.5rem', 
+          padding: '0.65rem clamp(1rem, 2.5vw, 2rem)', 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'space-between',
-          gap: '1.25rem'
+          gap: '1rem'
         }}
       >
         {/* Left: Brand Logo + Primary Nav */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1rem, 2vw, 2rem)' }}>
           {/* Logo */}
           <div 
             onClick={() => setActiveTab('home')}
@@ -127,39 +127,39 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <div 
               style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '11px',
+                width: '36px',
+                height: '36px',
+                borderRadius: '10px',
                 background: 'linear-gradient(135deg, var(--accent) 0%, #0d121c 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 0 18px var(--accent-glow)',
+                boxShadow: '0 0 20px var(--accent-glow)',
                 transition: 'transform 0.2s ease',
               }}
               onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.06)')}
               onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
-              <Film size={20} color={theme === 'cinejoy' ? '#05080b' : '#ffffff'} />
+              <Film size={19} color={theme === 'cinejoy' ? '#05080b' : '#ffffff'} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '1.45rem', fontWeight: 900, letterSpacing: '-0.03em', color: '#ffffff' }}>
-                PREM<span style={{ color: 'var(--accent)', textShadow: '0 0 15px var(--accent-glow)' }}>IER</span>
+              <span style={{ fontSize: '1.35rem', fontWeight: 900, letterSpacing: '-0.03em', color: '#ffffff' }}>
+                PREM<span style={{ color: 'var(--accent)', textShadow: '0 0 16px var(--accent-glow)' }}>IER</span>
               </span>
               <span 
                 style={{
-                  fontSize: '0.65rem',
+                  fontSize: '0.62rem',
                   fontWeight: 800,
-                  marginLeft: '7px',
-                  padding: '2px 7px',
-                  borderRadius: '5px',
-                  backgroundColor: 'var(--badge-bg)',
+                  marginLeft: '6px',
+                  padding: '1px 6px',
+                  borderRadius: '4px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
                   color: 'var(--accent)',
-                  border: '1px solid var(--accent)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
                   letterSpacing: '0.06em'
                 }}
               >
-                4K CINEMA
+                4K OTT
               </span>
             </div>
           </div>
@@ -167,8 +167,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Desktop Navigation Links */}
           <nav style={{ display: 'none' }} className="desktop-nav">
             <style>{`
-              @media (min-width: 1024px) {
-                .desktop-nav { display: flex !important; gap: 0.25rem; align-items: center; }
+              @media (min-width: 1080px) {
+                .desktop-nav { display: flex !important; gap: 0.2rem; align-items: center; }
               }
             `}</style>
             {navItems.map((item) => {
@@ -180,12 +180,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => setActiveTab(item.id)}
                   style={{
                     background: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-                    color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
-                    border: '1px solid',
-                    borderColor: isActive ? 'var(--border-subtle)' : 'transparent',
+                    color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.65)',
+                    border: 'none',
+                    position: 'relative',
                     padding: '0.45rem 0.75rem',
                     borderRadius: '8px',
-                    fontSize: '0.83rem',
+                    fontSize: '0.84rem',
                     fontWeight: isActive ? 700 : 500,
                     cursor: 'pointer',
                     display: 'flex',
@@ -196,46 +196,66 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }}
                   onMouseEnter={(e) => {
                     if (!isActive) {
-                      e.currentTarget.style.color = 'var(--text-primary)';
+                      e.currentTarget.style.color = '#ffffff';
                       e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
                     }
                   }}
                   onMouseLeave={(e) => {
                     if (!isActive) {
-                      e.currentTarget.style.color = 'var(--text-secondary)';
+                      e.currentTarget.style.color = 'rgba(255, 255, 255, 0.65)';
                       e.currentTarget.style.background = 'transparent';
                     }
                   }}
                 >
-                  <Icon size={15} />
+                  <Icon size={14} color={isActive ? 'var(--accent)' : 'currentColor'} />
                   <span>{item.label}</span>
+                  
+                  {/* Subtle active glowing underline */}
+                  {isActive && (
+                    <span 
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: '20%',
+                        right: '20%',
+                        height: '2px',
+                        borderRadius: '2px',
+                        background: 'var(--accent)',
+                        boxShadow: '0 0 8px var(--accent-glow)'
+                      }}
+                    />
+                  )}
+
                   {item.isLive && (
                     <span className="live-pulse" style={{ marginLeft: '2px' }} />
                   )}
+
                   {item.badgeText && (
                     <span
                       style={{
-                        fontSize: '0.62rem',
+                        fontSize: '0.6rem',
                         padding: '1px 5px',
                         borderRadius: '4px',
-                        background: 'var(--badge-bg)',
-                        color: 'var(--accent)',
+                        background: item.badgeText === 'NEW' ? 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)' : 'rgba(245, 158, 11, 0.2)',
+                        color: item.badgeText === 'NEW' ? '#ffffff' : '#fbbf24',
                         fontWeight: 800,
-                        border: '1px solid var(--border-subtle)',
+                        border: item.badgeText === 'NEW' ? 'none' : '1px solid rgba(245, 158, 11, 0.4)',
+                        lineHeight: 1.2,
                       }}
                     >
                       {item.badgeText}
                     </span>
                   )}
+
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
                       style={{
-                        fontSize: '0.68rem',
-                        padding: '1px 6px',
+                        fontSize: '0.65rem',
+                        padding: '1px 5px',
                         borderRadius: '999px',
                         background: 'var(--accent)',
                         color: 'var(--accent-text)',
-                        fontWeight: 800
+                        fontWeight: 900
                       }}
                     >
                       {item.badge}
@@ -247,44 +267,45 @@ export const Navbar: React.FC<NavbarProps> = ({
           </nav>
         </div>
 
-        {/* Center / Right: Quick Search Input + Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        {/* Right: Quick Search + Notifications + APK + Profile */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           {/* Quick Search Trigger Bar */}
           <button
             onClick={onOpenSearch}
             style={{
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid var(--border-subtle)',
-              color: 'var(--text-secondary)',
-              padding: '0.45rem 0.85rem',
-              borderRadius: '10px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              color: 'rgba(255, 255, 255, 0.6)',
+              padding: '0.42rem 0.85rem',
+              borderRadius: '999px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.6rem',
-              fontSize: '0.82rem',
+              gap: '0.55rem',
+              fontSize: '0.8rem',
               transition: 'all 0.2s ease',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
               e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+              e.currentTarget.style.color = '#fff';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.06)';
-              e.currentTarget.style.borderColor = 'var(--border-subtle)';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)';
             }}
           >
-            <Search size={15} color="var(--accent)" />
+            <Search size={14} color="var(--accent)" />
             <span style={{ display: 'none' }} className="search-text">Search movies, 4K hits...</span>
             <kbd 
               style={{
                 display: 'none',
-                padding: '2px 5px',
+                padding: '1px 5px',
                 borderRadius: '4px',
                 background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                fontSize: '0.68rem',
-                color: 'var(--text-muted)',
+                fontSize: '0.65rem',
+                color: 'rgba(255, 255, 255, 0.5)',
                 fontWeight: 600,
                 fontFamily: 'monospace'
               }}
@@ -310,10 +331,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setThemeDropdownOpen(false);
               }}
               style={{
-                background: notificationsOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid var(--border-subtle)',
+                background: notificationsOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
                 color: 'var(--text-primary)',
-                padding: '0.45rem',
+                padding: '0.42rem',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 display: 'flex',
@@ -323,14 +344,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               title="Notifications"
             >
-              <Bell size={18} />
+              <Bell size={16} />
               <span 
                 style={{
                   position: 'absolute',
                   top: '5px',
                   right: '5px',
-                  width: '7px',
-                  height: '7px',
+                  width: '6px',
+                  height: '6px',
                   borderRadius: '50%',
                   background: 'var(--accent)',
                   boxShadow: '0 0 6px var(--accent-glow)'
@@ -344,19 +365,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                   position: 'absolute',
                   right: 0,
                   marginTop: '0.5rem',
-                  width: '280px',
-                  borderRadius: '12px',
+                  width: '290px',
+                  borderRadius: '14px',
                   background: 'var(--bg-card)',
-                  backdropFilter: 'blur(20px)',
+                  backdropFilter: 'blur(24px)',
                   border: '1px solid var(--border-subtle)',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.8)',
-                  padding: '0.75rem',
+                  boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
+                  padding: '0.85rem',
                   zIndex: 60,
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-primary)' }}>Notifications</span>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--accent)', fontWeight: 700 }}>3 New</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>OTT Updates</span>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--accent)', fontWeight: 800, background: 'var(--badge-bg)', padding: '1px 6px', borderRadius: '4px' }}>3 New</span>
                 </div>
                 {notifications.map((n) => (
                   <div
@@ -366,7 +387,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       setNotificationsOpen(false);
                     }}
                     style={{
-                      padding: '0.5rem',
+                      padding: '0.55rem',
                       borderRadius: '8px',
                       cursor: 'pointer',
                       marginBottom: '4px',
@@ -376,8 +397,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
                     onMouseLeave={(e) => (e.currentTarget.style.background = n.unread ? 'rgba(255,255,255,0.04)' : 'transparent')}
                   >
-                    <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '2px' }}>{n.title}</p>
-                    <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{n.time}</p>
+                    <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fff', marginBottom: '2px' }}>{n.title}</p>
+                    <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{n.time}</p>
                   </div>
                 ))}
               </div>
@@ -392,24 +413,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setNotificationsOpen(false);
               }}
               style={{
-                background: themeDropdownOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid var(--border-subtle)',
+                background: themeDropdownOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
                 color: 'var(--text-primary)',
-                padding: '0.45rem 0.75rem',
+                padding: '0.42rem 0.65rem',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.4rem',
-                fontSize: '0.82rem',
+                gap: '0.35rem',
+                fontSize: '0.8rem',
                 fontWeight: 600,
               }}
-              title="Switch OTT Mirror Theme"
+              title="Switch OTT Color Theme"
             >
-              <Palette size={16} color="var(--accent)" />
+              <Palette size={15} color="var(--accent)" />
               <span style={{ textTransform: 'capitalize', display: 'none' }} className="theme-text">{theme}</span>
               <style>{`
-                @media (min-width: 840px) {
+                @media (min-width: 900px) {
                   .theme-text { display: inline !important; }
                 }
               `}</style>
@@ -422,17 +443,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   right: 0,
                   marginTop: '0.5rem',
                   width: '210px',
-                  borderRadius: '12px',
+                  borderRadius: '14px',
                   background: 'var(--bg-card)',
-                  backdropFilter: 'blur(20px)',
+                  backdropFilter: 'blur(24px)',
                   border: '1px solid var(--border-subtle)',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.8)',
+                  boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
                   padding: '0.5rem',
                   zIndex: 60,
                 }}
               >
-                <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                  Select OTT Skin
+                <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                  Select Theme Skin
                 </div>
                 {themes.map((t) => (
                   <button
@@ -460,10 +481,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: t.color }} />
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', backgroundColor: t.color }} />
                       <span>{t.name}</span>
                     </div>
-                    <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{t.tag}</span>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>{t.tag}</span>
                   </button>
                 ))}
               </div>
@@ -475,31 +496,31 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onOpenApkModal}
               style={{
-                background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.18) 0%, rgba(13, 21, 39, 0.6) 100%)',
-                color: 'var(--accent)',
-                border: '1px solid var(--accent)',
-                padding: '0.45rem 0.85rem',
+                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(13, 21, 39, 0.7) 100%)',
+                color: '#4ade80',
+                border: '1px solid rgba(34, 197, 94, 0.4)',
+                padding: '0.42rem 0.8rem',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.45rem',
-                fontSize: '0.82rem',
+                gap: '0.4rem',
+                fontSize: '0.8rem',
                 fontWeight: 800,
-                boxShadow: '0 0 14px var(--accent-glow)',
+                boxShadow: '0 0 16px rgba(34, 197, 94, 0.25)',
                 transition: 'all 0.2s ease',
               }}
               className="apk-desktop-btn"
               title="Download Android APK & Install App"
             >
-              <Smartphone size={16} />
+              <Smartphone size={15} />
               <span className="apk-btn-text">Get APK</span>
               <span
                 style={{
-                  fontSize: '0.62rem',
-                  padding: '1px 5px',
+                  fontSize: '0.6rem',
+                  padding: '1px 4px',
                   borderRadius: '3px',
-                  background: 'var(--accent)',
+                  background: '#22c55e',
                   color: '#05080b',
                   fontWeight: 900,
                 }}
@@ -513,26 +534,26 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={() => setActiveTab('profile')}
             style={{
-              background: activeTab === 'profile' ? 'var(--accent)' : 'linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03))',
+              background: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
               color: activeTab === 'profile' ? 'var(--accent-text)' : 'var(--text-primary)',
               border: '1px solid',
-              borderColor: activeTab === 'profile' ? 'var(--accent)' : 'var(--border-subtle)',
-              padding: '0.45rem 0.75rem',
+              borderColor: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.08)',
+              padding: '0.42rem 0.7rem',
               borderRadius: '8px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.45rem',
-              fontSize: '0.82rem',
+              gap: '0.4rem',
+              fontSize: '0.8rem',
               fontWeight: 700,
               transition: 'all 0.2s ease',
             }}
             title="User Profile & Streaming Preferences"
           >
-            <User size={16} />
+            <User size={15} />
             <span style={{ display: 'none' }} className="profile-text">Profile</span>
             <style>{`
-              @media (min-width: 900px) {
+              @media (min-width: 960px) {
                 .profile-text { display: inline !important; }
               }
             `}</style>
@@ -553,11 +574,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             className="mobile-menu-btn"
           >
             <style>{`
-              @media (min-width: 1024px) {
+              @media (min-width: 1080px) {
                 .mobile-menu-btn { display: none !important; }
               }
             `}</style>
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
@@ -566,14 +587,15 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div
           style={{
-            background: 'var(--glass-bg)',
-            backdropFilter: 'blur(28px)',
+            background: 'rgba(5, 7, 12, 0.98)',
+            backdropFilter: 'blur(32px)',
             borderBottom: '1px solid var(--border-subtle)',
             padding: '1rem 1.25rem 1.5rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.5rem',
+            gap: '0.4rem',
           }}
+          className="animate-fade-in"
         >
           {/* Featured Mobile APK Install Card */}
           {onOpenApkModal && (
@@ -583,16 +605,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
               }}
               style={{
-                background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.15) 0%, rgba(13, 21, 39, 0.9) 100%)',
-                border: '1px solid var(--accent)',
+                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(13, 21, 39, 0.9) 100%)',
+                border: '1px solid rgba(34, 197, 94, 0.4)',
                 borderRadius: '12px',
                 padding: '0.85rem 1rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 cursor: 'pointer',
-                marginBottom: '0.25rem',
-                boxShadow: '0 4px 20px var(--accent-glow)',
+                marginBottom: '0.4rem',
+                boxShadow: '0 4px 20px rgba(34, 197, 94, 0.2)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -601,7 +623,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     width: '34px',
                     height: '34px',
                     borderRadius: '8px',
-                    background: 'var(--accent)',
+                    background: '#22c55e',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -611,13 +633,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#fff' }}>Download Android APK</span>
-                    <span style={{ fontSize: '0.62rem', background: 'var(--accent)', color: '#000', fontWeight: 900, padding: '1px 4px', borderRadius: '3px' }}>v2.5</span>
+                    <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#fff' }}>Download Android APK</span>
+                    <span style={{ fontSize: '0.62rem', background: '#22c55e', color: '#000', fontWeight: 900, padding: '1px 4px', borderRadius: '3px' }}>v2.5</span>
                   </div>
                   <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Direct 4K Cinema App Installation</p>
                 </div>
               </div>
-              <Download size={18} color="var(--accent)" />
+              <Download size={18} color="#22c55e" />
             </div>
           )}
 
@@ -635,9 +657,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   background: isActive ? 'var(--badge-bg)' : 'rgba(255,255,255,0.03)',
                   color: isActive ? 'var(--accent)' : 'var(--text-primary)',
                   border: 'none',
-                  padding: '0.75rem 1rem',
+                  padding: '0.7rem 1rem',
                   borderRadius: '10px',
-                  fontSize: '0.92rem',
+                  fontSize: '0.9rem',
                   fontWeight: isActive ? 700 : 500,
                   cursor: 'pointer',
                   display: 'flex',
@@ -646,7 +668,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <Icon size={18} />
+                  <Icon size={17} />
                   <span>{item.label}</span>
                 </div>
                 {item.badgeText && (
