@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
-import { HeroBanner } from './components/HeroBanner';
+import { FlixDualHero } from './components/FlixDualHero';
+import { FlixCategoryRail } from './components/FlixCategoryRail';
+import { ContentCard } from './components/ContentCard';
 import { ContentRow } from './components/ContentRow';
 import { PlayerModal } from './components/PlayerModal';
 import { MediaDetailModal } from './components/MediaDetailModal';
@@ -22,7 +24,8 @@ import { Footer } from './components/Footer';
 import { Marquee } from './components/magicui/Marquee';
 import { BentoGrid } from './components/magicui/BentoGrid';
 import { 
-  FEATURED_HERO_ITEMS, 
+  FLIX_DUAL_HERO_ITEMS,
+  getFlixCategoryItems,
   POPULAR_MOVIES, 
   POPULAR_TV_SHOWS, 
   POPULAR_ANIME,
@@ -30,7 +33,7 @@ import {
   FRANCHISE_ALBUMS,
   MASTER_MEDIA_ITEMS
 } from './data/mockCatalog';
-import type { MediaItem, LiveChannel, MediaAlbum } from './types';
+import type { MediaItem, LiveChannel, MediaAlbum, FlixCategory, SortOption } from './types';
 import { Tv, Sparkles, Flame, Clapperboard, Disc, ArrowRight, Play, Clock, Server } from 'lucide-react';
 
 export const AppContent: React.FC = () => {
@@ -39,6 +42,8 @@ export const AppContent: React.FC = () => {
   const [detailMedia, setDetailMedia] = useState<MediaItem | null>(null);
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const [apkModalOpen, setApkModalOpen] = useState<boolean>(false);
+  const [flixCategory, setFlixCategory] = useState<FlixCategory>('animation');
+  const [flixSort, setFlixSort] = useState<SortOption>('trending');
   const { continueWatching } = useTheme();
 
   // Scroll to top when active tab changes
@@ -57,6 +62,25 @@ export const AppContent: React.FC = () => {
   const handlePlayChannel = (_: LiveChannel) => {
     setActiveTab('livetv');
   };
+
+  const handleCategorySelect = (cat: FlixCategory) => {
+    if (cat === 'livetv') {
+      setActiveTab('livetv');
+    } else {
+      setFlixCategory(cat);
+    }
+  };
+
+  // Get active category items sorted
+  const rawCategoryItems = getFlixCategoryItems(flixCategory);
+  let sortedCategoryItems = [...rawCategoryItems];
+  if (flixSort === 'top-rated') {
+    sortedCategoryItems.sort((a, b) => b.rating - a.rating);
+  } else if (flixSort === 'newest') {
+    sortedCategoryItems.sort((a, b) => b.releaseYear - a.releaseYear);
+  } else if (flixSort === 'title-asc') {
+    sortedCategoryItems.sort((a, b) => a.title.localeCompare(b.title));
+  }
 
   const handlePlayAlbumFirst = (album: MediaAlbum) => {
     const firstItem = MASTER_MEDIA_ITEMS.find((m) => m.id === album.itemIds[0]);
@@ -85,24 +109,59 @@ export const AppContent: React.FC = () => {
       <main style={{ flex: 1, paddingBottom: '5rem', position: 'relative', zIndex: 1 }}>
         {/* ================= TAB: HOME ================= */}
         {activeTab === 'home' && (
-          <div>
-            {/* Cinematic Hero Billboard */}
-            <HeroBanner
-              items={FEATURED_HERO_ITEMS}
-              onPlay={handlePlayMedia}
-              onShowDetails={handleShowDetails}
-            />
+          <div style={{ paddingTop: '5.2rem' }}>
+            <div style={{ maxWidth: '1480px', margin: '0 auto', padding: '0 1rem' }}>
+              
+              {/* Flix.id Dual Panoramic Hero Section */}
+              <FlixDualHero
+                items={FLIX_DUAL_HERO_ITEMS}
+                onPlay={handlePlayMedia}
+                onShowDetails={handleShowDetails}
+              />
+
+              {/* Flix.id Glass Category Pills Rail + Section Header */}
+              <FlixCategoryRail
+                activeCategory={flixCategory}
+                onSelectCategory={handleCategorySelect}
+                sortBy={flixSort}
+                onSortChange={setFlixSort}
+              />
+
+              {/* Flix.id Category Media Cards Grid */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+                  gap: '1.25rem',
+                  marginBottom: '2.5rem',
+                }}
+                className="flix-category-grid"
+              >
+                {sortedCategoryItems.map((item) => (
+                  <ContentCard
+                    key={item.id}
+                    item={item}
+                    onPlay={handlePlayMedia}
+                    onShowDetails={handleShowDetails}
+                    aspectRatio="poster"
+                    isGrid={true}
+                  />
+                ))}
+              </div>
+
+            </div>
 
             {/* Magic UI Infinite Marquee Live Ticker */}
             <div
               style={{
-                background: 'rgba(6, 7, 10, 0.7)',
+                background: 'var(--bg-card)',
                 backdropFilter: 'blur(16px)',
                 borderTop: '1px solid var(--border-subtle)',
                 borderBottom: '1px solid var(--border-subtle)',
                 padding: '0.65rem 0',
                 position: 'relative',
                 zIndex: 10,
+                marginBottom: '1.5rem',
               }}
             >
               <Marquee speed={35} pauseOnHover>
@@ -127,6 +186,7 @@ export const AppContent: React.FC = () => {
             </div>
 
             <div style={{ maxWidth: '1480px', margin: '0 auto', padding: '0 0.5rem' }}>
+
               
               {/* Quick Filter Ribbon */}
               <div 

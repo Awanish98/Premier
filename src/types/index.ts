@@ -89,6 +89,18 @@ export interface StreamServer {
   getUrl: (item: MediaItem, season?: number, episode?: number) => string;
 }
 
-export type ThemeMode = 'cinejoy' | 'prime' | 'netflix' | 'disney' | 'cyberpunk';
+export type ThemeMode = 'cinejoy' | 'prime' | 'netflix' | 'disney' | 'cyberpunk' | 'day' | 'night';
+
+export type FlixCategory = 
+  | 'trending'
+  | 'action'
+  | 'romance'
+  | 'animation'
+  | 'horror'
+  | 'special'
+  | 'drakor'
+  | 'bollywood'
+  | 'scifi'
+  | 'livetv';
 
 export type SortOption = 'trending' | 'top-rated' | 'newest' | 'title-asc';

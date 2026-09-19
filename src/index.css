@@ -22,6 +22,42 @@
   --header-grad: linear-gradient(180deg, rgba(6, 7, 10, 0.98) 0%, rgba(6, 7, 10, 0) 100%);
 }
 
+[data-theme='day'] {
+  --bg-primary: #d5dfe9;
+  --bg-secondary: #e6eef5;
+  --bg-card: rgba(255, 255, 255, 0.68);
+  --bg-card-hover: rgba(255, 255, 255, 0.92);
+  --accent: #0f172a;
+  --accent-hover: #1e293b;
+  --accent-glow: rgba(15, 23, 42, 0.2);
+  --accent-text: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-subtle: rgba(255, 255, 255, 0.85);
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --badge-bg: rgba(15, 23, 42, 0.08);
+  --header-grad: linear-gradient(180deg, rgba(213, 223, 233, 0.98) 0%, rgba(213, 223, 233, 0) 100%);
+}
+
+[data-theme='night'] {
+  --bg-primary: #06070a;
+  --bg-secondary: #0d121c;
+  --bg-card: rgba(13, 18, 28, 0.85);
+  --bg-card-hover: rgba(22, 30, 46, 0.96);
+  --accent: #95FF50;
+  --accent-hover: #7ae637;
+  --accent-glow: rgba(149, 255, 80, 0.45);
+  --accent-text: #05080b;
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --glass-bg: rgba(6, 7, 10, 0.92);
+  --badge-bg: rgba(149, 255, 80, 0.15);
+  --header-grad: linear-gradient(180deg, rgba(6, 7, 10, 0.98) 0%, rgba(6, 7, 10, 0) 100%);
+}
+
 [data-theme='cinejoy'] {
   --bg-primary: #06070a;
   --bg-secondary: #0d121c;
@@ -111,6 +147,7 @@
   --badge-bg: rgba(168, 85, 247, 0.22);
   --header-grad: linear-gradient(180deg, rgba(7, 4, 16, 0.98) 0%, rgba(7, 4, 16, 0) 100%);
 }
+
 
 html {
   scroll-behavior: smooth;
@@ -820,17 +857,193 @@ body {
   }
 }
 
-/* Touch-device global performance safeguards */
-@media (hover: none) {
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
+/* ================= FLIX.ID FROSTED GLASS DUAL-MODE DESIGN SYSTEM ================= */
 
-  .magic-card:hover,
-  .bento-card:hover,
-  .media-card-magic:hover {
-    transform: none !important;
+/* Flix.id Center Capsule Navigation */
+.flix-capsule-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.3s ease;
+}
+
+[data-theme='day'] .flix-capsule-bar {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+}
+
+.flix-capsule-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.flix-capsule-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.flix-capsule-item.active {
+  color: #0f172a;
+  background: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Flix.id Glass Category Pills */
+.flix-category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 1.3rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.flix-category-pill:hover {
+  transform: translateY(-2px);
+  background: var(--bg-card-hover);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.flix-category-pill.active {
+  background: var(--accent);
+  color: var(--accent-text);
+  border-color: var(--accent);
+  box-shadow: 0 6px 22px var(--accent-glow);
+  font-weight: 800;
+}
+
+[data-theme='day'] .flix-category-pill {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: #334155;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+}
+
+[data-theme='day'] .flix-category-pill:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+}
+
+[data-theme='day'] .flix-category-pill.active {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #ffffff;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.12);
+}
+
+/* Flix.id Dual Hero Cards */
+.flix-dual-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+  .flix-dual-hero-grid {
+    grid-template-columns: 1fr;
   }
 }
+
+.flix-hero-card {
+  position: relative;
+  min-height: 340px;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justifyContent: flex-end;
+  padding: 2rem 2.2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.flix-hero-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.3);
+}
+
+.flix-play-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 1.35rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 700;
+  transition: all 0.25s ease;
+  width: fit-content;
+}
+
+.flix-play-pill:hover {
+  background: #ffffff;
+  color: #0f172a;
+  transform: scale(1.04);
+}
+
+/* Day Mode Universal Contrast Boost */
+[data-theme='day'] body {
+  background: #d5dfe9;
+  color: #0f172a;
+}
+
+[data-theme='day'] .ambient-background-root {
+  background: radial-gradient(circle at 50% 10%, #e2ebf4 0%, #d4dde8 60%, #cad7e3 100%) !important;
+}
+
+[data-theme='day'] h1,
+[data-theme='day'] h2,
+[data-theme='day'] h3,
+[data-theme='day'] h4 {
+  color: #0f172a;
+}
+
+[data-theme='day'] .glass-panel {
+  background: rgba(255, 255, 255, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08) !important;
+}
+
+[data-theme='day'] .media-card-magic {
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
+}
+
 
 

@@ -17,6 +17,8 @@ export interface ToastInfo {
 interface ThemeContextType {
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
+  isDayMode: boolean;
+  toggleDayNight: () => void;
   activeHeroItem: MediaItem | null;
   setActiveHeroItem: (item: MediaItem | null) => void;
   watchlist: MediaItem[];
@@ -36,11 +38,18 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<ThemeMode>(() => {
-    return (localStorage.getItem('premier_theme') as ThemeMode) || (localStorage.getItem('cinejoy_theme') as ThemeMode) || 'cinejoy';
+    return (localStorage.getItem('premier_theme') as ThemeMode) || (localStorage.getItem('cinejoy_theme') as ThemeMode) || 'day';
   });
 
   const [activeHeroItem, setActiveHeroItem] = useState<MediaItem | null>(null);
   const [toast, setToast] = useState<ToastInfo | null>(null);
+
+  const isDayMode = theme === 'day';
+
+  const toggleDayNight = () => {
+    const nextTheme: ThemeMode = theme === 'day' ? 'night' : 'day';
+    setTheme(nextTheme);
+  };
 
   const [preferences, setPreferences] = useState<UserPreferences>(() => {
     try {
@@ -164,6 +173,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       value={{
         theme,
         setTheme,
+        isDayMode,
+        toggleDayNight,
         activeHeroItem,
         setActiveHeroItem,
         watchlist,
@@ -181,6 +192,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     >
       {children}
     </ThemeContext.Provider>
+
   );
 };
 

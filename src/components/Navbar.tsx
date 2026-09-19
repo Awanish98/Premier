@@ -8,13 +8,17 @@ import {
   Bookmark, 
   Palette, 
   Menu, 
-  X,
-  Flame,
-  Disc,
-  Compass,
-  Bell,
-  User,
-  Smartphone
+  X, 
+  Flame, 
+  Disc, 
+  Compass, 
+  Bell, 
+  User, 
+  Smartphone,
+  Sun,
+  Moon,
+  ChevronDown,
+  Check
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import type { ThemeMode } from '../types';
@@ -32,11 +36,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSearch,
   onOpenApkModal 
 }) => {
-  const { theme, setTheme, watchlist, showToast } = useTheme();
+  const { theme, setTheme, isDayMode, toggleDayNight, watchlist, showToast } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,27 +64,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, [onOpenSearch]);
 
   const themes: { id: ThemeMode; name: string; color: string; tag: string }[] = [
+    { id: 'day', name: 'Flix Daylight', color: '#d5dfe9', tag: 'Frosted Silk' },
+    { id: 'night', name: 'Flix Obsidian', color: '#06070a', tag: 'Deep Cinema' },
     { id: 'cinejoy', name: 'Premier Emerald', color: '#95FF50', tag: 'Electric Lime' },
     { id: 'prime', name: 'Prime Video', color: '#00a8e1', tag: 'Navy / Cyan' },
-    { id: 'netflix', name: 'Netflix Mirror', color: '#e50914', tag: 'Dark / Red' },
+    { id: 'netflix', name: 'Netflix Red', color: '#e50914', tag: 'Dark / Red' },
     { id: 'disney', name: 'Disney+ / Hotstar', color: '#0072d2', tag: 'Cobalt / Blue' },
     { id: 'cyberpunk', name: 'Cyberpunk Neon', color: '#a855f7', tag: 'Purple Glow' },
   ];
 
-  const navItems = [
-    { id: 'home', label: 'Home', icon: Flame },
-    { id: 'movies', label: 'Movies', icon: Film },
-    { id: 'tv', label: 'TV Shows', icon: Tv },
-    { id: 'dualaudio', label: 'Dual Audio', icon: Sparkles, badgeText: '🇮🇳 DUAL' },
-    { id: 'discover', label: 'Discover', icon: Compass },
-    { id: 'albums', label: 'Albums', icon: Disc, badgeText: 'NEW' },
-    { id: 'anime', label: 'Anime Hub', icon: Sparkles },
-    { id: 'livetv', label: 'Live TV', icon: Radio, isLive: true },
-    { id: 'watchlist', label: 'Watchlist', icon: Bookmark, badge: watchlist.length },
-  ];
-
   const notifications = [
-    { id: 1, title: '🔥 DC Extended Universe (28 Titles) Added', time: '5m ago', unread: true },
+    { id: 1, title: '🔥 Animation Spotlight: 12 New 4K Hits Added', time: '5m ago', unread: true },
     { id: 2, title: '🦸 Complete MCU Phase 1-5 (46 Titles) Live', time: '20m ago', unread: true },
     { id: 3, title: '⚡ VidLink Pro 4K & AutoEmbed Hindi Active', time: '1h ago', unread: false },
   ];
@@ -93,11 +88,17 @@ export const Navbar: React.FC<NavbarProps> = ({
         right: 0,
         zIndex: 50,
         transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-        background: isScrolled ? 'rgba(5, 7, 12, 0.92)' : 'rgba(5, 7, 12, 0.78)',
+        background: isDayMode
+          ? isScrolled ? 'rgba(213, 223, 233, 0.94)' : 'rgba(213, 223, 233, 0.82)'
+          : isScrolled ? 'rgba(6, 7, 10, 0.94)' : 'rgba(6, 7, 10, 0.8)',
         backdropFilter: 'blur(28px)',
         WebkitBackdropFilter: 'blur(28px)',
-        borderBottom: isScrolled ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(255, 255, 255, 0.04)',
-        boxShadow: isScrolled ? '0 12px 35px rgba(0, 0, 0, 0.7)' : '0 4px 20px rgba(0, 0, 0, 0.4)',
+        borderBottom: isDayMode
+          ? '1px solid rgba(255, 255, 255, 0.85)'
+          : '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: isDayMode
+          ? '0 10px 30px rgba(15, 23, 42, 0.08)'
+          : '0 10px 35px rgba(0, 0, 0, 0.7)',
       }}
     >
       <div 
@@ -111,9 +112,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           gap: '1rem'
         }}
       >
-        {/* Left: Brand Logo + Primary Nav */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1rem, 2vw, 2rem)' }}>
-          {/* Logo */}
+        {/* Left: Brand Logo (Flix.id style) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <div 
             onClick={() => setActiveTab('home')}
             style={{ 
@@ -129,441 +129,467 @@ export const Navbar: React.FC<NavbarProps> = ({
                 width: '36px',
                 height: '36px',
                 borderRadius: '10px',
-                background: 'linear-gradient(135deg, var(--accent) 0%, #0d121c 100%)',
+                background: isDayMode
+                  ? 'linear-gradient(135deg, #0f172a 0%, #334155 100%)'
+                  : 'linear-gradient(135deg, var(--accent) 0%, #0d121c 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 0 20px var(--accent-glow)',
+                boxShadow: isDayMode ? '0 4px 14px rgba(15, 23, 42, 0.2)' : '0 0 20px var(--accent-glow)',
                 transition: 'transform 0.2s ease',
               }}
               onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.06)')}
               onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
             >
-              <Film size={19} color={theme === 'cinejoy' ? '#05080b' : '#ffffff'} />
+              <Film size={19} color={isDayMode ? '#ffffff' : (theme === 'cinejoy' ? '#05080b' : '#ffffff')} />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <span style={{ fontSize: '1.35rem', fontWeight: 900, letterSpacing: '-0.03em', color: '#ffffff' }}>
-                PREM<span style={{ color: 'var(--accent)', textShadow: '0 0 16px var(--accent-glow)' }}>IER</span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
+              <span 
+                style={{ 
+                  fontSize: '1.45rem', 
+                  fontWeight: 900, 
+                  letterSpacing: '-0.03em', 
+                  color: isDayMode ? '#0f172a' : '#ffffff',
+                }}
+              >
+                Flix<span style={{ color: isDayMode ? '#2563eb' : 'var(--accent)' }}>.id</span>
               </span>
               <span 
                 style={{
-                  fontSize: '0.62rem',
+                  fontSize: '0.6rem',
                   fontWeight: 800,
                   marginLeft: '6px',
                   padding: '1px 6px',
                   borderRadius: '4px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                  color: 'var(--accent)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  backgroundColor: isDayMode ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.08)',
+                  color: isDayMode ? '#0f172a' : 'var(--accent)',
+                  border: isDayMode ? '1px solid rgba(15, 23, 42, 0.15)' : '1px solid rgba(255, 255, 255, 0.1)',
                   letterSpacing: '0.06em'
                 }}
               >
-                4K OTT
+                PREMIER
               </span>
             </div>
           </div>
-
-          {/* Desktop Navigation Links */}
-          <nav style={{ display: 'none' }} className="desktop-nav">
-            <style>{`
-              @media (min-width: 1080px) {
-                .desktop-nav { display: flex !important; gap: 0.2rem; align-items: center; }
-              }
-            `}</style>
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  style={{
-                    background: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-                    color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.65)',
-                    border: 'none',
-                    position: 'relative',
-                    padding: '0.45rem 0.75rem',
-                    borderRadius: '8px',
-                    fontSize: '0.84rem',
-                    fontWeight: isActive ? 700 : 500,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    transition: 'all 0.18s ease',
-                    whiteSpace: 'nowrap'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = '#ffffff';
-                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = 'rgba(255, 255, 255, 0.65)';
-                      e.currentTarget.style.background = 'transparent';
-                    }
-                  }}
-                >
-                  <Icon size={14} color={isActive ? 'var(--accent)' : 'currentColor'} />
-                  <span>{item.label}</span>
-                  
-                  {/* Subtle active glowing underline */}
-                  {isActive && (
-                    <span 
-                      style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: '20%',
-                        right: '20%',
-                        height: '2px',
-                        borderRadius: '2px',
-                        background: 'var(--accent)',
-                        boxShadow: '0 0 8px var(--accent-glow)'
-                      }}
-                    />
-                  )}
-
-                  {item.isLive && (
-                    <span className="live-pulse" style={{ marginLeft: '2px' }} />
-                  )}
-
-                  {item.badgeText && (
-                    <span
-                      style={{
-                        fontSize: '0.6rem',
-                        padding: '1px 5px',
-                        borderRadius: '4px',
-                        background: item.badgeText === 'NEW' ? 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)' : 'rgba(245, 158, 11, 0.2)',
-                        color: item.badgeText === 'NEW' ? '#ffffff' : '#fbbf24',
-                        fontWeight: 800,
-                        border: item.badgeText === 'NEW' ? 'none' : '1px solid rgba(245, 158, 11, 0.4)',
-                        lineHeight: 1.2,
-                      }}
-                    >
-                      {item.badgeText}
-                    </span>
-                  )}
-
-                  {item.badge !== undefined && item.badge > 0 && (
-                    <span
-                      style={{
-                        fontSize: '0.65rem',
-                        padding: '1px 5px',
-                        borderRadius: '999px',
-                        background: 'var(--accent)',
-                        color: 'var(--accent-text)',
-                        fontWeight: 900
-                      }}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </nav>
         </div>
 
-        {/* Right: Quick Search + Notifications + APK + Profile */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          {/* Quick Search Trigger Bar */}
+        {/* Center: Flix.id Floating Capsule Navigation */}
+        <div style={{ display: 'none' }} className="desktop-capsule-nav">
+          <style>{`
+            @media (min-width: 960px) {
+              .desktop-capsule-nav { display: block !important; }
+            }
+          `}</style>
+          <div className="flix-capsule-bar">
+            <button
+              onClick={() => setActiveTab('movies')}
+              className={`flix-capsule-item ${activeTab === 'movies' ? 'active' : ''}`}
+            >
+              <span>Movie</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('tv')}
+              className={`flix-capsule-item ${activeTab === 'tv' ? 'active' : ''}`}
+            >
+              <span>Series</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('albums')}
+              className={`flix-capsule-item ${activeTab === 'albums' ? 'active' : ''}`}
+            >
+              <span>Originals</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('livetv')}
+              className={`flix-capsule-item ${activeTab === 'livetv' ? 'active' : ''}`}
+            >
+              <span>Live TV</span>
+            </button>
+            <button
+              onClick={onOpenSearch}
+              className="flix-capsule-item"
+              style={{ padding: '0.45rem 0.65rem' }}
+              title="Search"
+            >
+              <Search size={15} />
+            </button>
+          </div>
+        </div>
+
+        {/* Right: Day/Night Switch + Notifications + Profile Avatar Pill */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+          
+          {/* Day / Night Mode 1-Click Instant Switch */}
           <button
-            onClick={onOpenSearch}
+            onClick={toggleDayNight}
             style={{
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: 'rgba(255, 255, 255, 0.7)',
-              padding: '0.42rem 0.75rem',
+              background: isDayMode ? '#ffffff' : 'rgba(255, 255, 255, 0.08)',
+              border: isDayMode ? '1px solid rgba(15, 23, 42, 0.12)' : '1px solid rgba(255, 255, 255, 0.15)',
+              color: isDayMode ? '#0f172a' : '#ffffff',
+              padding: '0.42rem 0.8rem',
               borderRadius: '999px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.5rem',
+              gap: '0.45rem',
               fontSize: '0.8rem',
-              transition: 'all 0.2s ease',
+              fontWeight: 800,
+              boxShadow: isDayMode ? '0 4px 14px rgba(15, 23, 42, 0.08)' : '0 2px 10px rgba(0, 0, 0, 0.4)',
+              transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
-            aria-label="Search"
+            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            title={isDayMode ? 'Switch to Night Mode (Velvet Obsidian)' : 'Switch to Day Mode (Frosted Slate)'}
           >
-            <Search size={15} color="var(--accent)" />
-            <span style={{ display: 'none' }} className="search-text">Search 4K hits...</span>
-            <kbd 
-              style={{
-                display: 'none',
-                padding: '1px 5px',
-                borderRadius: '4px',
-                background: 'rgba(255, 255, 255, 0.1)',
-                fontSize: '0.65rem',
-                color: 'rgba(255, 255, 255, 0.5)',
-                fontWeight: 600,
-                fontFamily: 'monospace'
-              }}
-              className="search-shortcut"
-            >
-              Ctrl K
-            </kbd>
-            <style>{`
-              @media (min-width: 640px) {
-                .search-text { display: inline !important; }
-              }
-              @media (min-width: 1200px) {
-                .search-shortcut { display: inline !important; }
-              }
-            `}</style>
+            {isDayMode ? (
+              <>
+                <Sun size={15} color="#f59e0b" fill="#f59e0b" />
+                <span>Day</span>
+              </>
+            ) : (
+              <>
+                <Moon size={15} color="#38bdf8" fill="#38bdf8" />
+                <span>Night</span>
+              </>
+            )}
           </button>
 
-          {/* Desktop-Only Controls Container */}
-          <div style={{ display: 'none' }} className="desktop-controls-group">
-            <style>{`
-              @media (min-width: 768px) {
-                .desktop-controls-group { display: flex !important; align-items: center; gap: 0.6rem; }
-              }
-            `}</style>
-
-            {/* Notifications Flyout */}
-            <div style={{ position: 'relative' }}>
-              <button
-                onClick={() => {
-                  setNotificationsOpen(!notificationsOpen);
-                  setThemeDropdownOpen(false);
-                }}
-                style={{
-                  background: notificationsOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  color: 'var(--text-primary)',
-                  padding: '0.42rem',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                }}
-                title="Notifications"
-              >
-                <Bell size={16} />
-                <span 
-                  style={{
-                    position: 'absolute',
-                    top: '5px',
-                    right: '5px',
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    background: 'var(--accent)',
-                    boxShadow: '0 0 6px var(--accent-glow)'
-                  }}
-                />
-              </button>
-
-              {notificationsOpen && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    right: 0,
-                    marginTop: '0.5rem',
-                    width: '290px',
-                    borderRadius: '14px',
-                    background: 'var(--bg-card)',
-                    backdropFilter: 'blur(24px)',
-                    border: '1px solid var(--border-subtle)',
-                    boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
-                    padding: '0.85rem',
-                    zIndex: 60,
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>OTT Updates</span>
-                    <span style={{ fontSize: '0.68rem', color: 'var(--accent)', fontWeight: 800, background: 'var(--badge-bg)', padding: '1px 6px', borderRadius: '4px' }}>3 New</span>
-                  </div>
-                  {notifications.map((n) => (
-                    <div
-                      key={n.id}
-                      onClick={() => {
-                        showToast(n.title, 'info');
-                        setNotificationsOpen(false);
-                      }}
-                      style={{
-                        padding: '0.55rem',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        marginBottom: '4px',
-                        background: n.unread ? 'rgba(255,255,255,0.04)' : 'transparent',
-                        transition: 'background 0.15s ease',
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.background = n.unread ? 'rgba(255,255,255,0.04)' : 'transparent')}
-                    >
-                      <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fff', marginBottom: '2px' }}>{n.title}</p>
-                      <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{n.time}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Theme Skin Switcher Dropdown */}
-            <div style={{ position: 'relative' }}>
-              <button
-                onClick={() => {
-                  setThemeDropdownOpen(!themeDropdownOpen);
-                  setNotificationsOpen(false);
-                }}
-                style={{
-                  background: themeDropdownOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
-                  color: 'var(--text-primary)',
-                  padding: '0.42rem 0.65rem',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                }}
-                title="Switch OTT Color Theme"
-              >
-                <Palette size={15} color="var(--accent)" />
-                <span style={{ textTransform: 'capitalize', display: 'none' }} className="theme-text">{theme}</span>
-                <style>{`
-                  @media (min-width: 900px) {
-                    .theme-text { display: inline !important; }
-                  }
-                `}</style>
-              </button>
-
-              {themeDropdownOpen && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    right: 0,
-                    marginTop: '0.5rem',
-                    width: '210px',
-                    borderRadius: '14px',
-                    background: 'var(--bg-card)',
-                    backdropFilter: 'blur(24px)',
-                    border: '1px solid var(--border-subtle)',
-                    boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
-                    padding: '0.5rem',
-                    zIndex: 60,
-                  }}
-                >
-                  <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                    Select Theme Skin
-                  </div>
-                  {themes.map((t) => (
-                    <button
-                      key={t.id}
-                      onClick={() => {
-                        setTheme(t.id);
-                        setThemeDropdownOpen(false);
-                        showToast(`Switched to ${t.name} Theme`, 'info');
-                      }}
-                      style={{
-                        width: '100%',
-                        textAlign: 'left',
-                        padding: '0.55rem 0.7rem',
-                        borderRadius: '8px',
-                        background: theme === t.id ? 'var(--badge-bg)' : 'transparent',
-                        color: theme === t.id ? 'var(--accent)' : 'var(--text-primary)',
-                        border: 'none',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        fontSize: '0.82rem',
-                        fontWeight: theme === t.id ? 700 : 500,
-                        marginBottom: '2px',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <span style={{ width: '9px', height: '9px', borderRadius: '50%', backgroundColor: t.color }} />
-                        <span>{t.name}</span>
-                      </div>
-                      <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>{t.tag}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Web App PWA Install Trigger Button */}
-            {onOpenApkModal && (
-              <button
-                onClick={onOpenApkModal}
-                style={{
-                  background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.16) 0%, rgba(13, 21, 39, 0.7) 100%)',
-                  color: 'var(--accent)',
-                  border: '1px solid var(--accent)',
-                  padding: '0.42rem 0.8rem',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  fontSize: '0.8rem',
-                  fontWeight: 800,
-                  boxShadow: '0 0 16px var(--accent-glow)',
-                  transition: 'all 0.2s ease',
-                }}
-                className="apk-desktop-btn"
-                title="Install PREMIER Web App (PWA)"
-              >
-                <Smartphone size={15} />
-                <span className="apk-btn-text">Install App</span>
-                <span
-                  style={{
-                    fontSize: '0.6rem',
-                    padding: '1px 5px',
-                    borderRadius: '3px',
-                    background: 'var(--accent)',
-                    color: '#05080b',
-                    fontWeight: 900,
-                  }}
-                >
-                  PWA
-                </span>
-              </button>
-            )}
-
-            {/* Profile Button */}
+          {/* Notifications Flyout */}
+          <div style={{ position: 'relative' }}>
             <button
-              onClick={() => setActiveTab('profile')}
+              onClick={() => {
+                setNotificationsOpen(!notificationsOpen);
+                setThemeDropdownOpen(false);
+                setProfileMenuOpen(false);
+              }}
               style={{
-                background: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
-                color: activeTab === 'profile' ? 'var(--accent-text)' : 'var(--text-primary)',
-                border: '1px solid',
-                borderColor: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.08)',
-                padding: '0.42rem 0.7rem',
-                borderRadius: '8px',
+                background: isDayMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.08)',
+                border: isDayMode ? '1px solid rgba(15, 23, 42, 0.1)' : '1px solid rgba(255, 255, 255, 0.12)',
+                color: isDayMode ? '#0f172a' : '#ffffff',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.4rem',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                transition: 'all 0.2s ease',
+                justifyContent: 'center',
+                position: 'relative',
               }}
-              title="User Profile & Streaming Preferences"
+              title="Notifications"
             >
-              <User size={15} />
-              <span style={{ display: 'none' }} className="profile-text">Profile</span>
-              <style>{`
-                @media (min-width: 960px) {
-                  .profile-text { display: inline !important; }
-                }
-              `}</style>
+              <Bell size={16} />
+              <span 
+                style={{
+                  position: 'absolute',
+                  top: '2px',
+                  right: '2px',
+                  minWidth: '16px',
+                  height: '16px',
+                  borderRadius: '999px',
+                  background: '#ef4444',
+                  color: '#ffffff',
+                  fontSize: '0.62rem',
+                  fontWeight: 900,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 2px',
+                }}
+              >
+                8
+              </span>
             </button>
+
+            {notificationsOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  marginTop: '0.65rem',
+                  width: '300px',
+                  borderRadius: '16px',
+                  background: 'var(--bg-card)',
+                  backdropFilter: 'blur(28px)',
+                  WebkitBackdropFilter: 'blur(28px)',
+                  border: '1px solid var(--border-subtle)',
+                  boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+                  padding: '0.9rem',
+                  zIndex: 60,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
+                  <span style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--text-primary)' }}>Flix Updates</span>
+                  <span style={{ fontSize: '0.68rem', color: isDayMode ? '#ffffff' : 'var(--accent-text)', fontWeight: 800, background: isDayMode ? '#0f172a' : 'var(--accent)', padding: '1px 6px', borderRadius: '4px' }}>8 New</span>
+                </div>
+                {notifications.map((n) => (
+                  <div
+                    key={n.id}
+                    onClick={() => {
+                      showToast(n.title, 'info');
+                      setNotificationsOpen(false);
+                    }}
+                    style={{
+                      padding: '0.6rem',
+                      borderRadius: '10px',
+                      cursor: 'pointer',
+                      marginBottom: '4px',
+                      background: n.unread ? (isDayMode ? 'rgba(15, 23, 42, 0.05)' : 'rgba(255,255,255,0.06)') : 'transparent',
+                      transition: 'background 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = isDayMode ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255,255,255,0.12)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = n.unread ? (isDayMode ? 'rgba(15, 23, 42, 0.05)' : 'rgba(255,255,255,0.06)') : 'transparent')}
+                  >
+                    <p style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '2px' }}>{n.title}</p>
+                    <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{n.time}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Mobile Hamburger Toggle Button */}
+          {/* User Profile Avatar Pill (Flix.id style) */}
+          <div style={{ position: 'relative', display: 'none' }} className="desktop-profile-pill">
+            <style>{`
+              @media (min-width: 640px) {
+                .desktop-profile-pill { display: block !important; }
+              }
+            `}</style>
+            <div
+              onClick={() => {
+                setProfileMenuOpen(!profileMenuOpen);
+                setNotificationsOpen(false);
+                setThemeDropdownOpen(false);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.55rem',
+                padding: '0.32rem 0.75rem 0.32rem 0.35rem',
+                borderRadius: '999px',
+                background: isDayMode ? 'rgba(255, 255, 255, 0.75)' : 'rgba(255, 255, 255, 0.08)',
+                border: isDayMode ? '1px solid rgba(15, 23, 42, 0.12)' : '1px solid rgba(255, 255, 255, 0.15)',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                userSelect: 'none',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+                alt="Sarah J"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+                <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                  Sarah J
+                </span>
+                <span style={{ fontSize: '0.62rem', fontWeight: 700, color: isDayMode ? '#2563eb' : 'var(--accent)' }}>
+                  Premium
+                </span>
+              </div>
+              <ChevronDown size={14} color="var(--text-muted)" />
+            </div>
+
+            {profileMenuOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  marginTop: '0.65rem',
+                  width: '220px',
+                  borderRadius: '16px',
+                  background: 'var(--bg-card)',
+                  backdropFilter: 'blur(28px)',
+                  WebkitBackdropFilter: 'blur(28px)',
+                  border: '1px solid var(--border-subtle)',
+                  boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+                  padding: '0.65rem',
+                  zIndex: 60,
+                }}
+              >
+                <div style={{ padding: '0.5rem 0.65rem', borderBottom: '1px solid var(--border-subtle)', marginBottom: '0.35rem' }}>
+                  <p style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-primary)' }}>Sarah Jenkins</p>
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>sarah.ott@premier.io</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setActiveTab('profile');
+                    setProfileMenuOpen(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '0.55rem 0.75rem',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'transparent',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                  }}
+                >
+                  <User size={15} /> Account Settings
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveTab('watchlist');
+                    setProfileMenuOpen(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    textAlign: 'left',
+                    padding: '0.55rem 0.75rem',
+                    borderRadius: '8px',
+                    border: 'none',
+                    background: 'transparent',
+                    color: 'var(--text-primary)',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                  }}
+                >
+                  <Bookmark size={15} /> My Watchlist ({watchlist.length})
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Theme Skin Dropdown (Optional Advanced Skins) */}
+          <div style={{ position: 'relative', display: 'none' }} className="desktop-skin-picker">
+            <style>{`
+              @media (min-width: 1200px) {
+                .desktop-skin-picker { display: block !important; }
+              }
+            `}</style>
+            <button
+              onClick={() => {
+                setThemeDropdownOpen(!themeDropdownOpen);
+                setNotificationsOpen(false);
+                setProfileMenuOpen(false);
+              }}
+              style={{
+                background: isDayMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.08)',
+                border: isDayMode ? '1px solid rgba(15, 23, 42, 0.1)' : '1px solid rgba(255, 255, 255, 0.12)',
+                color: isDayMode ? '#0f172a' : '#ffffff',
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+              title="Theme Presets"
+            >
+              <Palette size={16} />
+            </button>
+
+            {themeDropdownOpen && (
+              <div
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  marginTop: '0.65rem',
+                  width: '210px',
+                  borderRadius: '16px',
+                  background: 'var(--bg-card)',
+                  backdropFilter: 'blur(28px)',
+                  WebkitBackdropFilter: 'blur(28px)',
+                  border: '1px solid var(--border-subtle)',
+                  boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+                  padding: '0.5rem',
+                  zIndex: 60,
+                }}
+              >
+                <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                  Select Theme Skin
+                </div>
+                {themes.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => {
+                      setTheme(t.id);
+                      setThemeDropdownOpen(false);
+                      showToast(`Switched to ${t.name} Theme`, 'info');
+                    }}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '0.55rem 0.7rem',
+                      borderRadius: '8px',
+                      background: theme === t.id ? 'var(--badge-bg)' : 'transparent',
+                      color: theme === t.id ? (isDayMode ? '#0f172a' : 'var(--accent)') : 'var(--text-primary)',
+                      border: 'none',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      fontSize: '0.82rem',
+                      fontWeight: theme === t.id ? 800 : 500,
+                      marginBottom: '2px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', backgroundColor: t.color }} />
+                      <span>{t.name}</span>
+                    </div>
+                    {theme === t.id && <Check size={14} />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* PWA App Install Button */}
+          {onOpenApkModal && (
+            <button
+              onClick={onOpenApkModal}
+              style={{
+                background: isDayMode ? '#0f172a' : 'rgba(149, 255, 80, 0.15)',
+                color: isDayMode ? '#ffffff' : 'var(--accent)',
+                border: isDayMode ? '1px solid #0f172a' : '1px solid var(--accent)',
+                padding: '0.42rem 0.8rem',
+                borderRadius: '999px',
+                cursor: 'pointer',
+                display: 'none',
+                alignItems: 'center',
+                gap: '0.4rem',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                transition: 'all 0.2s ease',
+              }}
+              className="pwa-install-pill"
+              title="Install Web App"
+            >
+              <style>{`
+                @media (min-width: 768px) {
+                  .pwa-install-pill { display: flex !important; }
+                }
+              `}</style>
+              <Smartphone size={14} />
+              <span>Install App</span>
+            </button>
+          )}
+
+          {/* Mobile Menu Hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              background: isDayMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.08)',
+              border: isDayMode ? '1px solid rgba(15, 23, 42, 0.1)' : '1px solid rgba(255, 255, 255, 0.12)',
               borderRadius: '8px',
               color: 'var(--text-primary)',
               cursor: 'pointer',
@@ -576,7 +602,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             aria-label="Menu"
           >
             <style>{`
-              @media (min-width: 1080px) {
+              @media (min-width: 960px) {
                 .mobile-menu-btn { display: none !important; }
               }
             `}</style>
@@ -589,7 +615,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div
           style={{
-            background: 'rgba(5, 7, 12, 0.98)',
+            background: isDayMode ? 'rgba(213, 223, 233, 0.98)' : 'rgba(6, 7, 10, 0.98)',
             backdropFilter: 'blur(32px)',
             borderBottom: '1px solid var(--border-subtle)',
             padding: '1rem 1.25rem 1.5rem',
@@ -599,159 +625,73 @@ export const Navbar: React.FC<NavbarProps> = ({
           }}
           className="animate-fade-in"
         >
-          {/* Featured Mobile Web App Install Card */}
-          {onOpenApkModal && (
-            <div
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            {[
+              { id: 'home', label: 'Home', icon: Flame },
+              { id: 'movies', label: 'Movies', icon: Film },
+              { id: 'tv', label: 'Series', icon: Tv },
+              { id: 'albums', label: 'Originals', icon: Disc },
+              { id: 'dualaudio', label: 'Dual Audio', icon: Sparkles },
+              { id: 'livetv', label: 'Live TV', icon: Radio },
+              { id: 'discover', label: 'Discover', icon: Compass },
+              { id: 'watchlist', label: `Watchlist (${watchlist.length})`, icon: Bookmark },
+            ].map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setMobileMenuOpen(false);
+                  }}
+                  style={{
+                    padding: '0.65rem 0.85rem',
+                    borderRadius: '10px',
+                    border: '1px solid var(--border-subtle)',
+                    background: isActive ? 'var(--accent)' : 'var(--bg-card)',
+                    color: isActive ? 'var(--accent-text)' : 'var(--text-primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontSize: '0.84rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <Icon size={16} />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+            <button
               onClick={() => {
-                onOpenApkModal();
+                toggleDayNight();
                 setMobileMenuOpen(false);
               }}
               style={{
-                background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.16) 0%, rgba(13, 21, 39, 0.9) 100%)',
-                border: '1px solid var(--accent)',
-                borderRadius: '12px',
-                padding: '0.85rem 1rem',
+                flex: 1,
+                padding: '0.65rem',
+                borderRadius: '10px',
+                background: isDayMode ? '#0f172a' : '#ffffff',
+                color: isDayMode ? '#ffffff' : '#0f172a',
+                border: 'none',
+                fontWeight: 800,
+                fontSize: '0.84rem',
+                cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
-                cursor: 'pointer',
-                marginBottom: '0.4rem',
-                boxShadow: '0 4px 20px var(--accent-glow)',
+                justifyContent: 'center',
+                gap: '0.45rem',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <div
-                  style={{
-                    width: '34px',
-                    height: '34px',
-                    borderRadius: '8px',
-                    background: 'var(--accent)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Smartphone size={18} color="#05080b" />
-                </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#fff' }}>Install PREMIER Web App</span>
-                    <span style={{ fontSize: '0.62rem', background: 'var(--accent)', color: '#000', fontWeight: 900, padding: '1px 5px', borderRadius: '3px' }}>PWA</span>
-                  </div>
-                  <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Instant 1-Tap Mobile Installation</p>
-                </div>
-              </div>
-              <Sparkles size={18} color="var(--accent)" />
-            </div>
-          )}
-
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                style={{
-                  background: isActive ? 'var(--badge-bg)' : 'rgba(255,255,255,0.03)',
-                  color: isActive ? 'var(--accent)' : 'var(--text-primary)',
-                  border: 'none',
-                  padding: '0.7rem 1rem',
-                  borderRadius: '10px',
-                  fontSize: '0.9rem',
-                  fontWeight: isActive ? 700 : 500,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <Icon size={17} />
-                  <span>{item.label}</span>
-                </div>
-                {item.badgeText && (
-                  <span
-                    style={{
-                      fontSize: '0.65rem',
-                      padding: '2px 6px',
-                      borderRadius: '4px',
-                      background: 'var(--badge-bg)',
-                      color: 'var(--accent)',
-                      fontWeight: 800,
-                    }}
-                  >
-                    {item.badgeText}
-                  </span>
-                )}
-                {item.isLive && <span className="live-pulse" />}
-              </button>
-            );
-          })}
-
-          {/* Mobile Theme Skin Selector */}
-          <div style={{ marginTop: '0.65rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              Color Theme Skin
-            </div>
-            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-              {themes.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => {
-                    setTheme(t.id);
-                    showToast(`Switched to ${t.name} Theme`, 'info');
-                  }}
-                  style={{
-                    background: theme === t.id ? 'var(--badge-bg)' : 'rgba(255,255,255,0.05)',
-                    border: theme === t.id ? '1px solid var(--accent)' : '1px solid rgba(255,255,255,0.1)',
-                    color: theme === t.id ? 'var(--accent)' : 'var(--text-secondary)',
-                    borderRadius: '8px',
-                    padding: '0.4rem 0.65rem',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                  }}
-                >
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: t.color }} />
-                  <span>{t.name.split(' ')[0]}</span>
-                </button>
-              ))}
-            </div>
+              {isDayMode ? <Moon size={16} /> : <Sun size={16} />}
+              <span>{isDayMode ? 'Switch to Night Mode' : 'Switch to Day Mode'}</span>
+            </button>
           </div>
-
-          {/* Profile & Settings Button */}
-          <button
-            onClick={() => {
-              setActiveTab('profile');
-              setMobileMenuOpen(false);
-            }}
-            style={{
-              marginTop: '0.5rem',
-              background: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255,255,255,0.05)',
-              color: activeTab === 'profile' ? 'var(--accent-text)' : 'var(--text-primary)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '10px',
-              padding: '0.7rem 1rem',
-              fontSize: '0.9rem',
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <User size={17} />
-              <span>User Profile & Settings</span>
-            </div>
-          </button>
         </div>
       )}
     </header>
