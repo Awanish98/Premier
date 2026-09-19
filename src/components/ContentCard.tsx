@@ -54,9 +54,10 @@ export const ContentCard: React.FC<ContentCardProps> = ({
     >
       {/* Background Poster Image */}
       <img
-        src={isPoster ? item.posterPath : item.backdropPath}
+        src={isPoster ? (item.posterPath || item.backdropPath) : (item.backdropPath || item.posterPath)}
         alt={item.title}
         loading="lazy"
+        decoding="async"
         style={{
           position: 'absolute',
           top: 0,
@@ -67,8 +68,14 @@ export const ContentCard: React.FC<ContentCardProps> = ({
           transition: 'transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
         onError={(e) => {
-          (e.target as HTMLImageElement).src =
-            'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=500&auto=format&fit=crop';
+          const img = e.target as HTMLImageElement;
+          const altFallback = isPoster ? item.backdropPath : item.posterPath;
+          if (altFallback && img.src !== altFallback) {
+            img.src = altFallback;
+          } else {
+            // Elegant premium dark OTT cinema backdrop
+            img.src = 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600&auto=format&fit=crop&q=80';
+          }
         }}
       />
 

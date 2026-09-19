@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 interface MagicCardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ interface MagicCardProps extends React.HTMLAttributes<HTMLDivElement> {
 export const MagicCard: React.FC<MagicCardProps> = ({
   children,
   className = '',
-  gradientSize = 250,
+  gradientSize = 240,
   gradientColor = 'var(--accent)',
   gradientOpacity = 0.25,
   borderWidth = 1,
@@ -20,26 +20,31 @@ export const MagicCard: React.FC<MagicCardProps> = ({
   ...props
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({ x: -1000, y: -1000 });
   const [isHovered, setIsHovered] = useState(false);
+  const isTouchDevice = useRef(false);
+
+  useEffect(() => {
+    isTouchDevice.current = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (isTouchDevice.current || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    setMousePosition({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    cardRef.current.style.setProperty('--mouse-x', `${x}px`);
+    cardRef.current.style.setProperty('--mouse-y', `${y}px`);
   };
 
   return (
     <div
       ref={cardRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => {
+        if (!isTouchDevice.current) setIsHovered(true);
+      }}
       onMouseLeave={() => {
         setIsHovered(false);
-        setMousePosition({ x: -1000, y: -1000 });
       }}
       className={`magic-card ${className}`}
       style={{
@@ -48,23 +53,22 @@ export const MagicCard: React.FC<MagicCardProps> = ({
         overflow: 'hidden',
         background: 'var(--bg-card)',
         border: `${borderWidth}px solid var(--border-subtle)`,
-        transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease',
-        boxShadow: isHovered 
-          ? '0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 25px -5px var(--accent-glow)' 
-          : '0 8px 24px -8px rgba(0, 0, 0, 0.5)',
+        transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease',
+        transform: 'translateZ(0)',
+        willChange: 'transform',
         ...style,
       }}
       {...props}
     >
-      {/* Interactive Cursor Spotlight Glow (Magic UI) */}
+      {/* Interactive Cursor Spotlight Glow (Pure CSS variables for zero re-renders) */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           pointerEvents: 'none',
           opacity: isHovered ? 1 : 0,
-          transition: 'opacity 0.35s ease',
-          background: `radial-gradient(${gradientSize}px circle at ${mousePosition.x}px ${mousePosition.y}px, ${gradientColor} 0%, transparent 80%)`,
+          transition: 'opacity 0.25s ease',
+          background: `radial-gradient(${gradientSize}px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), ${gradientColor} 0%, transparent 80%)`,
           mixBlendMode: 'screen',
           zIndex: 1,
         }}
@@ -77,7 +81,7 @@ export const MagicCard: React.FC<MagicCardProps> = ({
           inset: 0,
           pointerEvents: 'none',
           opacity: isHovered ? gradientOpacity : 0,
-          transition: 'opacity 0.4s ease',
+          transition: 'opacity 0.3s ease',
           background: `radial-gradient(circle at 50% 0%, var(--accent-glow) 0%, transparent 70%)`,
           zIndex: 1,
         }}

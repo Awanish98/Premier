@@ -480,8 +480,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           </div>
         </div>
 
-        {/* Filmstrip Thumbnail Rail & Bottom Controls */}
+        {/* Filmstrip Thumbnail Rail & Bottom Controls (Desktop / Tablet) */}
         <div
+          className="hero-filmstrip-container"
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -659,6 +660,45 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
               );
             })}
           </div>
+        </div>
+
+        {/* Mobile Dot Indicators (Visible on Screens <= 900px) */}
+        <div
+          className="hero-mobile-dots"
+          style={{
+            display: 'none',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.45rem',
+            padding: '0.5rem 0 0',
+          }}
+        >
+          <style>{`
+            @media (max-width: 900px) {
+              .hero-mobile-dots { display: flex !important; }
+            }
+          `}</style>
+          {items.map((item, idx) => {
+            const isActive = idx === currentIndex;
+            return (
+              <button
+                key={item.id}
+                onClick={() => goToSlide(idx)}
+                style={{
+                  width: isActive ? '24px' : '7px',
+                  height: '7px',
+                  borderRadius: '999px',
+                  background: isActive ? (item.accentColor || 'var(--accent)') : 'rgba(255, 255, 255, 0.25)',
+                  border: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                  padding: 0,
+                  boxShadow: isActive ? `0 0 10px ${item.accentColor || 'var(--accent)'}` : 'none',
+                }}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            );
+          })}
         </div>
       </div>
 

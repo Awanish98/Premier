@@ -34,93 +34,67 @@ export const AmbientBackground: React.FC = () => {
         zIndex: 0,
         overflow: 'hidden',
         background: 'var(--bg-primary)',
-        transition: 'background-color 0.5s ease',
+        transform: 'translateZ(0)',
+        willChange: 'transform',
       }}
       aria-hidden="true"
+      className="ambient-background-root"
     >
-      {/* Layer 1: Blurred Movie Backdrop Aura (Cinejoy Atmosphere Glow) */}
+      {/* Desktop Blurred Movie Backdrop Aura */}
       {backdropUrl && (
         <div
           key={backdropUrl}
           style={{
             position: 'absolute',
-            inset: '-10%',
-            width: '120%',
-            height: '120%',
+            inset: '-5%',
+            width: '110%',
+            height: '110%',
             backgroundImage: `url(${backdropUrl})`,
             backgroundSize: 'cover',
-            backgroundPosition: 'center 25%',
-            filter: 'blur(90px) saturate(200%) brightness(0.4)',
-            opacity: 0.38,
-            transition: 'opacity 1.2s ease-in-out',
-            transform: 'scale(1.05)',
-            willChange: 'opacity, transform',
+            backgroundPosition: 'center 20%',
+            opacity: 0.3,
+            transform: 'translateZ(0)',
           }}
-          className="ambient-aura-drift"
+          className="desktop-ambient-aura"
         />
       )}
 
-      {/* Layer 2: Animated Floating Aurora Glow Orb 1 (Top Left Primary Glow) */}
+      {/* Lightweight GPU-Optimized Glow Orbs */}
       <div
         style={{
           position: 'absolute',
-          top: '-15%',
+          top: '-10%',
           left: '10%',
-          width: '750px',
-          height: '750px',
+          width: 'min(700px, 90vw)',
+          height: 'min(700px, 90vw)',
           borderRadius: '50%',
-          background: `radial-gradient(circle, ${primaryColor} 0%, transparent 65%)`,
-          filter: 'blur(120px)',
-          opacity: 0.42,
-          transition: 'background 1s ease',
+          background: `radial-gradient(circle, ${primaryColor}26 0%, transparent 70%)`,
+          transform: 'translateZ(0)',
         }}
         className="aurora-orb-1"
       />
 
-      {/* Layer 3: Animated Floating Aurora Glow Orb 2 (Right Mid Secondary Glow) */}
       <div
         style={{
           position: 'absolute',
-          top: '30%',
+          top: '35%',
           right: '-5%',
-          width: '680px',
-          height: '680px',
+          width: 'min(600px, 80vw)',
+          height: 'min(600px, 80vw)',
           borderRadius: '50%',
-          background: `radial-gradient(circle, ${primaryColor} 0%, transparent 65%)`,
-          filter: 'blur(130px)',
-          opacity: 0.32,
-          transition: 'background 1s ease',
+          background: `radial-gradient(circle, ${primaryColor}1a 0%, transparent 70%)`,
+          transform: 'translateZ(0)',
         }}
         className="aurora-orb-2"
       />
 
-      {/* Layer 4: Animated Floating Aurora Glow Orb 3 (Bottom Center Ambient Glow) */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '-10%',
-          left: '35%',
-          width: '800px',
-          height: '800px',
-          borderRadius: '50%',
-          background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)`,
-          filter: 'blur(140px)',
-          opacity: 0.28,
-          transition: 'background 1s ease',
-        }}
-        className="aurora-orb-3"
-      />
-
-      {/* Layer 5: Cosmic Subtle Dust / Stars Field */}
-      <div className="ambient-stars-layer" />
-
-      {/* Layer 6: Vignette Overlays for Crisp Text Legibility */}
+      {/* Vignette Overlays for Crisp Text Legibility */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(circle at 50% 30%, transparent 20%, rgba(6, 7, 10, 0.75) 85%, var(--bg-primary) 100%)',
+            'radial-gradient(circle at 50% 30%, transparent 30%, rgba(6, 7, 10, 0.75) 85%, var(--bg-primary) 100%)',
         }}
       />
       <div

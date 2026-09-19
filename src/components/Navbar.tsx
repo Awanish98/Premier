@@ -272,31 +272,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             onClick={onOpenSearch}
             style={{
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              color: 'rgba(255, 255, 255, 0.6)',
-              padding: '0.42rem 0.85rem',
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: 'rgba(255, 255, 255, 0.7)',
+              padding: '0.42rem 0.75rem',
               borderRadius: '999px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.55rem',
+              gap: '0.5rem',
               fontSize: '0.8rem',
               transition: 'all 0.2s ease',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-              e.currentTarget.style.color = '#fff';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-              e.currentTarget.style.color = 'rgba(255, 255, 255, 0.6)';
-            }}
+            aria-label="Search"
           >
-            <Search size={14} color="var(--accent)" />
-            <span style={{ display: 'none' }} className="search-text">Search movies, 4K hits...</span>
+            <Search size={15} color="var(--accent)" />
+            <span style={{ display: 'none' }} className="search-text">Search 4K hits...</span>
             <kbd 
               style={{
                 display: 'none',
@@ -322,262 +313,274 @@ export const Navbar: React.FC<NavbarProps> = ({
             `}</style>
           </button>
 
-          {/* Notifications Flyout */}
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => {
-                setNotificationsOpen(!notificationsOpen);
-                setThemeDropdownOpen(false);
-              }}
-              style={{
-                background: notificationsOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                color: 'var(--text-primary)',
-                padding: '0.42rem',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-              }}
-              title="Notifications"
-            >
-              <Bell size={16} />
-              <span 
-                style={{
-                  position: 'absolute',
-                  top: '5px',
-                  right: '5px',
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: 'var(--accent)',
-                  boxShadow: '0 0 6px var(--accent-glow)'
-                }}
-              />
-            </button>
+          {/* Desktop-Only Controls Container */}
+          <div style={{ display: 'none' }} className="desktop-controls-group">
+            <style>{`
+              @media (min-width: 768px) {
+                .desktop-controls-group { display: flex !important; align-items: center; gap: 0.6rem; }
+              }
+            `}</style>
 
-            {notificationsOpen && (
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  marginTop: '0.5rem',
-                  width: '290px',
-                  borderRadius: '14px',
-                  background: 'var(--bg-card)',
-                  backdropFilter: 'blur(24px)',
-                  border: '1px solid var(--border-subtle)',
-                  boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
-                  padding: '0.85rem',
-                  zIndex: 60,
+            {/* Notifications Flyout */}
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => {
+                  setNotificationsOpen(!notificationsOpen);
+                  setThemeDropdownOpen(false);
                 }}
+                style={{
+                  background: notificationsOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  color: 'var(--text-primary)',
+                  padding: '0.42rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                }}
+                title="Notifications"
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
-                  <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>OTT Updates</span>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--accent)', fontWeight: 800, background: 'var(--badge-bg)', padding: '1px 6px', borderRadius: '4px' }}>3 New</span>
-                </div>
-                {notifications.map((n) => (
-                  <div
-                    key={n.id}
-                    onClick={() => {
-                      showToast(n.title, 'info');
-                      setNotificationsOpen(false);
-                    }}
-                    style={{
-                      padding: '0.55rem',
-                      borderRadius: '8px',
-                      cursor: 'pointer',
-                      marginBottom: '4px',
-                      background: n.unread ? 'rgba(255,255,255,0.04)' : 'transparent',
-                      transition: 'background 0.15s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = n.unread ? 'rgba(255,255,255,0.04)' : 'transparent')}
-                  >
-                    <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fff', marginBottom: '2px' }}>{n.title}</p>
-                    <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{n.time}</p>
+                <Bell size={16} />
+                <span 
+                  style={{
+                    position: 'absolute',
+                    top: '5px',
+                    right: '5px',
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: 'var(--accent)',
+                    boxShadow: '0 0 6px var(--accent-glow)'
+                  }}
+                />
+              </button>
+
+              {notificationsOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    marginTop: '0.5rem',
+                    width: '290px',
+                    borderRadius: '14px',
+                    background: 'var(--bg-card)',
+                    backdropFilter: 'blur(24px)',
+                    border: '1px solid var(--border-subtle)',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
+                    padding: '0.85rem',
+                    zIndex: 60,
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>OTT Updates</span>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--accent)', fontWeight: 800, background: 'var(--badge-bg)', padding: '1px 6px', borderRadius: '4px' }}>3 New</span>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Theme Skin Switcher Dropdown */}
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => {
-                setThemeDropdownOpen(!themeDropdownOpen);
-                setNotificationsOpen(false);
-              }}
-              style={{
-                background: themeDropdownOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                color: 'var(--text-primary)',
-                padding: '0.42rem 0.65rem',
-                borderRadius: '8px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-              }}
-              title="Switch OTT Color Theme"
-            >
-              <Palette size={15} color="var(--accent)" />
-              <span style={{ textTransform: 'capitalize', display: 'none' }} className="theme-text">{theme}</span>
-              <style>{`
-                @media (min-width: 900px) {
-                  .theme-text { display: inline !important; }
-                }
-              `}</style>
-            </button>
-
-            {themeDropdownOpen && (
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  marginTop: '0.5rem',
-                  width: '210px',
-                  borderRadius: '14px',
-                  background: 'var(--bg-card)',
-                  backdropFilter: 'blur(24px)',
-                  border: '1px solid var(--border-subtle)',
-                  boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
-                  padding: '0.5rem',
-                  zIndex: 60,
-                }}
-              >
-                <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                  Select Theme Skin
-                </div>
-                {themes.map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => {
-                      setTheme(t.id);
-                      setThemeDropdownOpen(false);
-                      showToast(`Switched to ${t.name} Theme`, 'info');
-                    }}
-                    style={{
-                      width: '100%',
-                      textAlign: 'left',
-                      padding: '0.55rem 0.7rem',
-                      borderRadius: '8px',
-                      background: theme === t.id ? 'var(--badge-bg)' : 'transparent',
-                      color: theme === t.id ? 'var(--accent)' : 'var(--text-primary)',
-                      border: 'none',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      fontSize: '0.82rem',
-                      fontWeight: theme === t.id ? 700 : 500,
-                      marginBottom: '2px',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ width: '9px', height: '9px', borderRadius: '50%', backgroundColor: t.color }} />
-                      <span>{t.name}</span>
+                  {notifications.map((n) => (
+                    <div
+                      key={n.id}
+                      onClick={() => {
+                        showToast(n.title, 'info');
+                        setNotificationsOpen(false);
+                      }}
+                      style={{
+                        padding: '0.55rem',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        marginBottom: '4px',
+                        background: n.unread ? 'rgba(255,255,255,0.04)' : 'transparent',
+                        transition: 'background 0.15s ease',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = n.unread ? 'rgba(255,255,255,0.04)' : 'transparent')}
+                    >
+                      <p style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fff', marginBottom: '2px' }}>{n.title}</p>
+                      <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{n.time}</p>
                     </div>
-                    <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>{t.tag}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-          {/* Web App PWA Install Trigger Button */}
-          {onOpenApkModal && (
+            {/* Theme Skin Switcher Dropdown */}
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => {
+                  setThemeDropdownOpen(!themeDropdownOpen);
+                  setNotificationsOpen(false);
+                }}
+                style={{
+                  background: themeDropdownOpen ? 'rgba(255,255,255,0.12)' : 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  color: 'var(--text-primary)',
+                  padding: '0.42rem 0.65rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                }}
+                title="Switch OTT Color Theme"
+              >
+                <Palette size={15} color="var(--accent)" />
+                <span style={{ textTransform: 'capitalize', display: 'none' }} className="theme-text">{theme}</span>
+                <style>{`
+                  @media (min-width: 900px) {
+                    .theme-text { display: inline !important; }
+                  }
+                `}</style>
+              </button>
+
+              {themeDropdownOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    marginTop: '0.5rem',
+                    width: '210px',
+                    borderRadius: '14px',
+                    background: 'var(--bg-card)',
+                    backdropFilter: 'blur(24px)',
+                    border: '1px solid var(--border-subtle)',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.85)',
+                    padding: '0.5rem',
+                    zIndex: 60,
+                  }}
+                >
+                  <div style={{ padding: '0.4rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                    Select Theme Skin
+                  </div>
+                  {themes.map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => {
+                        setTheme(t.id);
+                        setThemeDropdownOpen(false);
+                        showToast(`Switched to ${t.name} Theme`, 'info');
+                      }}
+                      style={{
+                        width: '100%',
+                        textAlign: 'left',
+                        padding: '0.55rem 0.7rem',
+                        borderRadius: '8px',
+                        background: theme === t.id ? 'var(--badge-bg)' : 'transparent',
+                        color: theme === t.id ? 'var(--accent)' : 'var(--text-primary)',
+                        border: 'none',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        fontSize: '0.82rem',
+                        fontWeight: theme === t.id ? 700 : 500,
+                        marginBottom: '2px',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ width: '9px', height: '9px', borderRadius: '50%', backgroundColor: t.color }} />
+                        <span>{t.name}</span>
+                      </div>
+                      <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>{t.tag}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Web App PWA Install Trigger Button */}
+            {onOpenApkModal && (
+              <button
+                onClick={onOpenApkModal}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.16) 0%, rgba(13, 21, 39, 0.7) 100%)',
+                  color: 'var(--accent)',
+                  border: '1px solid var(--accent)',
+                  padding: '0.42rem 0.8rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  boxShadow: '0 0 16px var(--accent-glow)',
+                  transition: 'all 0.2s ease',
+                }}
+                className="apk-desktop-btn"
+                title="Install PREMIER Web App (PWA)"
+              >
+                <Smartphone size={15} />
+                <span className="apk-btn-text">Install App</span>
+                <span
+                  style={{
+                    fontSize: '0.6rem',
+                    padding: '1px 5px',
+                    borderRadius: '3px',
+                    background: 'var(--accent)',
+                    color: '#05080b',
+                    fontWeight: 900,
+                  }}
+                >
+                  PWA
+                </span>
+              </button>
+            )}
+
+            {/* Profile Button */}
             <button
-              onClick={onOpenApkModal}
+              onClick={() => setActiveTab('profile')}
               style={{
-                background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.16) 0%, rgba(13, 21, 39, 0.7) 100%)',
-                color: 'var(--accent)',
-                border: '1px solid var(--accent)',
-                padding: '0.42rem 0.8rem',
+                background: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
+                color: activeTab === 'profile' ? 'var(--accent-text)' : 'var(--text-primary)',
+                border: '1px solid',
+                borderColor: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.08)',
+                padding: '0.42rem 0.7rem',
                 borderRadius: '8px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.4rem',
                 fontSize: '0.8rem',
-                fontWeight: 800,
-                boxShadow: '0 0 16px var(--accent-glow)',
+                fontWeight: 700,
                 transition: 'all 0.2s ease',
               }}
-              className="apk-desktop-btn"
-              title="Install PREMIER Web App (PWA)"
+              title="User Profile & Streaming Preferences"
             >
-              <Smartphone size={15} />
-              <span className="apk-btn-text">Install App</span>
-              <span
-                style={{
-                  fontSize: '0.6rem',
-                  padding: '1px 5px',
-                  borderRadius: '3px',
-                  background: 'var(--accent)',
-                  color: '#05080b',
-                  fontWeight: 900,
-                }}
-              >
-                PWA
-              </span>
+              <User size={15} />
+              <span style={{ display: 'none' }} className="profile-text">Profile</span>
+              <style>{`
+                @media (min-width: 960px) {
+                  .profile-text { display: inline !important; }
+                }
+              `}</style>
             </button>
-          )}
-
-          {/* Profile Button */}
-          <button
-            onClick={() => setActiveTab('profile')}
-            style={{
-              background: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
-              color: activeTab === 'profile' ? 'var(--accent-text)' : 'var(--text-primary)',
-              border: '1px solid',
-              borderColor: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.08)',
-              padding: '0.42rem 0.7rem',
-              borderRadius: '8px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              transition: 'all 0.2s ease',
-            }}
-            title="User Profile & Streaming Preferences"
-          >
-            <User size={15} />
-            <span style={{ display: 'none' }} className="profile-text">Profile</span>
-            <style>{`
-              @media (min-width: 960px) {
-                .profile-text { display: inline !important; }
-              }
-            `}</style>
-          </button>
+          </div>
 
           {/* Mobile Hamburger Toggle Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{
-              background: 'transparent',
-              border: 'none',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '8px',
               color: 'var(--text-primary)',
               cursor: 'pointer',
-              padding: '0.4rem',
+              padding: '0.45rem',
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
             }}
             className="mobile-menu-btn"
+            aria-label="Menu"
           >
             <style>{`
               @media (min-width: 1080px) {
                 .mobile-menu-btn { display: none !important; }
               }
             `}</style>
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
@@ -688,6 +691,67 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             );
           })}
+
+          {/* Mobile Theme Skin Selector */}
+          <div style={{ marginTop: '0.65rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              Color Theme Skin
+            </div>
+            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+              {themes.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => {
+                    setTheme(t.id);
+                    showToast(`Switched to ${t.name} Theme`, 'info');
+                  }}
+                  style={{
+                    background: theme === t.id ? 'var(--badge-bg)' : 'rgba(255,255,255,0.05)',
+                    border: theme === t.id ? '1px solid var(--accent)' : '1px solid rgba(255,255,255,0.1)',
+                    color: theme === t.id ? 'var(--accent)' : 'var(--text-secondary)',
+                    borderRadius: '8px',
+                    padding: '0.4rem 0.65rem',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                  }}
+                >
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: t.color }} />
+                  <span>{t.name.split(' ')[0]}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Profile & Settings Button */}
+          <button
+            onClick={() => {
+              setActiveTab('profile');
+              setMobileMenuOpen(false);
+            }}
+            style={{
+              marginTop: '0.5rem',
+              background: activeTab === 'profile' ? 'var(--accent)' : 'rgba(255,255,255,0.05)',
+              color: activeTab === 'profile' ? 'var(--accent-text)' : 'var(--text-primary)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: '10px',
+              padding: '0.7rem 1rem',
+              fontSize: '0.9rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <User size={17} />
+              <span>User Profile & Settings</span>
+            </div>
+          </button>
         </div>
       )}
     </header>

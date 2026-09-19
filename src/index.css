@@ -762,4 +762,75 @@ body {
   }
 }
 
+/* ================= MOBILE 60-120 FPS ULTRA SMOOTH SCROLLING & UI ADAPTATIONS ================= */
+@media (max-width: 768px) {
+  /* Disable heavy background blurs and GPU load on mobile */
+  .ambient-stars-layer,
+  .meteors-container {
+    display: none !important;
+  }
+
+  .aurora-orb-1,
+  .aurora-orb-2,
+  .aurora-orb-3 {
+    animation: none !important;
+    opacity: 0.25 !important;
+  }
+
+  .hero-ken-burns {
+    animation: none !important;
+  }
+
+  /* Optimize card dimensions for mobile screens */
+  .media-card-magic {
+    flex: 0 0 145px !important;
+    width: 145px !important;
+    height: 225px !important;
+    border-radius: 12px !important;
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  .media-card-magic h3 {
+    font-size: 0.82rem !important;
+  }
+
+  /* Compact quick actions for mobile */
+  .media-card-magic .card-hover-actions button {
+    padding: 0.38rem !important;
+    font-size: 0.74rem !important;
+  }
+
+  /* Smooth momentum horizontal touch scrolling */
+  .scroll-rail-container,
+  div[style*="overflowX: auto"],
+  div[style*="overflow-x: auto"] {
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+    touch-action: pan-y;
+  }
+
+  /* Prevent layout shifts */
+  .glass-panel {
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+  }
+}
+
+/* Touch-device global performance safeguards */
+@media (hover: none) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .magic-card:hover,
+  .bento-card:hover,
+  .media-card-magic:hover {
+    transform: none !important;
+  }
+}
+
 
