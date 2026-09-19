@@ -86,11 +86,11 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenS
         right: 0,
         zIndex: 50,
         transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-        background: isScrolled ? 'var(--glass-bg)' : 'var(--header-grad)',
-        backdropFilter: isScrolled ? 'blur(24px)' : 'none',
-        WebkitBackdropFilter: isScrolled ? 'blur(24px)' : 'none',
-        borderBottom: isScrolled ? '1px solid var(--border-subtle)' : '1px solid transparent',
-        boxShadow: isScrolled ? '0 10px 30px rgba(0, 0, 0, 0.6)' : 'none',
+        background: isScrolled ? 'var(--glass-bg)' : 'rgba(6, 7, 10, 0.85)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        borderBottom: isScrolled ? '1px solid var(--border-subtle)' : '1px solid rgba(255, 255, 255, 0.08)',
+        boxShadow: isScrolled ? '0 10px 30px rgba(0, 0, 0, 0.6)' : '0 4px 20px rgba(0, 0, 0, 0.4)',
       }}
     >
       <div 

@@ -140,16 +140,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: '88vh',
-        maxHeight: '940px',
+        minHeight: '86vh',
         display: 'flex',
-        alignItems: 'flex-end',
-        padding: '0 2rem 5rem',
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        padding: '6.5rem 1.5rem 3rem',
         overflow: 'hidden',
         background: '#040508',
       }}
     >
-      {/* Background Image Layer with Ken Burns Animation & Smooth Crossfade */}
+      {/* Background Image Layer with Ken Burns Animation */}
       <div
         key={current.id}
         className="hero-ken-burns"
@@ -164,31 +164,31 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
         }}
       />
 
-      {/* Dynamic Ambient Color Spotlight based on movie accent */}
+      {/* Dynamic Ambient Color Spotlight */}
       <div
         className="hero-glow-pulse"
         style={{
           position: 'absolute',
-          top: '20%',
-          left: '10%',
-          width: '600px',
-          height: '600px',
+          top: '25%',
+          left: '5%',
+          width: '550px',
+          height: '550px',
           borderRadius: '50%',
           background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)`,
-          filter: 'blur(100px)',
+          filter: 'blur(110px)',
           opacity: 0.35,
           zIndex: 2,
           pointerEvents: 'none',
         }}
       />
 
-      {/* Cinematic Vignette Overlays */}
+      {/* Cinematic Vignette Overlays for Maximum Text Contrast */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(180deg, rgba(4,5,8,0.35) 0%, rgba(4,5,8,0.65) 60%, var(--bg-primary) 100%)',
+            'linear-gradient(180deg, rgba(4,5,8,0.55) 0%, rgba(4,5,8,0.5) 40%, rgba(4,5,8,0.85) 75%, var(--bg-primary) 100%)',
           zIndex: 3,
         }}
       />
@@ -197,431 +197,461 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(90deg, var(--bg-primary) 0%, rgba(4,5,8,0.85) 38%, rgba(4,5,8,0.2) 75%, transparent 100%)',
+            'linear-gradient(90deg, var(--bg-primary) 0%, rgba(4,5,8,0.9) 35%, rgba(4,5,8,0.4) 70%, transparent 100%)',
           zIndex: 3,
         }}
       />
 
       {/* Ambient Shooting Meteors Effect */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 4, pointerEvents: 'none' }}>
-        <Meteors number={24} />
+        <Meteors number={20} />
       </div>
 
-      {/* Left / Right Chevron Controls */}
-      <button
-        onClick={prevSlide}
-        className="hero-nav-arrow"
-        style={{ position: 'absolute', left: '1.5rem', top: '50%', transform: 'translateY(-50%)', zIndex: 25 }}
-        aria-label="Previous Slide"
-      >
-        <ChevronLeft size={26} />
-      </button>
-
-      <button
-        onClick={nextSlide}
-        className="hero-nav-arrow"
-        style={{ position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)', zIndex: 25 }}
-        aria-label="Next Slide"
-      >
-        <ChevronRight size={26} />
-      </button>
-
-      {/* Hero Content Main Viewport */}
+      {/* Hero Content & Filmstrip Responsive Container */}
       <div
         style={{
           position: 'relative',
           zIndex: 10,
-          maxWidth: '880px',
+          maxWidth: '1480px',
           width: '100%',
-          margin: '0 auto 0 0',
+          margin: '0 auto',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '2rem',
         }}
       >
-        {/* Top Badges Row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1.15rem', flexWrap: 'wrap' }}>
-          {current.platformBadge && (
-            <AnimatedBadge variant="accent" icon={<Sparkles size={13} />}>
-              {current.platformBadge} EXCLUSIVE
-            </AnimatedBadge>
-          )}
+        {/* Main Movie Presentation Area */}
+        <div style={{ maxWidth: '820px', width: '100%' }}>
+          {/* Top Badges Row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.85rem', flexWrap: 'wrap' }}>
+            {current.platformBadge && (
+              <AnimatedBadge variant="accent" icon={<Sparkles size={13} />}>
+                {current.platformBadge} EXCLUSIVE
+              </AnimatedBadge>
+            )}
 
-          {(current.isDualAudio || current.hasHindiDubbed || current.language === 'Hindi') && (
-            <AnimatedBadge variant="gold">
-              🇮🇳 Dual Audio (Hindi + Eng 4K)
-            </AnimatedBadge>
-          )}
+            {(current.isDualAudio || current.hasHindiDubbed || current.language === 'Hindi') && (
+              <AnimatedBadge variant="gold">
+                🇮🇳 Dual Audio (Hindi + Eng)
+              </AnimatedBadge>
+            )}
 
-          {/* IMDb Rating Badge */}
-          <span
-            style={{
-              background: 'rgba(0, 0, 0, 0.65)',
-              backdropFilter: 'blur(12px)',
-              padding: '0.35rem 0.75rem',
-              borderRadius: '8px',
-              fontSize: '0.82rem',
-              fontWeight: 800,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              color: '#fbbf24',
-              border: '1px solid rgba(251, 191, 36, 0.4)',
-              boxShadow: '0 4px 15px rgba(251, 191, 36, 0.15)',
-            }}
-          >
-            <Star size={14} fill="#fbbf24" color="#fbbf24" />
-            <span>{current.rating.toFixed(1)}</span>
-            <span style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 500, fontSize: '0.72rem' }}>IMDb</span>
-          </span>
-
-          {/* Rotten Tomatoes Score (if present) */}
-          {current.rottenTomatoesScore && (
+            {/* IMDb Rating Badge */}
             <span
               style={{
-                background: 'rgba(239, 68, 68, 0.15)',
+                background: 'rgba(0, 0, 0, 0.7)',
                 backdropFilter: 'blur(12px)',
-                padding: '0.35rem 0.75rem',
+                padding: '0.3rem 0.7rem',
                 borderRadius: '8px',
-                fontSize: '0.82rem',
+                fontSize: '0.8rem',
                 fontWeight: 800,
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.35rem',
-                color: '#f87171',
-                border: '1px solid rgba(239, 68, 68, 0.4)',
+                color: '#fbbf24',
+                border: '1px solid rgba(251, 191, 36, 0.4)',
               }}
             >
-              🍅 {current.rottenTomatoesScore}% Fresh
+              <Star size={14} fill="#fbbf24" color="#fbbf24" />
+              <span>{current.rating.toFixed(1)}</span>
+              <span style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 500, fontSize: '0.72rem' }}>IMDb</span>
             </span>
-          )}
 
-          {/* Quality Badge */}
-          <span
-            style={{
-              background: 'rgba(56, 189, 248, 0.15)',
-              padding: '0.3rem 0.65rem',
-              borderRadius: '6px',
-              fontSize: '0.76rem',
-              fontWeight: 800,
-              color: '#38bdf8',
-              border: '1px solid rgba(56, 189, 248, 0.4)',
-              letterSpacing: '0.04em',
-            }}
-          >
-            4K UHD • HDR10+ • ATMOS
-          </span>
-
-          {current.ageRating && (
-            <span
-              style={{
-                background: 'rgba(255, 255, 255, 0.08)',
-                padding: '0.25rem 0.55rem',
-                borderRadius: '4px',
-                fontSize: '0.74rem',
-                fontWeight: 700,
-                color: 'var(--text-secondary)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-              }}
-            >
-              {current.ageRating}
-            </span>
-          )}
-
-          <span style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
-            {current.releaseYear}
-          </span>
-          {current.duration && (
-            <span style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
-              • {current.duration}
-            </span>
-          )}
-          {current.totalSeasons && (
-            <span style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
-              • {current.totalSeasons} {current.totalSeasons > 1 ? 'Seasons' : 'Season'}
-            </span>
-          )}
-        </div>
-
-        {/* Tagline Preview */}
-        {current.tagline && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.45rem',
-              fontSize: '0.92rem',
-              fontWeight: 700,
-              color: accentColor,
-              marginBottom: '0.6rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-            }}
-          >
-            <Flame size={15} />
-            <span>{current.tagline}</span>
-          </div>
-        )}
-
-        {/* Main Title */}
-        <h1
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2.4rem, 5.8vw, 4.8rem)',
-            fontWeight: 900,
-            lineHeight: 1.05,
-            marginBottom: '1.15rem',
-            letterSpacing: '-0.025em',
-            textShadow: '0 4px 30px rgba(0,0,0,0.95), 0 0 40px rgba(0,0,0,0.5)',
-            color: '#ffffff',
-          }}
-        >
-          {current.title}
-        </h1>
-
-        {/* Overview Description */}
-        <p
-          style={{
-            fontSize: 'clamp(0.98rem, 1.25vw, 1.15rem)',
-            color: 'rgba(243, 244, 246, 0.88)',
-            lineHeight: 1.65,
-            marginBottom: '1.4rem',
-            maxWidth: '720px',
-            display: '-webkit-box',
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textShadow: '0 2px 14px rgba(0,0,0,0.9)',
-          }}
-        >
-          {current.overview}
-        </p>
-
-        {/* Cast & Director Pill Information */}
-        {current.cast && current.cast.length > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
-            <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
-              Starring:
-            </span>
-            {current.cast.slice(0, 4).map((actor, idx) => (
+            {/* Rotten Tomatoes Score (if present) */}
+            {current.rottenTomatoesScore && (
               <span
-                key={idx}
                 style={{
+                  background: 'rgba(239, 68, 68, 0.18)',
+                  backdropFilter: 'blur(12px)',
+                  padding: '0.3rem 0.65rem',
+                  borderRadius: '8px',
                   fontSize: '0.78rem',
-                  fontWeight: 600,
-                  color: 'rgba(255,255,255,0.85)',
-                  background: 'rgba(255,255,255,0.06)',
-                  backdropFilter: 'blur(8px)',
-                  padding: '0.2rem 0.6rem',
-                  borderRadius: '6px',
-                  border: '1px solid rgba(255,255,255,0.1)',
+                  fontWeight: 800,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  color: '#f87171',
+                  border: '1px solid rgba(239, 68, 68, 0.4)',
                 }}
               >
-                {actor}
+                🍅 {current.rottenTomatoesScore}% Fresh
+              </span>
+            )}
+
+            {/* Quality Badge */}
+            <span
+              style={{
+                background: 'rgba(56, 189, 248, 0.15)',
+                padding: '0.25rem 0.6rem',
+                borderRadius: '6px',
+                fontSize: '0.74rem',
+                fontWeight: 800,
+                color: '#38bdf8',
+                border: '1px solid rgba(56, 189, 248, 0.4)',
+                letterSpacing: '0.04em',
+              }}
+            >
+              4K UHD • HDR10+ • ATMOS
+            </span>
+
+            {current.ageRating && (
+              <span
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  padding: '0.25rem 0.5rem',
+                  borderRadius: '4px',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: 'var(--text-secondary)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                }}
+              >
+                {current.ageRating}
+              </span>
+            )}
+
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+              {current.releaseYear}
+            </span>
+            {current.duration && (
+              <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                • {current.duration}
+              </span>
+            )}
+            {current.totalSeasons && (
+              <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                • {current.totalSeasons} {current.totalSeasons > 1 ? 'Seasons' : 'Season'}
+              </span>
+            )}
+          </div>
+
+          {/* Tagline */}
+          {current.tagline && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                fontSize: '0.88rem',
+                fontWeight: 700,
+                color: accentColor,
+                marginBottom: '0.5rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+              }}
+            >
+              <Flame size={15} />
+              <span>{current.tagline}</span>
+            </div>
+          )}
+
+          {/* Main Title */}
+          <h1
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(2.2rem, 5vw, 4.2rem)',
+              fontWeight: 900,
+              lineHeight: 1.06,
+              marginBottom: '0.9rem',
+              letterSpacing: '-0.02em',
+              textShadow: '0 4px 30px rgba(0,0,0,0.95)',
+              color: '#ffffff',
+            }}
+          >
+            {current.title}
+          </h1>
+
+          {/* Overview Description */}
+          <p
+            style={{
+              fontSize: 'clamp(0.92rem, 1.15vw, 1.05rem)',
+              color: 'rgba(243, 244, 246, 0.88)',
+              lineHeight: 1.6,
+              marginBottom: '1.15rem',
+              maxWidth: '680px',
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textShadow: '0 2px 12px rgba(0,0,0,0.9)',
+            }}
+          >
+            {current.overview}
+          </p>
+
+          {/* Cast pills */}
+          {current.cast && current.cast.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
+                Starring:
+              </span>
+              {current.cast.slice(0, 4).map((actor, idx) => (
+                <span
+                  key={idx}
+                  style={{
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    color: 'rgba(255,255,255,0.85)',
+                    background: 'rgba(255,255,255,0.06)',
+                    backdropFilter: 'blur(8px)',
+                    padding: '0.2rem 0.55rem',
+                    borderRadius: '6px',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                  }}
+                >
+                  {actor}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Genres Pills */}
+          <div style={{ display: 'flex', gap: '0.45rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+            {current.genres.map((g) => (
+              <span
+                key={g}
+                style={{
+                  fontSize: '0.76rem',
+                  fontWeight: 600,
+                  color: 'var(--text-primary)',
+                  background: 'rgba(255,255,255,0.08)',
+                  backdropFilter: 'blur(10px)',
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: '999px',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                }}
+              >
+                {g}
               </span>
             ))}
           </div>
-        )}
 
-        {/* Genres Pill List */}
-        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-          {current.genres.map((g) => (
-            <span
-              key={g}
-              style={{
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                color: 'var(--text-primary)',
-                background: 'rgba(255,255,255,0.08)',
-                backdropFilter: 'blur(10px)',
-                padding: '0.3rem 0.85rem',
-                borderRadius: '999px',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-              }}
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
+            <ShimmerButton
+              onClick={() => onPlay(current)}
+              style={{ fontSize: '1rem', padding: '0.8rem 2.2rem', fontWeight: 800 }}
             >
-              {g}
-            </span>
-          ))}
-        </div>
+              <Play size={20} fill="currentColor" />
+              <span>Watch Stream (4K)</span>
+            </ShimmerButton>
 
-        {/* Action Controls & Shimmer Play Button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-          <ShimmerButton
-            onClick={() => onPlay(current)}
-            style={{ fontSize: '1.05rem', padding: '0.85rem 2.4rem', fontWeight: 800 }}
-          >
-            <Play size={22} fill="currentColor" />
-            <span>Watch Stream (4K)</span>
-          </ShimmerButton>
-
-          {current.trailerUrl && (
-            <button
-              onClick={() => setTrailerModalOpen(true)}
-              className="btn-secondary"
-              style={{
-                fontSize: '0.96rem',
-                padding: '0.85rem 1.6rem',
-                background: 'rgba(255, 255, 255, 0.12)',
-                borderColor: 'rgba(255, 255, 255, 0.25)',
-              }}
-            >
-              <Film size={19} color={accentColor} />
-              <span>Watch Trailer</span>
-            </button>
-          )}
-
-          <button
-            onClick={toggleWatchlist}
-            className="btn-secondary"
-            style={{ fontSize: '0.96rem', padding: '0.85rem 1.4rem' }}
-          >
-            {inWatchlist ? <Check size={19} color="var(--accent)" /> : <Plus size={19} />}
-            <span>{inWatchlist ? 'In Watchlist' : 'Add to List'}</span>
-          </button>
-
-          <button
-            onClick={() => onShowDetails(current)}
-            className="btn-secondary"
-            style={{ fontSize: '0.96rem', padding: '0.85rem 1.25rem' }}
-            title="More Information"
-          >
-            <Info size={19} />
-            <span>Details</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Interactive Filmstrip Thumbnail Selector (Right Bottom) */}
-      <div
-        className="hero-filmstrip-container"
-        style={{
-          position: 'absolute',
-          bottom: '2.5rem',
-          right: '2.5rem',
-          zIndex: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          gap: '0.75rem',
-        }}
-      >
-        {/* Filmstrip Title & Sound Equalizer Toggle */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-secondary)', fontSize: '0.78rem', fontWeight: 700 }}>
-            <Clapperboard size={14} color="var(--accent)" />
-            <span>TOP BLOCKBUSTERS ({currentIndex + 1}/{total})</span>
-          </div>
-
-          {/* Sound Toggle with Equalizer Waveform */}
-          <button
-            onClick={() => setIsMuted(!isMuted)}
-            style={{
-              background: 'rgba(10, 14, 23, 0.75)',
-              backdropFilter: 'blur(14px)',
-              border: '1px solid rgba(255,255,255,0.2)',
-              color: '#fff',
-              borderRadius: '999px',
-              padding: '0.35rem 0.8rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              transition: 'all 0.2s ease',
-            }}
-            title={isMuted ? 'Turn Sound Mode On' : 'Mute Ambient Audio'}
-          >
-            {!isMuted && (
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '14px' }}>
-                <span className="equalizer-bar" />
-                <span className="equalizer-bar" />
-                <span className="equalizer-bar" />
-                <span className="equalizer-bar" />
-              </div>
+            {current.trailerUrl && (
+              <button
+                onClick={() => setTrailerModalOpen(true)}
+                className="btn-secondary"
+                style={{
+                  fontSize: '0.92rem',
+                  padding: '0.8rem 1.4rem',
+                  background: 'rgba(255, 255, 255, 0.12)',
+                  borderColor: 'rgba(255, 255, 255, 0.25)',
+                }}
+              >
+                <Film size={18} color={accentColor} />
+                <span>Watch Trailer</span>
+              </button>
             )}
-            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} color="var(--accent)" />}
-            <span>{isMuted ? 'Ambient Muted' : 'Audio Live'}</span>
-          </button>
+
+            <button
+              onClick={toggleWatchlist}
+              className="btn-secondary"
+              style={{ fontSize: '0.92rem', padding: '0.8rem 1.25rem' }}
+            >
+              {inWatchlist ? <Check size={18} color="var(--accent)" /> : <Plus size={18} />}
+              <span>{inWatchlist ? 'In Watchlist' : 'Add to List'}</span>
+            </button>
+
+            <button
+              onClick={() => onShowDetails(current)}
+              className="btn-secondary"
+              style={{ fontSize: '0.92rem', padding: '0.8rem 1.15rem' }}
+              title="More Information"
+            >
+              <Info size={18} />
+              <span>Details</span>
+            </button>
+          </div>
         </div>
 
-        {/* Thumbnail Cards Row with Progress Bars */}
+        {/* Filmstrip Thumbnail Rail & Bottom Controls */}
         <div
           style={{
             display: 'flex',
+            flexDirection: 'column',
             gap: '0.65rem',
-            background: 'rgba(6, 7, 10, 0.75)',
-            backdropFilter: 'blur(20px)',
-            padding: '0.65rem',
-            borderRadius: '16px',
-            border: '1px solid rgba(255,255,255,0.12)',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.8)',
-            maxWidth: '620px',
-            overflowX: 'auto',
-            scrollbarWidth: 'none',
+            width: '100%',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+            paddingTop: '1rem',
           }}
         >
-          {items.map((item, idx) => {
-            const isActive = idx === currentIndex;
-            return (
-              <div
-                key={item.id}
-                onClick={() => goToSlide(idx)}
-                className={`hero-filmstrip-item ${isActive ? 'active' : ''}`}
-                style={{
-                  borderColor: isActive ? (item.accentColor || 'var(--accent)') : 'transparent',
-                }}
-              >
-                <img src={item.backdropPath || item.posterPath} alt={item.title} />
-                
-                {/* Title Overlay in Thumbnail */}
-                <div
+          {/* Rail Header with Slide Index, Prev/Next buttons, and Audio Mode */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--text-secondary)', fontSize: '0.78rem', fontWeight: 700 }}>
+                <Clapperboard size={14} color="var(--accent)" />
+                <span>FEATURED BLOCKBUSTERS ({currentIndex + 1}/{total})</span>
+              </div>
+
+              {/* Prev / Next Chevrons */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <button
+                  onClick={prevSlide}
                   style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: 'linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.85) 100%)',
-                    padding: '0.35rem 0.45rem',
+                    background: 'rgba(255,255,255,0.08)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '30px',
+                    height: '30px',
                     display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+
+                <button
+                  onClick={nextSlide}
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '30px',
+                    height: '30px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  aria-label="Next slide"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            </div>
+
+            {/* Sound Toggle */}
+            <button
+              onClick={() => setIsMuted(!isMuted)}
+              style={{
+                background: 'rgba(10, 14, 23, 0.75)',
+                backdropFilter: 'blur(14px)',
+                border: '1px solid rgba(255,255,255,0.18)',
+                color: '#fff',
+                borderRadius: '999px',
+                padding: '0.35rem 0.8rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                cursor: 'pointer',
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                transition: 'all 0.2s ease',
+              }}
+              title={isMuted ? 'Turn Sound Mode On' : 'Mute Ambient Audio'}
+            >
+              {!isMuted && (
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px', height: '12px' }}>
+                  <span className="equalizer-bar" />
+                  <span className="equalizer-bar" />
+                  <span className="equalizer-bar" />
+                  <span className="equalizer-bar" />
+                </div>
+              )}
+              {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} color="var(--accent)" />}
+              <span>{isMuted ? 'Ambient Muted' : 'Audio Live'}</span>
+            </button>
+          </div>
+
+          {/* Filmstrip Cards Row */}
+          <div
+            style={{
+              display: 'flex',
+              gap: '0.75rem',
+              overflowX: 'auto',
+              scrollbarWidth: 'none',
+              padding: '0.35rem 0.15rem 0.75rem',
+            }}
+          >
+            {items.map((item, idx) => {
+              const isActive = idx === currentIndex;
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => goToSlide(idx)}
+                  className={`hero-filmstrip-item ${isActive ? 'active' : ''}`}
+                  style={{
+                    borderColor: isActive ? (item.accentColor || 'var(--accent)') : 'rgba(255,255,255,0.1)',
                   }}
                 >
-                  <span
-                    style={{
-                      fontSize: '0.68rem',
-                      fontWeight: 800,
-                      color: '#ffffff',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
+                  <img
+                    src={item.backdropPath || item.posterPath}
+                    alt={item.title}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src =
+                        item.posterPath ||
+                        'https://image.tmdb.org/t/p/w780/rstcAnBeCkxNQjNp3YXrF6IP1tW.jpg';
                     }}
-                  >
-                    {item.title}
-                  </span>
-                </div>
-
-                {/* Progress bar inside active item */}
-                {isActive && (
+                  />
+                  
+                  {/* Title Overlay in Thumbnail */}
                   <div
                     style={{
                       position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      height: '3px',
-                      background: 'rgba(255,255,255,0.2)',
+                      inset: 0,
+                      background: 'linear-gradient(180deg, transparent 20%, rgba(0,0,0,0.85) 100%)',
+                      padding: '0.35rem 0.45rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-end',
                     }}
                   >
+                    <span
+                      style={{
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        color: '#ffffff',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {item.title}
+                    </span>
+                  </div>
+
+                  {/* Progress bar inside active item */}
+                  {isActive && (
                     <div
                       style={{
-                        width: `${progress}%`,
-                        height: '100%',
-                        background: item.accentColor || 'var(--accent)',
-                        transition: 'width 0.05s linear',
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: '3px',
+                        background: 'rgba(255,255,255,0.2)',
                       }}
-                    />
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                    >
+                      <div
+                        style={{
+                          width: `${progress}%`,
+                          height: '100%',
+                          background: item.accentColor || 'var(--accent)',
+                          transition: 'width 0.05s linear',
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
