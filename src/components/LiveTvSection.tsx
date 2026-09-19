@@ -11,12 +11,29 @@ import {
   Tv,
   Check,
   ShieldCheck,
-  Globe
+  Globe,
+  Heart,
+  PictureInPicture,
+  Maximize2,
+  Minimize2,
+  Upload,
+  Radio
 } from 'lucide-react';
-import { GLOBAL_LIVE_CHANNELS, IPTV_COUNTRY_PRESETS } from '../data/globalLiveTvCatalog';
+import { GLOBAL_LIVE_CHANNELS } from '../data/globalLiveTvCatalog';
+import { 
+  WORLD_COUNTRY_PRESETS, 
+  IPTV_GENRES, 
+  getFavoriteChannelIds, 
+  toggleFavoriteChannelId,
+  fetchIptvCountryChannels,
+  parseCustomM3uText,
+  getProxiedStreamUrl 
+} from '../services/iptvService';
 import type { LiveChannel } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 export const LiveTvSection: React.FC = () => {
+  const { isDayMode, showToast } = useTheme();
   const [channels, setChannels] = useState<LiveChannel[]>(GLOBAL_LIVE_CHANNELS);
   const [activeChannel, setActiveChannel] = useState<LiveChannel>(GLOBAL_LIVE_CHANNELS[0]);
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
@@ -24,10 +41,14 @@ export const LiveTvSection: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [customM3uUrl, setCustomM3uUrl] = useState<string>('');
   const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [volume, setVolume] = useState<number>(1);
   const [streamError, setStreamError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetchingIptv, setIsFetchingIptv] = useState<boolean>(false);
   const [iptvStatusMessage, setIptvStatusMessage] = useState<string>('');
+  const [isTheater, setIsTheater] = useState<boolean>(false);
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(getFavoriteChannelIds());
+  const [proxyTier, setProxyTier] = useState<'direct' | 'relay1' | 'relay2' | 'backend'>('direct');
   const [serverMode, setServerMode] = useState<'embed' | 'hls' | 'backup'>(
     GLOBAL_LIVE_CHANNELS[0].embedUrl ? 'embed' : 'hls'
   );
@@ -36,19 +57,7 @@ export const LiveTvSection: React.FC = () => {
   const hlsRef = useRef<Hls | null>(null);
   const timeoutRef = useRef<number | null>(null);
   const playerContainerRef = useRef<HTMLDivElement>(null);
-
-  const categories = [
-    'All',
-    'News',
-    'Sports',
-    'Movies',
-    'Science',
-    'Nature',
-    'Music',
-    'Anime',
-    'Kids',
-    'Entertainment'
-  ];
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Quick preset shortcuts for instant 1-click loading
   const quickPresets = [
@@ -70,12 +79,22 @@ export const LiveTvSection: React.FC = () => {
   const handleSelectChannel = (channel: LiveChannel) => {
     setActiveChannel(channel);
     setStreamError(false);
+    setProxyTier('direct');
+
     // If channel has official verified 24/7 embed, default to embed for instant guaranteed playback
     if (channel.embedUrl) {
       setServerMode('embed');
     } else {
       setServerMode('hls');
     }
+  };
+
+  const handleToggleFavorite = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    const updated = toggleFavoriteChannelId(id);
+    setFavoriteIds(updated);
+    const isFav = updated.includes(id);
+    showToast(isFav ? 'Added to Favorite Channels ❤️' : 'Removed from Favorites', 'info');
   };
 
   // Initialize and load HLS stream when in 'hls' or 'backup' mode
@@ -108,15 +127,23 @@ export const LiveTvSection: React.FC = () => {
     }
 
     const video = videoRef.current;
-    const targetStreamUrl =
+    const baseStreamUrl =
       serverMode === 'backup' && activeChannel.backupStreamUrl
         ? activeChannel.backupStreamUrl
         : activeChannel.streamUrl;
 
-    // Fail-safe Watchdog: If HLS takes > 4.5s (due to CORS/network block), failover to embed
+    const resolvedStreamUrl = getProxiedStreamUrl(baseStreamUrl, proxyTier);
+
+    // Fail-safe Watchdog: If HLS takes > 5s (due to CORS/network block), auto failover to CORS relay
     timeoutRef.current = window.setTimeout(() => {
       if (isLoading) {
-        if (activeChannel.embedUrl) {
+        if (proxyTier === 'direct') {
+          console.log('Auto switching to CORS Relay 1...');
+          setProxyTier('relay1');
+        } else if (proxyTier === 'relay1') {
+          console.log('Auto switching to CORS Relay 2...');
+          setProxyTier('relay2');
+        } else if (activeChannel.embedUrl) {
           setServerMode('embed');
           setIsLoading(false);
         } else {
@@ -124,19 +151,19 @@ export const LiveTvSection: React.FC = () => {
           setIsLoading(false);
         }
       }
-    }, 4500);
+    }, 5000);
 
     if (Hls.isSupported()) {
       const hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
         backBufferLength: 60,
-        manifestLoadingTimeOut: 4000,
-        manifestLoadingMaxRetry: 1,
+        manifestLoadingTimeOut: 5000,
+        manifestLoadingMaxRetry: 2,
       });
 
       hlsRef.current = hls;
-      hls.loadSource(targetStreamUrl);
+      hls.loadSource(resolvedStreamUrl);
       hls.attachMedia(video);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
@@ -153,8 +180,11 @@ export const LiveTvSection: React.FC = () => {
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (data.fatal) {
           if (timeoutRef.current) clearTimeout(timeoutRef.current);
-          if (activeChannel.embedUrl) {
-            // Auto failover to Server 1 (Official Live Stream)
+          if (proxyTier === 'direct') {
+            setProxyTier('relay1');
+          } else if (proxyTier === 'relay1') {
+            setProxyTier('relay2');
+          } else if (activeChannel.embedUrl) {
             setServerMode('embed');
             setIsLoading(false);
           } else {
@@ -166,7 +196,7 @@ export const LiveTvSection: React.FC = () => {
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       // Native iOS Safari support
-      video.src = targetStreamUrl;
+      video.src = resolvedStreamUrl;
       video.addEventListener('loadedmetadata', () => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         setIsLoading(false);
@@ -175,7 +205,9 @@ export const LiveTvSection: React.FC = () => {
       });
       video.addEventListener('error', () => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        if (activeChannel.embedUrl) {
+        if (proxyTier === 'direct') {
+          setProxyTier('relay1');
+        } else if (activeChannel.embedUrl) {
           setServerMode('embed');
         } else {
           setStreamError(true);
@@ -191,7 +223,7 @@ export const LiveTvSection: React.FC = () => {
         hlsRef.current = null;
       }
     };
-  }, [activeChannel, serverMode]);
+  }, [activeChannel, serverMode, proxyTier]);
 
   const handleMuteToggle = () => {
     if (videoRef.current) {
@@ -200,10 +232,37 @@ export const LiveTvSection: React.FC = () => {
     }
   };
 
+  const handleVolumeChange = (newVol: number) => {
+    setVolume(newVol);
+    if (videoRef.current) {
+      videoRef.current.volume = newVol;
+      if (newVol > 0 && isMuted) {
+        videoRef.current.muted = false;
+        setIsMuted(false);
+      }
+    }
+  };
+
+  const handlePictureInPicture = async () => {
+    if (videoRef.current && document.pictureInPictureEnabled) {
+      try {
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else {
+          await videoRef.current.requestPictureInPicture();
+        }
+      } catch (err) {
+        console.warn('PiP error', err);
+      }
+    }
+  };
+
   const handleFullScreen = () => {
     if (playerContainerRef.current) {
-      if (playerContainerRef.current.requestFullscreen) {
-        playerContainerRef.current.requestFullscreen();
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      } else if (playerContainerRef.current.requestFullscreen) {
+        playerContainerRef.current.requestFullscreen().catch(() => {});
       }
     }
   };
@@ -228,65 +287,48 @@ export const LiveTvSection: React.FC = () => {
     setChannels([customChannel, ...channels]);
     setActiveChannel(customChannel);
     setServerMode('hls');
+    setProxyTier('direct');
     setCustomM3uUrl('');
+    showToast('Loaded custom M3U8 feed', 'success');
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      if (text) {
+        const parsed = parseCustomM3uText(text);
+        if (parsed.length > 0) {
+          setChannels([...parsed, ...channels]);
+          setActiveChannel(parsed[0]);
+          setServerMode('hls');
+          showToast(`Loaded ${parsed.length} channels from playlist file`, 'success');
+        } else {
+          showToast('Could not find valid stream entries in M3U file', 'warning');
+        }
+      }
+    };
+    reader.readAsText(file);
   };
 
   // Dynamic iptv-org M3U Playlist Loader
-  const loadIptvCountryPlaylist = async (countryCode: string, countryName: string) => {
+  const loadCountryChannels = async (countryCode: string, countryName: string) => {
     setIsFetchingIptv(true);
-    setIptvStatusMessage(`Fetching 24/7 channels for ${countryName} from iptv-org...`);
+    setIptvStatusMessage(`Fetching 24/7 channels for ${countryName} from global IPTV database...`);
 
     try {
-      const url =
-        countryCode === 'all'
-          ? 'https://iptv-org.github.io/iptv/index.m3u'
-          : `https://iptv-org.github.io/iptv/countries/${countryCode}.m3u`;
-
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Network response not ok');
-      const text = await res.text();
-
-      // Parse M3U playlist lines
-      const lines = text.split('\n');
-      const parsedChannels: LiveChannel[] = [];
-      let currentInfo: Partial<LiveChannel> = {};
-
-      for (let i = 0; i < lines.length && parsedChannels.length < 60; i++) {
-        const line = lines[i].trim();
-        if (line.startsWith('#EXTINF:')) {
-          const nameMatch = line.match(/,(.+)$/);
-          const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-          const groupMatch = line.match(/group-title="([^"]+)"/);
-
-          currentInfo = {
-            id: `iptv-${countryCode}-${parsedChannels.length + 1}-${Date.now()}`,
-            name: nameMatch ? nameMatch[1].trim() : `Channel ${parsedChannels.length + 1}`,
-            logo: logoMatch ? logoMatch[1] : 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=100&auto=format&fit=crop',
-            category: groupMatch ? groupMatch[1] : 'General',
-            country: countryName,
-            language: 'Live Broadcast',
-            resolution: 'HD',
-            isLive: true,
-            currentProgram: '24x7 Live Transmission'
-          };
-        } else if (line.startsWith('http://') || line.startsWith('https://')) {
-          if (currentInfo.name) {
-            parsedChannels.push({
-              ...(currentInfo as LiveChannel),
-              streamUrl: line,
-            });
-            currentInfo = {};
-          }
-        }
-      }
-
-      if (parsedChannels.length > 0) {
-        setChannels([...GLOBAL_LIVE_CHANNELS, ...parsedChannels]);
-        setIptvStatusMessage(`✓ Successfully added ${parsedChannels.length} live channels from ${countryName}!`);
-        setActiveChannel(parsedChannels[0]);
+      const fetched = await fetchIptvCountryChannels(countryCode, countryName);
+      if (fetched.length > 0) {
+        setChannels([...GLOBAL_LIVE_CHANNELS, ...fetched]);
+        setIptvStatusMessage(`✓ Successfully added ${fetched.length} live channels from ${countryName}!`);
+        setActiveChannel(fetched[0]);
         setServerMode('hls');
+        setProxyTier('direct');
       } else {
-        setIptvStatusMessage(`Using curated verified streams for ${countryName}.`);
+        setIptvStatusMessage(`Loaded curated verified channels for ${countryName}.`);
       }
     } catch {
       setIptvStatusMessage(`Loaded curated verified channels for ${countryName}.`);
@@ -297,31 +339,40 @@ export const LiveTvSection: React.FC = () => {
   };
 
   const filteredChannels = channels.filter((c) => {
+    const isFavMatch = selectedCategory === 'Favorites' ? favoriteIds.includes(c.id) : true;
+
     const matchesCountry =
       selectedCountry === 'all' ||
-      (selectedCountry === 'in' ? c.country.toLowerCase().includes('india') : true);
+      c.country.toLowerCase().includes(selectedCountry.toLowerCase()) ||
+      (selectedCountry === 'in' && c.country.toLowerCase().includes('india'));
 
     const matchesCategory =
       selectedCategory === 'All' ||
+      selectedCategory === 'Favorites' ||
       c.category.toLowerCase().includes(selectedCategory.toLowerCase());
 
     const matchesSearch =
+      searchQuery.trim() === '' ||
       c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      c.country.toLowerCase().includes(searchQuery.toLowerCase());
+      c.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (c.language && c.language.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    return matchesCountry && matchesCategory && matchesSearch;
+    return isFavMatch && matchesCountry && matchesCategory && matchesSearch;
   });
 
+  const isCurrentFav = favoriteIds.includes(activeChannel.id);
+
   return (
-    <div style={{ maxWidth: '1520px', margin: '0 auto', padding: '6rem 1.25rem 3rem' }}>
-      {/* Header Title & Quick Stats */}
+    <div style={{ maxWidth: '1520px', margin: '0 auto', padding: '5.5rem clamp(0.75rem, 2.5vw, 1.5rem) 3rem' }}>
+      
+      {/* Top Header Banner */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.3rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.3rem', flexWrap: 'wrap' }}>
             <span className="live-pulse" />
-            <h1 style={{ fontSize: '1.9rem', fontWeight: 900, fontFamily: 'var(--font-display)', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-              Global Live TV Universe & 4K OTT Streams
+            <h1 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 900, fontFamily: 'var(--font-display)', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+              Worldwide Live TV Universe & 4K OTT Streams
             </h1>
             <span
               style={{
@@ -335,39 +386,58 @@ export const LiveTvSection: React.FC = () => {
                 letterSpacing: '0.05em'
               }}
             >
-              8,000+ FREE CHANNELS
+              10,000+ FREE GLOBAL CHANNELS
             </span>
           </div>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-            Duniya bhar ke Indian Hindi news, global sports cricket, 4K cinema, space, EDM music aur IPTV feeds bina kisi subscription ke free me dekhein.
+            Duniya bhar ke Indian Hindi news, global sports cricket, 4K cinema, space, EDM music aur IPTV feeds bina kisi buffering aur subscription ke free me dekhein.
           </p>
         </div>
 
-        {/* Custom M3U8 Link Input Bar */}
-        <form onSubmit={handleCustomStreamLoad} style={{ display: 'flex', gap: '0.5rem', maxWidth: '460px', width: '100%' }}>
-          <input
-            type="url"
-            placeholder="Paste any custom .m3u8 stream link..."
-            value={customM3uUrl}
-            onChange={(e) => setCustomM3uUrl(e.target.value)}
-            style={{
-              flex: 1,
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: '1px solid var(--border-subtle)',
-              borderRadius: '10px',
-              padding: '0.55rem 0.9rem',
-              color: '#fff',
-              fontSize: '0.84rem',
-              outline: 'none',
-            }}
-          />
-          <button type="submit" className="btn-accent" style={{ padding: '0.55rem 1.1rem', fontSize: '0.84rem', fontWeight: 800 }}>
-            Stream M3U8
+        {/* Custom Stream & File Importers */}
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <form onSubmit={handleCustomStreamLoad} style={{ display: 'flex', gap: '0.4rem', minWidth: '280px' }}>
+            <input
+              type="url"
+              placeholder="Paste any custom .m3u8 link..."
+              value={customM3uUrl}
+              onChange={(e) => setCustomM3uUrl(e.target.value)}
+              style={{
+                flex: 1,
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '10px',
+                padding: '0.5rem 0.85rem',
+                color: 'var(--text-primary)',
+                fontSize: '0.82rem',
+                outline: 'none',
+              }}
+            />
+            <button type="submit" className="btn-accent" style={{ padding: '0.5rem 0.9rem', fontSize: '0.8rem', fontWeight: 800 }}>
+              Play M3U8
+            </button>
+          </form>
+
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="btn-secondary"
+            style={{ padding: '0.5rem 0.85rem', fontSize: '0.8rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+            title="Upload custom .m3u playlist file"
+          >
+            <Upload size={14} />
+            <span>Upload M3U</span>
           </button>
-        </form>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".m3u,.m3u8,.txt"
+            style={{ display: 'none' }}
+            onChange={handleFileUpload}
+          />
+        </div>
       </div>
 
-      {/* World Countries 1-Click Importer Rail */}
+      {/* 50+ Countries Worldwide Selector Rail */}
       <div
         style={{
           background: 'var(--bg-card)',
@@ -383,19 +453,39 @@ export const LiveTvSection: React.FC = () => {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Globe size={16} color="var(--accent)" />
-          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-            Explore World IPTV Feeds:
+          <Globe size={18} color="var(--accent)" />
+          <span style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+            Select Country Broadcast:
           </span>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.45rem', overflowX: 'auto', scrollbarWidth: 'none', padding: '2px 0' }}>
-          {IPTV_COUNTRY_PRESETS.map((country) => (
+        <div style={{ display: 'flex', gap: '0.45rem', overflowX: 'auto', scrollbarWidth: 'none', padding: '2px 0', maxWidth: '100%' }}>
+          <button
+            onClick={() => {
+              setSelectedCountry('all');
+              setChannels(GLOBAL_LIVE_CHANNELS);
+            }}
+            style={{
+              background: selectedCountry === 'all' ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: selectedCountry === 'all' ? 'var(--accent-text)' : 'var(--text-primary)',
+              border: selectedCountry === 'all' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+              padding: '0.35rem 0.75rem',
+              borderRadius: '8px',
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            🌐 All Worldwide (80+ Verified)
+          </button>
+
+          {WORLD_COUNTRY_PRESETS.map((country) => (
             <button
               key={country.code}
               onClick={() => {
                 setSelectedCountry(country.code);
-                loadIptvCountryPlaylist(country.code, country.name);
+                loadCountryChannels(country.code, country.name);
               }}
               style={{
                 background: selectedCountry === country.code ? 'var(--accent)' : 'var(--bg-secondary)',
@@ -413,6 +503,7 @@ export const LiveTvSection: React.FC = () => {
                 transition: 'all 0.2s ease',
               }}
             >
+              <span>{country.flag}</span>
               <span>{country.name}</span>
               <span style={{ fontSize: '0.65rem', opacity: 0.75 }}>({country.count})</span>
             </button>
@@ -426,7 +517,7 @@ export const LiveTvSection: React.FC = () => {
             background: 'rgba(149, 255, 80, 0.12)',
             border: '1px solid var(--accent)',
             borderRadius: '10px',
-            padding: '0.5rem 1rem',
+            padding: '0.55rem 1rem',
             marginBottom: '1rem',
             fontSize: '0.82rem',
             fontWeight: 700,
@@ -437,15 +528,15 @@ export const LiveTvSection: React.FC = () => {
           }}
           className="animate-fade-in"
         >
-          {isFetchingIptv ? <RefreshCw size={14} className="animate-spin" /> : <Check size={14} />}
+          {isFetchingIptv ? <RefreshCw size={15} className="animate-spin" /> : <Check size={15} />}
           <span>{iptvStatusMessage}</span>
         </div>
       )}
 
       {/* Quick Stream Preset Selector Pills */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.85rem', marginBottom: '1.25rem', scrollbarWidth: 'none' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.75rem', marginBottom: '1rem', scrollbarWidth: 'none' }}>
         <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <Zap size={14} /> Quick Feeds:
+          <Zap size={14} /> Quick Hits:
         </span>
         {quickPresets.map((preset) => {
           const target = channels.find((c) => c.id === preset.id);
@@ -476,7 +567,7 @@ export const LiveTvSection: React.FC = () => {
         })}
       </div>
 
-      {/* Multi-Server Selector Row */}
+      {/* Multi-Server & CORS Proxy Engine Switcher Bar */}
       <div
         style={{
           display: 'flex',
@@ -485,7 +576,7 @@ export const LiveTvSection: React.FC = () => {
           background: 'var(--bg-card)',
           border: '1px solid var(--border-subtle)',
           borderRadius: '12px',
-          padding: '0.5rem 0.85rem',
+          padding: '0.55rem 0.95rem',
           marginBottom: '1rem',
           flexWrap: 'wrap',
           gap: '0.65rem',
@@ -494,7 +585,7 @@ export const LiveTvSection: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Tv size={16} color="var(--accent)" />
           <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-            Streaming Source:
+            Stream Engine & CORS Proxy:
           </span>
         </div>
 
@@ -517,11 +608,10 @@ export const LiveTvSection: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.35rem',
-                transition: 'all 0.2s ease',
               }}
             >
               <ShieldCheck size={13} />
-              <span>Server 1: Official Live 24/7 (Instant 1080p)</span>
+              <span>Server 1: Official 24/7 (Instant 1080p)</span>
               {serverMode === 'embed' && <Check size={12} />}
             </button>
           )}
@@ -529,12 +619,13 @@ export const LiveTvSection: React.FC = () => {
           <button
             onClick={() => {
               setServerMode('hls');
+              setProxyTier('direct');
               setStreamError(false);
             }}
             style={{
-              background: serverMode === 'hls' ? 'var(--accent)' : 'var(--bg-secondary)',
-              color: serverMode === 'hls' ? 'var(--accent-text)' : 'var(--text-secondary)',
-              border: serverMode === 'hls' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+              background: serverMode === 'hls' && proxyTier === 'direct' ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: serverMode === 'hls' && proxyTier === 'direct' ? 'var(--accent-text)' : 'var(--text-secondary)',
+              border: serverMode === 'hls' && proxyTier === 'direct' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
               padding: '0.35rem 0.75rem',
               borderRadius: '8px',
               fontSize: '0.76rem',
@@ -543,48 +634,79 @@ export const LiveTvSection: React.FC = () => {
               display: 'flex',
               alignItems: 'center',
               gap: '0.35rem',
-              transition: 'all 0.2s ease',
             }}
           >
             <Zap size={13} />
-            <span>Server 2: HLS Direct Stream</span>
-            {serverMode === 'hls' && <Check size={12} />}
+            <span>Server 2: Direct HLS</span>
+            {serverMode === 'hls' && proxyTier === 'direct' && <Check size={12} />}
           </button>
 
-          {activeChannel.backupStreamUrl && (
-            <button
-              onClick={() => {
-                setServerMode('backup');
-                setStreamError(false);
-              }}
-              style={{
-                background: serverMode === 'backup' ? 'var(--accent)' : 'var(--bg-secondary)',
-                color: serverMode === 'backup' ? 'var(--accent-text)' : 'var(--text-secondary)',
-                border: serverMode === 'backup' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
-                padding: '0.35rem 0.75rem',
-                borderRadius: '8px',
-                fontSize: '0.76rem',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <Globe size={13} />
-              <span>Server 3: Mirror Feed</span>
-              {serverMode === 'backup' && <Check size={12} />}
-            </button>
-          )}
+          <button
+            onClick={() => {
+              setServerMode('hls');
+              setProxyTier('relay1');
+              setStreamError(false);
+            }}
+            style={{
+              background: serverMode === 'hls' && proxyTier === 'relay1' ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: serverMode === 'hls' && proxyTier === 'relay1' ? 'var(--accent-text)' : 'var(--text-secondary)',
+              border: serverMode === 'hls' && proxyTier === 'relay1' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+              padding: '0.35rem 0.75rem',
+              borderRadius: '8px',
+              fontSize: '0.76rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+            }}
+            title="Bypasses browser CORS blocking using public stream relay"
+          >
+            <Globe size={13} />
+            <span>Server 3: CORS Relay 1</span>
+            {serverMode === 'hls' && proxyTier === 'relay1' && <Check size={12} />}
+          </button>
+
+          <button
+            onClick={() => {
+              setServerMode('hls');
+              setProxyTier('relay2');
+              setStreamError(false);
+            }}
+            style={{
+              background: serverMode === 'hls' && proxyTier === 'relay2' ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: serverMode === 'hls' && proxyTier === 'relay2' ? 'var(--accent-text)' : 'var(--text-secondary)',
+              border: serverMode === 'hls' && proxyTier === 'relay2' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+              padding: '0.35rem 0.75rem',
+              borderRadius: '8px',
+              fontSize: '0.76rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+            }}
+          >
+            <Radio size={13} />
+            <span>Server 4: CORS Relay 2</span>
+            {serverMode === 'hls' && proxyTier === 'relay2' && <Check size={12} />}
+          </button>
         </div>
       </div>
 
-      {/* Main Grid: Left is Video Player, Right is Channel Selector */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }} className="livetv-grid">
+      {/* Main Grid: Left is Video Player, Right is Search & Channel List */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 1fr)',
+          gap: '1.5rem',
+          marginBottom: '2.5rem',
+        }}
+        className="livetv-grid"
+      >
         <style>{`
           @media (min-width: 1024px) {
-            .livetv-grid { grid-template-columns: 1.75fr 1fr !important; }
+            .livetv-grid { grid-template-columns: ${isTheater ? '1fr' : '1.75fr 1fr'} !important; }
           }
         `}</style>
 
@@ -599,9 +721,10 @@ export const LiveTvSection: React.FC = () => {
             boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
             display: 'flex',
             flexDirection: 'column',
+            position: 'relative',
           }}
         >
-          {/* Player Display */}
+          {/* Video / Embed Display */}
           <div
             style={{
               position: 'relative',
@@ -642,7 +765,7 @@ export const LiveTvSection: React.FC = () => {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'rgba(0,0,0,0.75)',
+                  background: 'rgba(0,0,0,0.78)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -654,10 +777,10 @@ export const LiveTvSection: React.FC = () => {
                   zIndex: 10,
                 }}
               >
-                <RefreshCw size={26} className="animate-spin" />
+                <RefreshCw size={28} className="animate-spin" />
                 <span>Connecting to HLS Stream...</span>
                 <span style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
-                  Auto failover to Server 1 in a moment if network is slow
+                  Auto resolving stream via CORS proxies
                 </span>
               </div>
             )}
@@ -667,7 +790,7 @@ export const LiveTvSection: React.FC = () => {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'rgba(0,0,0,0.92)',
+                  background: 'rgba(0,0,0,0.94)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -679,12 +802,12 @@ export const LiveTvSection: React.FC = () => {
                 }}
               >
                 <div style={{ color: '#ef4444', fontSize: '1.15rem', fontWeight: 800 }}>
-                  ⚠️ Direct HLS Stream Blocked by ISP or Offline
+                  ⚠️ Stream Blocked by ISP or Offline
                 </div>
                 <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', maxWidth: '440px', lineHeight: 1.5 }}>
-                  Browser CORS policy ya ISP ne direct HLS link block kiya hai. Kripya <strong>Server 1: Official Live 24/7</strong> par switch karein jo 100% chalega!
+                  Browser CORS policy ya ISP ne is direct stream ko block kiya hai. Kripya <strong>Server 1: Official Live 24/7</strong> ya <strong>Server 3/4 CORS Relay</strong> switch karein!
                 </p>
-                <div style={{ display: 'flex', gap: '0.65rem' }}>
+                <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                   {activeChannel.embedUrl && (
                     <button
                       onClick={() => {
@@ -697,6 +820,16 @@ export const LiveTvSection: React.FC = () => {
                       Switch to Server 1 (Official Live)
                     </button>
                   )}
+                  <button
+                    onClick={() => {
+                      setProxyTier('relay1');
+                      setServerMode('hls');
+                    }}
+                    className="btn-secondary"
+                    style={{ fontSize: '0.85rem', padding: '0.55rem 1.1rem' }}
+                  >
+                    Try CORS Relay 1
+                  </button>
                   <button
                     onClick={() => {
                       const next = channels.find((c) => c.id !== activeChannel.id);
@@ -759,7 +892,7 @@ export const LiveTvSection: React.FC = () => {
             )}
           </div>
 
-          {/* Player Controls & Current Program Info */}
+          {/* Player Controls Bar & Program Meta */}
           <div
             style={{
               padding: '1rem 1.25rem',
@@ -777,8 +910,8 @@ export const LiveTvSection: React.FC = () => {
                 src={activeChannel.logo}
                 alt={activeChannel.name}
                 style={{
-                  width: '44px',
-                  height: '44px',
+                  width: '46px',
+                  height: '46px',
                   objectFit: 'contain',
                   borderRadius: '10px',
                   background: 'rgba(255,255,255,0.06)',
@@ -789,182 +922,307 @@ export const LiveTvSection: React.FC = () => {
                 }}
               />
               <div>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                  {activeChannel.name}
-                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                    {activeChannel.name}
+                  </h3>
+                  <button
+                    onClick={(e) => handleToggleFavorite(activeChannel.id, e)}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: isCurrentFav ? '#ef4444' : 'var(--text-muted)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '2px',
+                    }}
+                    title={isCurrentFav ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    <Heart size={18} fill={isCurrentFav ? '#ef4444' : 'none'} />
+                  </button>
+                </div>
                 <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                   {activeChannel.currentProgram || '24x7 Broadcast Stream'} • {activeChannel.country} ({activeChannel.language})
                 </p>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              {serverMode !== 'embed' && (
+            {/* Live Playback Controls */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              {/* Volume Slider */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'var(--bg-card)', padding: '0.35rem 0.65rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
                 <button
                   onClick={handleMuteToggle}
-                  style={{
-                    background: 'rgba(255,255,255,0.08)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: '8px',
-                    padding: '0.55rem',
-                    color: '#fff',
-                    cursor: 'pointer',
-                  }}
-                  title={isMuted ? 'Unmute' : 'Mute'}
+                  style={{ background: 'transparent', border: 'none', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                 >
-                  {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                  {isMuted || volume === 0 ? <VolumeX size={16} /> : <Volume2 size={16} />}
                 </button>
-              )}
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.05"
+                  value={isMuted ? 0 : volume}
+                  onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
+                  style={{ width: '60px', accentColor: 'var(--accent)', cursor: 'pointer' }}
+                />
+              </div>
 
+              {/* PiP Button */}
+              <button
+                onClick={handlePictureInPicture}
+                style={{
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border-subtle)',
+                  color: 'var(--text-primary)',
+                  padding: '0.45rem 0.65rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                }}
+                title="Picture-in-Picture Mode"
+              >
+                <PictureInPicture size={15} />
+                <span>PiP</span>
+              </button>
+
+              {/* Theater Mode Button */}
+              <button
+                onClick={() => setIsTheater(!isTheater)}
+                style={{
+                  background: isTheater ? 'var(--accent)' : 'var(--bg-card)',
+                  color: isTheater ? 'var(--accent-text)' : 'var(--text-primary)',
+                  border: '1px solid var(--border-subtle)',
+                  padding: '0.45rem 0.65rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                }}
+                title={isTheater ? 'Exit Theater Mode' : 'Theater Mode'}
+              >
+                {isTheater ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+                <span>Theater</span>
+              </button>
+
+              {/* Fullscreen Button */}
               <button
                 onClick={handleFullScreen}
                 style={{
-                  background: 'rgba(255,255,255,0.08)',
+                  background: 'var(--bg-card)',
                   border: '1px solid var(--border-subtle)',
+                  color: 'var(--text-primary)',
+                  padding: '0.45rem 0.65rem',
                   borderRadius: '8px',
-                  padding: '0.55rem',
-                  color: '#fff',
                   cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
                 }}
                 title="Fullscreen"
               >
-                <Maximize size={18} />
+                <Maximize size={15} />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Right Side: Channel Directory & Category Filters */}
-        <div
-          style={{
-            background: 'var(--bg-card)',
-            borderRadius: '20px',
-            border: '1px solid var(--border-subtle)',
-            padding: '1.25rem',
-            display: 'flex',
-            flexDirection: 'column',
-            maxHeight: '620px',
-          }}
-        >
-          {/* Category Tabs */}
-          <div style={{ display: 'flex', gap: '0.4rem', overflowX: 'auto', paddingBottom: '0.5rem', marginBottom: '0.75rem', scrollbarWidth: 'none' }}>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
+        {/* Right Side: Channel Directory & Filter Search */}
+        {!isTheater && (
+          <div
+            style={{
+              background: 'var(--bg-card)',
+              borderRadius: '20px',
+              border: '1px solid var(--border-subtle)',
+              padding: '1.15rem',
+              display: 'flex',
+              flexDirection: 'column',
+              maxHeight: '680px',
+            }}
+          >
+            {/* Search Input */}
+            <div style={{ position: 'relative', marginBottom: '0.85rem' }}>
+              <Search size={16} color="var(--accent)" style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} />
+              <input
+                type="text"
+                placeholder="Search by Channel, Country, Language..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
-                  background: selectedCategory === cat ? 'var(--accent)' : 'var(--bg-secondary)',
-                  color: selectedCategory === cat ? 'var(--accent-text)' : 'var(--text-secondary)',
-                  border: selectedCategory === cat ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
-                  borderRadius: '8px',
-                  padding: '0.38rem 0.8rem',
-                  fontSize: '0.78rem',
-                  fontWeight: selectedCategory === cat ? 800 : 600,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
+                  width: '100%',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '10px',
+                  padding: '0.55rem 0.85rem 0.55rem 2.4rem',
+                  color: 'var(--text-primary)',
+                  fontSize: '0.84rem',
+                  outline: 'none',
                 }}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+              />
+            </div>
 
-          {/* Search Box */}
-          <div style={{ position: 'relative', marginBottom: '0.85rem' }}>
-            <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} />
-            <input
-              type="text"
-              placeholder="Search across all live channels..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: '10px',
-                padding: '0.55rem 0.85rem 0.55rem 2.2rem',
-                color: 'var(--text-primary)',
-                fontSize: '0.84rem',
-                outline: 'none',
-              }}
-            />
-          </div>
-
-          {/* Channel Cards Scroll List */}
-          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingRight: '0.25rem' }} className="custom-scrollbar">
-            {filteredChannels.length === 0 ? (
-              <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-                No channels found matching query.
-              </div>
-            ) : (
-              filteredChannels.map((c) => {
-                const isSelected = activeChannel.id === c.id;
+            {/* Category Filter Chips */}
+            <div style={{ display: 'flex', gap: '0.35rem', overflowX: 'auto', paddingBottom: '0.65rem', marginBottom: '0.75rem', scrollbarWidth: 'none' }}>
+              {IPTV_GENRES.map((cat) => {
+                const isActive = selectedCategory === cat;
                 return (
-                  <div
-                    key={c.id}
-                    onClick={() => handleSelectChannel(c)}
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
                     style={{
+                      background: isActive ? 'var(--accent)' : 'var(--bg-secondary)',
+                      color: isActive ? 'var(--accent-text)' : 'var(--text-secondary)',
+                      border: isActive ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '999px',
+                      fontSize: '0.75rem',
+                      fontWeight: isActive ? 800 : 600,
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '0.75rem',
-                      padding: '0.65rem 0.85rem',
-                      borderRadius: '12px',
-                      background: isSelected ? 'var(--badge-bg)' : 'rgba(255,255,255,0.02)',
-                      border: isSelected ? '1px solid var(--accent)' : '1px solid transparent',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isSelected) e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+                      gap: '0.3rem',
                     }}
                   >
-                    <img
-                      src={c.logo}
-                      alt={c.name}
-                      style={{
-                        width: '34px',
-                        height: '34px',
-                        objectFit: 'contain',
-                        borderRadius: '8px',
-                        background: '#111',
-                        padding: '2px',
-                        flexShrink: 0,
-                      }}
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=100&auto=format&fit=crop';
-                      }}
-                    />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                        <h4
-                          style={{
-                            fontSize: '0.84rem',
-                            fontWeight: isSelected ? 800 : 600,
-                            color: isSelected ? 'var(--accent)' : 'var(--text-primary)',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {c.name}
-                        </h4>
-                        {c.isLive && <span className="live-pulse" style={{ width: '6px', height: '6px' }} />}
+                    {cat === 'Favorites' && <Heart size={12} fill={isActive ? 'currentColor' : '#ef4444'} color="#ef4444" />}
+                    <span>{cat}</span>
+                    {cat === 'Favorites' && <span>({favoriteIds.length})</span>}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Channel List Header Stats */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem', fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 700 }}>
+              <span>Available Channels: {filteredChannels.length}</span>
+              <span>HD / 4K UHD</span>
+            </div>
+
+            {/* Scrollable Channel List Cards */}
+            <div
+              style={{
+                flex: 1,
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem',
+                paddingRight: '0.25rem',
+              }}
+              className="custom-scrollbar"
+            >
+              {filteredChannels.map((channel) => {
+                const isSelected = activeChannel.id === channel.id;
+                const isFav = favoriteIds.includes(channel.id);
+
+                return (
+                  <div
+                    key={channel.id}
+                    onClick={() => handleSelectChannel(channel)}
+                    style={{
+                      background: isSelected ? 'var(--badge-bg)' : 'var(--bg-secondary)',
+                      border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
+                      borderRadius: '12px',
+                      padding: '0.65rem 0.85rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                      gap: '0.75rem',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                      <img
+                        src={channel.logo}
+                        alt={channel.name}
+                        style={{
+                          width: '38px',
+                          height: '38px',
+                          objectFit: 'contain',
+                          borderRadius: '8px',
+                          background: 'rgba(255,255,255,0.06)',
+                          padding: '3px',
+                          flexShrink: 0,
+                        }}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=100&auto=format&fit=crop';
+                        }}
+                      />
+
+                      <div style={{ minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <h4
+                            style={{
+                              fontSize: '0.85rem',
+                              fontWeight: isSelected ? 800 : 700,
+                              color: isSelected ? (isDayMode ? '#0f172a' : 'var(--accent)') : 'var(--text-primary)',
+                              whiteSpace: 'nowrap',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                            }}
+                          >
+                            {channel.name}
+                          </h4>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '2px', fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                          <span>{channel.country}</span>
+                          <span>•</span>
+                          <span>{channel.category}</span>
+                        </div>
                       </div>
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-                        {c.category} • {c.country}
-                      </span>
                     </div>
 
-                    <Play size={16} color={isSelected ? 'var(--accent)' : 'var(--text-muted)'} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexShrink: 0 }}>
+                      <button
+                        onClick={(e) => handleToggleFavorite(channel.id, e)}
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          cursor: 'pointer',
+                          color: isFav ? '#ef4444' : 'var(--text-muted)',
+                          padding: '4px',
+                        }}
+                      >
+                        <Heart size={16} fill={isFav ? '#ef4444' : 'none'} />
+                      </button>
+
+                      <div
+                        style={{
+                          width: '28px',
+                          height: '28px',
+                          borderRadius: '50%',
+                          background: isSelected ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
+                          color: isSelected ? 'var(--accent-text)' : 'var(--text-primary)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Play size={13} fill="currentColor" style={{ marginLeft: '1px' }} />
+                      </div>
+                    </div>
                   </div>
                 );
-              })
-            )}
+              })}
+
+              {filteredChannels.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
+                  Koi channel nahi mila is filter ke sath. Doosra country ya category select karein!
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
