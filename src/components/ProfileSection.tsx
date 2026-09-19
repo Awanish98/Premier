@@ -288,8 +288,8 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ onPlayMedia, onS
                   onClick={() => updatePreferences({ audioLanguage: lang })}
                   style={{
                     flex: 1,
-                    background: preferences.audioLanguage === lang ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
-                    color: preferences.audioLanguage === lang ? '#05080b' : 'var(--text-primary)',
+                    background: preferences.audioLanguage === lang ? 'var(--accent)' : 'var(--bg-secondary)',
+                    color: preferences.audioLanguage === lang ? 'var(--accent-text)' : 'var(--text-primary)',
                     border: preferences.audioLanguage === lang ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                     borderRadius: '8px',
                     padding: '0.55rem',
@@ -316,9 +316,9 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ onPlayMedia, onS
               onChange={(e) => updatePreferences({ defaultServer: e.target.value })}
               style={{
                 width: '100%',
-                background: 'rgba(255, 255, 255, 0.06)',
+                background: 'var(--bg-secondary)',
                 border: '1px solid var(--border-subtle)',
-                color: '#ffffff',
+                color: 'var(--text-primary)',
                 borderRadius: '8px',
                 padding: '0.65rem 0.85rem',
                 fontSize: '0.85rem',
@@ -327,11 +327,11 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ onPlayMedia, onS
                 cursor: 'pointer',
               }}
             >
-              <option value="vidlink_pro" style={{ background: '#0d121c' }}>VidLink Pro (Multi-Audio 4K)</option>
-              <option value="autoembed_hindi" style={{ background: '#0d121c' }}>AutoEmbed (Hindi Mirror)</option>
-              <option value="vidsrc_cc" style={{ background: '#0d121c' }}>VidSrc (High Speed 1080p)</option>
-              <option value="embed_su" style={{ background: '#0d121c' }}>Embed.su (4K HDR Master)</option>
-              <option value="smashystream" style={{ background: '#0d121c' }}>SmashyStream (Dual Audio)</option>
+              <option value="vidlink_pro">VidLink Pro (Multi-Audio 4K)</option>
+              <option value="autoembed_hindi">AutoEmbed (Hindi Mirror)</option>
+              <option value="vidsrc_cc">VidSrc (High Speed 1080p)</option>
+              <option value="embed_su">Embed.su (4K HDR Master)</option>
+              <option value="smashystream">SmashyStream (Dual Audio)</option>
             </select>
           </div>
 
@@ -349,7 +349,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ onPlayMedia, onS
                     key={t.id}
                     onClick={() => setTheme(t.id)}
                     style={{
-                      background: isSelected ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.03)',
+                      background: isSelected ? 'var(--badge-bg)' : 'var(--bg-secondary)',
                       border: isSelected ? `2px solid ${t.color}` : '1px solid var(--border-subtle)',
                       borderRadius: '10px',
                       padding: '0.65rem 0.5rem',
@@ -363,7 +363,7 @@ export const ProfileSection: React.FC<ProfileSectionProps> = ({ onPlayMedia, onS
                     }}
                   >
                     <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: t.color }} />
-                    <span style={{ fontSize: '0.78rem', fontWeight: isSelected ? 800 : 600, color: isSelected ? '#ffffff' : 'var(--text-secondary)' }}>
+                    <span style={{ fontSize: '0.78rem', fontWeight: isSelected ? 800 : 600, color: isSelected ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
                       {t.name}
                     </span>
                   </button>

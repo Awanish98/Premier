@@ -215,7 +215,7 @@ export const DiscoverSection: React.FC<DiscoverSectionProps> = ({
                   onClick={() => setSelectedType(type)}
                   style={{
                     background: isSelected ? 'var(--accent)' : 'transparent',
-                    color: isSelected ? '#05080b' : 'var(--text-secondary)',
+                    color: isSelected ? 'var(--accent-text)' : 'var(--text-secondary)',
                     border: 'none',
                     padding: '0.45rem 1rem',
                     borderRadius: '7px',
@@ -242,11 +242,11 @@ export const DiscoverSection: React.FC<DiscoverSectionProps> = ({
               placeholder="Search title, actor, director..."
               style={{
                 width: '100%',
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'var(--bg-secondary)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: '10px',
                 padding: '0.65rem 1rem 0.65rem 2.5rem',
-                color: '#ffffff',
+                color: 'var(--text-primary)',
                 fontSize: '0.88rem',
                 outline: 'none',
               }}
@@ -287,8 +287,8 @@ export const DiscoverSection: React.FC<DiscoverSectionProps> = ({
                   key={g}
                   onClick={() => setSelectedGenre(g)}
                   style={{
-                    background: isSelected ? 'var(--accent)' : 'rgba(255, 255, 255, 0.04)',
-                    color: isSelected ? '#05080b' : 'var(--text-secondary)',
+                    background: isSelected ? 'var(--accent)' : 'var(--bg-secondary)',
+                    color: isSelected ? 'var(--accent-text)' : 'var(--text-secondary)',
                     border: isSelected ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                     borderRadius: '999px',
                     padding: '0.35rem 0.85rem',
@@ -352,9 +352,9 @@ export const DiscoverSection: React.FC<DiscoverSectionProps> = ({
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortOption)}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.06)',
+                  background: 'var(--bg-secondary)',
                   border: '1px solid var(--border-subtle)',
-                  color: '#ffffff',
+                  color: 'var(--text-primary)',
                   borderRadius: '8px',
                   padding: '0.4rem 0.75rem',
                   fontSize: '0.8rem',
@@ -363,10 +363,10 @@ export const DiscoverSection: React.FC<DiscoverSectionProps> = ({
                   cursor: 'pointer',
                 }}
               >
-                <option value="trending" style={{ background: '#0d121c' }}>🔥 Trending Now</option>
-                <option value="top-rated" style={{ background: '#0d121c' }}>⭐ Highest Rated</option>
-                <option value="newest" style={{ background: '#0d121c' }}>📅 Latest Release</option>
-                <option value="title-asc" style={{ background: '#0d121c' }}>🔤 Alphabetical (A-Z)</option>
+                <option value="trending">🔥 Trending Now</option>
+                <option value="top-rated">⭐ Highest Rated</option>
+                <option value="newest">📅 Latest Release</option>
+                <option value="title-asc">🔤 Alphabetical (A-Z)</option>
               </select>
             </div>
           </div>

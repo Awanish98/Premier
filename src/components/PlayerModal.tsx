@@ -270,7 +270,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                 }}
                 style={{
                   background: selectedServer.id === 'autoembed_hindi' || selectedServer.id === 'vidlink_pro' ? '#f59e0b' : 'rgba(255,255,255,0.08)',
-                  color: selectedServer.id === 'autoembed_hindi' || selectedServer.id === 'vidlink_pro' ? '#000000' : '#ffffff',
+                  color: selectedServer.id === 'autoembed_hindi' || selectedServer.id === 'vidlink_pro' ? '#000000' : 'var(--text-primary)',
                   border: '1px solid rgba(245, 158, 11, 0.6)',
                   borderRadius: '6px',
                   padding: '0.35rem 0.75rem',
@@ -293,7 +293,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                 }}
                 style={{
                   background: selectedServer.id === 'embed_su' || selectedServer.id === 'vidsrc_cc' ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
-                  color: '#ffffff',
+                  color: selectedServer.id === 'embed_su' || selectedServer.id === 'vidsrc_cc' ? 'var(--accent-text)' : 'var(--text-primary)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: '6px',
                   padding: '0.35rem 0.75rem',
@@ -316,7 +316,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                 }}
                 style={{
                   background: selectedServer.id === 'vidsrc_to' ? 'var(--accent)' : 'rgba(255,255,255,0.08)',
-                  color: '#ffffff',
+                  color: selectedServer.id === 'vidsrc_to' ? 'var(--accent-text)' : 'var(--text-primary)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: '6px',
                   padding: '0.35rem 0.75rem',
@@ -391,8 +391,10 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                     style={{
                       background: isSelected 
                         ? (isHindi ? 'linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(13, 21, 39, 0.9) 100%)' : 'var(--accent)')
-                        : 'rgba(255, 255, 255, 0.04)',
-                      color: isSelected ? '#ffffff' : 'var(--text-primary)',
+                        : 'var(--bg-card)',
+                      color: isSelected 
+                        ? (isHindi ? '#fef08a' : 'var(--accent-text)') 
+                        : 'var(--text-primary)',
                       border: isSelected 
                         ? (isHindi ? '1px solid #f59e0b' : '1px solid var(--accent)') 
                         : '1px solid var(--border-subtle)',
@@ -419,7 +421,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                           fontSize: '0.62rem',
                           padding: '1px 5px',
                           borderRadius: '4px',
-                          background: isSelected ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.08)',
+                          background: isSelected ? 'rgba(0,0,0,0.4)' : 'var(--badge-bg)',
                           color: isSelected ? '#fbbf24' : 'var(--accent)',
                           fontWeight: 800,
                         }}
@@ -462,7 +464,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                         }}
                         style={{
                           background: currentSeason === s ? 'var(--accent)' : 'rgba(255,255,255,0.05)',
-                          color: currentSeason === s ? '#fff' : 'var(--text-secondary)',
+                          color: currentSeason === s ? 'var(--accent-text)' : 'var(--text-secondary)',
                           border: '1px solid var(--border-subtle)',
                           padding: '0.25rem 0.65rem',
                           borderRadius: '6px',
@@ -510,8 +512,8 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                         setKey((prev) => prev + 1);
                       }}
                       style={{
-                        background: isActive ? 'var(--accent)' : 'rgba(255,255,255,0.04)',
-                        color: isActive ? '#fff' : 'var(--text-primary)',
+                        background: isActive ? 'var(--accent)' : 'var(--bg-card)',
+                        color: isActive ? 'var(--accent-text)' : 'var(--text-primary)',
                         border: isActive ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                         borderRadius: '6px',
                         padding: '0.5rem 0.4rem',

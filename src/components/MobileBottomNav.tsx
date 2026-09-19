@@ -15,7 +15,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   onOpenSearch,
   onOpenApkModal 
 }) => {
-  const { watchlist } = useTheme();
+  const { watchlist, isDayMode } = useTheme();
 
   const items = [
     { id: 'home', label: 'Home', icon: Home },
@@ -34,10 +34,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         left: 0,
         right: 0,
         zIndex: 45,
-        background: 'rgba(6, 7, 10, 0.95)',
+        background: isDayMode ? 'rgba(213, 223, 233, 0.96)' : 'rgba(6, 7, 10, 0.96)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
-        borderTop: '1px solid var(--border-subtle)',
+        borderTop: isDayMode ? '1px solid rgba(255, 255, 255, 0.85)' : '1px solid var(--border-subtle)',
         paddingTop: '0.45rem',
         paddingBottom: 'max(0.65rem, env(safe-area-inset-bottom, 0.65rem))',
         paddingLeft: '0.5rem',
@@ -45,7 +45,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
         display: 'none',
         justifyContent: 'space-around',
         alignItems: 'center',
-        boxShadow: '0 -10px 25px rgba(0, 0, 0, 0.7)',
+        boxShadow: isDayMode ? '0 -10px 25px rgba(15, 23, 42, 0.08)' : '0 -10px 25px rgba(0, 0, 0, 0.7)',
       }}
     >
       {items.map((item) => {
@@ -93,7 +93,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                     top: '-4px',
                     right: '-8px',
                     background: 'var(--accent)',
-                    color: '#05080b',
+                    color: 'var(--accent-text)',
                     fontSize: '0.6rem',
                     fontWeight: 900,
                     width: '16px',
@@ -114,7 +114,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                     top: '-5px',
                     right: '-10px',
                     background: 'var(--accent)',
-                    color: '#000',
+                    color: 'var(--accent-text)',
                     fontSize: '0.52rem',
                     fontWeight: 900,
                     padding: '1px 3px',

@@ -70,9 +70,9 @@ export const AnimeSection: React.FC<AnimeSectionProps> = ({ onPlay, onShowDetail
               key={g}
               onClick={() => setSelectedGenre(g)}
               style={{
-                background: selectedGenre === g ? 'var(--accent)' : 'rgba(255,255,255,0.05)',
-                color: selectedGenre === g ? '#fff' : 'var(--text-secondary)',
-                border: 'none',
+                background: selectedGenre === g ? 'var(--accent)' : 'var(--bg-card)',
+                color: selectedGenre === g ? 'var(--accent-text)' : 'var(--text-secondary)',
+                border: selectedGenre === g ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                 borderRadius: '8px',
                 padding: '0.45rem 1rem',
                 fontSize: '0.85rem',

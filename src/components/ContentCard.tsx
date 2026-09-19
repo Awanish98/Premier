@@ -217,7 +217,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
               <Star size={11} fill="#fbbf24" />
               {item.rating.toFixed(1)}
             </span>
-            <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
+            <span style={{ color: 'rgba(226, 232, 240, 0.85)', fontWeight: 600 }}>
               • {item.releaseYear}
             </span>
             {(item.isDualAudio || item.hasHindiDubbed) ? (
@@ -249,7 +249,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
                 🇮🇳 Hindi
               </span>
             ) : (
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.7rem' }}>
+              <span style={{ color: 'rgba(203, 213, 225, 0.75)', fontSize: '0.7rem' }}>
                 • {item.language || 'Multi'}
               </span>
             )}

@@ -97,11 +97,11 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
             onChange={(e) => setQuery(e.target.value)}
             style={{
               width: '100%',
-              background: 'rgba(255, 255, 255, 0.08)',
+              background: 'var(--bg-card)',
               border: '1px solid var(--accent)',
               borderRadius: '14px',
               padding: '0.9rem 3.2rem 0.9rem 2.8rem',
-              color: '#fff',
+              color: 'var(--text-primary)',
               fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
               outline: 'none',
               boxShadow: '0 0 30px var(--accent-glow)',
@@ -122,7 +122,7 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fff',
+              color: 'var(--text-primary)',
               cursor: 'pointer',
             }}
           >
@@ -143,8 +143,8 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
               key={f.id}
               onClick={() => setFilter(f.id as any)}
               style={{
-                background: filter === f.id ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
-                color: filter === f.id ? '#fff' : 'var(--text-secondary)',
+                background: filter === f.id ? 'var(--accent)' : 'var(--bg-card)',
+                color: filter === f.id ? 'var(--accent-text)' : 'var(--text-secondary)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: '999px',
                 padding: '0.4rem 1rem',
@@ -200,6 +200,10 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
                       src={item.posterPath}
                       alt={item.title}
                       style={{ width: '60px', height: '85px', objectFit: 'cover', borderRadius: '6px' }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=200&auto=format&fit=crop';
+                      }}
                     />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', marginBottom: '0.2rem' }}>
@@ -225,7 +229,7 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
                         style={{
                           fontSize: '0.9rem',
                           fontWeight: 700,
-                          color: '#fff',
+                          color: 'var(--text-primary)',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -275,9 +279,13 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
                       src={ch.logo}
                       alt={ch.name}
                       style={{ width: '32px', height: '32px', objectFit: 'contain', borderRadius: '4px', background: '#111' }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=100&auto=format&fit=crop';
+                      }}
                     />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {ch.name}
                       </h4>
                       <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>

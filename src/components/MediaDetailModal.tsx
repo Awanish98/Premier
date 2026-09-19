@@ -231,7 +231,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
               gap: '1rem',
-              background: 'rgba(255,255,255,0.03)',
+              background: 'var(--bg-card)',
               borderRadius: '12px',
               padding: '1.25rem',
               border: '1px solid var(--border-subtle)',
@@ -242,7 +242,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
                   Director
                 </span>
-                <p style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600, marginTop: '2px' }}>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 600, marginTop: '2px' }}>
                   {item.director}
                 </p>
               </div>
@@ -253,7 +253,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
                   Starring Cast
                 </span>
-                <p style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600, marginTop: '2px' }}>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 600, marginTop: '2px' }}>
                   {item.cast.join(', ')}
                 </p>
               </div>
@@ -272,7 +272,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>
                 Streaming Source Engine
               </span>
-              <p style={{ fontSize: '0.9rem', color: '#fff', fontWeight: 600, marginTop: '2px' }}>
+              <p style={{ fontSize: '0.9rem', color: 'var(--text-primary)', fontWeight: 600, marginTop: '2px' }}>
                 Multi-Server (VidLink Pro, VidSrc, AutoEmbed)
               </p>
             </div>
@@ -314,13 +314,17 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
                       src={rel.posterPath}
                       alt={rel.title}
                       style={{ width: '40px', height: '56px', objectFit: 'cover', borderRadius: '6px' }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=200&auto=format&fit=crop';
+                      }}
                     />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <h4
                         style={{
                           fontSize: '0.85rem',
                           fontWeight: 700,
-                          color: '#fff',
+                          color: 'var(--text-primary)',
                           whiteSpace: 'nowrap',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',

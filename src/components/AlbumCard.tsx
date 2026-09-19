@@ -112,7 +112,7 @@ export const AlbumCard: React.FC<AlbumCardProps> = ({ album, onClick, onPlayFirs
               borderRadius: '50%',
               background: album.colorTheme || 'var(--accent)',
               border: 'none',
-              color: '#05080b',
+              color: 'var(--accent-text)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',

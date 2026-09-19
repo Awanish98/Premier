@@ -42,10 +42,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApkModal }) => {
                   boxShadow: '0 0 12px var(--accent-glow)'
                 }}
               >
-                <Film size={18} color={theme === 'cinejoy' ? '#05080b' : '#ffffff'} />
+                <Film size={18} color="var(--accent-text)" />
               </div>
-              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff' }}>
-                PREM<span style={{ color: 'var(--accent)' }}>IER</span>
+              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-primary)' }}>
+                Flix<span style={{ color: 'var(--accent)' }}>.id</span>
               </span>
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1rem' }}>
@@ -110,7 +110,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApkModal }) => {
             </h4>
             <div
               style={{
-                background: 'rgba(255, 255, 255, 0.03)',
+                background: 'var(--bg-card)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: '10px',
                 padding: '0.85rem',
@@ -130,15 +130,17 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApkModal }) => {
           {/* Col 4: Theme Skins Quick Select */}
           <div>
             <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1rem' }}>
-              Active OTT Skin
+              Active Theme Skin
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               {[
-                { id: 'cinejoy', name: 'Premier Emerald' },
-                { id: 'prime', name: 'Prime Video Navy' },
-                { id: 'netflix', name: 'Netflix Red' },
-                { id: 'disney', name: 'Disney+ / Hotstar Cobalt' },
-                { id: 'cyberpunk', name: 'Cyberpunk Purple Neon' },
+                { id: 'day', name: '☀️ Flix Daylight (Frosted Slate)' },
+                { id: 'night', name: '🌙 Flix Obsidian (Deep Cinema)' },
+                { id: 'cinejoy', name: '⚡ Premier Emerald' },
+                { id: 'prime', name: '🎬 Prime Video Navy' },
+                { id: 'netflix', name: '🔴 Netflix Red' },
+                { id: 'disney', name: '🔷 Disney+ Cobalt' },
+                { id: 'cyberpunk', name: '🟣 Cyberpunk Neon' },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -160,6 +162,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApkModal }) => {
               ))}
             </div>
           </div>
+
         </div>
 
         {/* Bottom copyright / disclaimer */}

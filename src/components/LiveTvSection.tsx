@@ -370,7 +370,7 @@ export const LiveTvSection: React.FC = () => {
       {/* World Countries 1-Click Importer Rail */}
       <div
         style={{
-          background: 'linear-gradient(135deg, rgba(13, 18, 28, 0.95) 0%, rgba(20, 27, 45, 0.95) 100%)',
+          background: 'var(--bg-card)',
           border: '1px solid var(--border-subtle)',
           borderRadius: '14px',
           padding: '0.75rem 1rem',
@@ -384,7 +384,7 @@ export const LiveTvSection: React.FC = () => {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Globe size={16} color="var(--accent)" />
-          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#ffffff' }}>
+          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>
             Explore World IPTV Feeds:
           </span>
         </div>
@@ -398,9 +398,9 @@ export const LiveTvSection: React.FC = () => {
                 loadIptvCountryPlaylist(country.code, country.name);
               }}
               style={{
-                background: selectedCountry === country.code ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
-                color: selectedCountry === country.code ? '#05080b' : 'var(--text-primary)',
-                border: selectedCountry === country.code ? '1px solid var(--accent)' : '1px solid rgba(255, 255, 255, 0.1)',
+                background: selectedCountry === country.code ? 'var(--accent)' : 'var(--bg-secondary)',
+                color: selectedCountry === country.code ? 'var(--accent-text)' : 'var(--text-primary)',
+                border: selectedCountry === country.code ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                 padding: '0.35rem 0.75rem',
                 borderRadius: '8px',
                 fontSize: '0.78rem',
@@ -457,8 +457,8 @@ export const LiveTvSection: React.FC = () => {
                 if (target) handleSelectChannel(target);
               }}
               style={{
-                background: isActive ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
-                color: isActive ? '#05080b' : 'rgba(255, 255, 255, 0.8)',
+                background: isActive ? 'var(--accent)' : 'var(--bg-card)',
+                color: isActive ? 'var(--accent-text)' : 'var(--text-primary)',
                 border: '1px solid',
                 borderColor: isActive ? 'var(--accent)' : 'var(--border-subtle)',
                 borderRadius: '999px',
@@ -482,7 +482,7 @@ export const LiveTvSection: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'rgba(13, 18, 28, 0.95)',
+          background: 'var(--bg-card)',
           border: '1px solid var(--border-subtle)',
           borderRadius: '12px',
           padding: '0.5rem 0.85rem',
@@ -493,7 +493,7 @@ export const LiveTvSection: React.FC = () => {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Tv size={16} color="var(--accent)" />
-          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#ffffff' }}>
+          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text-primary)' }}>
             Streaming Source:
           </span>
         </div>
@@ -506,9 +506,9 @@ export const LiveTvSection: React.FC = () => {
                 setStreamError(false);
               }}
               style={{
-                background: serverMode === 'embed' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
-                color: serverMode === 'embed' ? '#05080b' : 'var(--text-secondary)',
-                border: serverMode === 'embed' ? '1px solid var(--accent)' : '1px solid rgba(255, 255, 255, 0.1)',
+                background: serverMode === 'embed' ? 'var(--accent)' : 'var(--bg-secondary)',
+                color: serverMode === 'embed' ? 'var(--accent-text)' : 'var(--text-secondary)',
+                border: serverMode === 'embed' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                 padding: '0.35rem 0.75rem',
                 borderRadius: '8px',
                 fontSize: '0.76rem',
@@ -532,9 +532,9 @@ export const LiveTvSection: React.FC = () => {
               setStreamError(false);
             }}
             style={{
-              background: serverMode === 'hls' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
-              color: serverMode === 'hls' ? '#05080b' : 'var(--text-secondary)',
-              border: serverMode === 'hls' ? '1px solid var(--accent)' : '1px solid rgba(255, 255, 255, 0.1)',
+              background: serverMode === 'hls' ? 'var(--accent)' : 'var(--bg-secondary)',
+              color: serverMode === 'hls' ? 'var(--accent-text)' : 'var(--text-secondary)',
+              border: serverMode === 'hls' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
               padding: '0.35rem 0.75rem',
               borderRadius: '8px',
               fontSize: '0.76rem',
@@ -558,9 +558,9 @@ export const LiveTvSection: React.FC = () => {
                 setStreamError(false);
               }}
               style={{
-                background: serverMode === 'backup' ? 'var(--accent)' : 'rgba(255, 255, 255, 0.06)',
-                color: serverMode === 'backup' ? '#05080b' : 'var(--text-secondary)',
-                border: serverMode === 'backup' ? '1px solid var(--accent)' : '1px solid rgba(255, 255, 255, 0.1)',
+                background: serverMode === 'backup' ? 'var(--accent)' : 'var(--bg-secondary)',
+                color: serverMode === 'backup' ? 'var(--accent-text)' : 'var(--text-secondary)',
+                border: serverMode === 'backup' ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                 padding: '0.35rem 0.75rem',
                 borderRadius: '8px',
                 fontSize: '0.76rem',
@@ -853,9 +853,9 @@ export const LiveTvSection: React.FC = () => {
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 style={{
-                  background: selectedCategory === cat ? 'var(--accent)' : 'rgba(255,255,255,0.05)',
-                  color: selectedCategory === cat ? '#05080b' : 'var(--text-secondary)',
-                  border: 'none',
+                  background: selectedCategory === cat ? 'var(--accent)' : 'var(--bg-secondary)',
+                  color: selectedCategory === cat ? 'var(--accent-text)' : 'var(--text-secondary)',
+                  border: selectedCategory === cat ? '1px solid var(--accent)' : '1px solid var(--border-subtle)',
                   borderRadius: '8px',
                   padding: '0.38rem 0.8rem',
                   fontSize: '0.78rem',
@@ -879,11 +879,11 @@ export const LiveTvSection: React.FC = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
                 width: '100%',
-                background: 'rgba(255,255,255,0.04)',
+                background: 'var(--bg-secondary)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: '10px',
                 padding: '0.55rem 0.85rem 0.55rem 2.2rem',
-                color: '#fff',
+                color: 'var(--text-primary)',
                 fontSize: '0.84rem',
                 outline: 'none',
               }}
