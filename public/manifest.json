@@ -1,19 +1,32 @@
 {
-  "name": "PREMIER - 4K Cinema & Dual Audio Streaming",
-  "short_name": "PREMIER",
-  "description": "Ultra-Premium 4K Streaming Hub for Movies, TV Shows, Anime & Dual Audio (Hindi + English).",
+  "name": "PREMIER 4K Cinema - OTT Streaming",
+  "short_name": "PREMIER 4K",
+  "id": "./",
+  "scope": "./",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#06070a",
   "theme_color": "#95FF50",
   "orientation": "any",
-  "categories": ["entertainment", "movies", "video"],
+  "categories": ["entertainment", "movies", "video", "multimedia"],
   "icons": [
     {
-      "src": "favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "./pwa-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "./pwa-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./favicon.svg",
+      "sizes": "48x48 72x72 96x96 128x128 192x192 256x256 512x512 any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
   "shortcuts": [

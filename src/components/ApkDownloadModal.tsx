@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Download, 
   Smartphone, 
   Sparkles, 
   Check, 
@@ -13,7 +12,11 @@ import {
   Layers, 
   Tv, 
   Wifi, 
-  HelpCircle 
+  HelpCircle,
+  PlusSquare,
+  Share2,
+  MoreVertical,
+  Download
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { BorderBeam } from './magicui/BorderBeam';
@@ -27,16 +30,29 @@ interface ApkDownloadModalProps {
 export const ApkDownloadModal: React.FC<ApkDownloadModalProps> = ({ isOpen, onClose }) => {
   const { showToast } = useTheme();
   const [activeGuideTab, setActiveGuideTab] = useState<'android' | 'ios' | 'desktop'>('android');
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isDownloading, setIsDownloading] = useState<boolean>(false);
-  const [downloadProgress, setDownloadProgress] = useState<number>(0);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>((window as any).__premierDeferredPrompt || null);
+  const [isStandalone, setIsStandalone] = useState<boolean>(false);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
+  const [installSuccess, setInstallSuccess] = useState<boolean>(false);
 
-  // Listen for native PWA beforeinstallprompt event
+  // Detect platform & standalone mode on mount
   useEffect(() => {
+    const isRunningStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone;
+    setIsStandalone(!!isRunningStandalone);
+
+    const ua = navigator.userAgent || '';
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+      setActiveGuideTab('ios');
+    } else if (/Android/i.test(ua)) {
+      setActiveGuideTab('android');
+    } else {
+      setActiveGuideTab('desktop');
+    }
+
     const handleBeforeInstallPrompt = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      (window as any).__premierDeferredPrompt = e;
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -48,65 +64,34 @@ export const ApkDownloadModal: React.FC<ApkDownloadModalProps> = ({ isOpen, onCl
   // Trigger Native PWA Installation
   const handlePwaInstall = async () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        showToast('🎉 PREMIER App successfully installed!', 'success');
-        setDeferredPrompt(null);
-        onClose();
+      try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          setInstallSuccess(true);
+          showToast('🎉 PREMIER Web App successfully installed!', 'success');
+          setDeferredPrompt(null);
+          (window as any).__premierDeferredPrompt = null;
+          setTimeout(() => {
+            onClose();
+          }, 1800);
+        } else {
+          showToast('Install prompt cancelled. You can install anytime from menu.', 'info');
+        }
+      } catch {
+        showToast('Neeche diye gaye steps follow karein to install PREMIER App', 'info');
       }
     } else {
-      // Fallback instructions
-      setActiveGuideTab('android');
-      showToast('Install prompt open karein ya neeche diye gaye steps follow karein', 'info');
+      // Fallback instructions based on platform
+      const ua = navigator.userAgent || '';
+      if (/iPhone|iPad|iPod/i.test(ua)) {
+        setActiveGuideTab('ios');
+        showToast('Safari me Share (⬆️) -> "Add to Home Screen" select karein', 'info');
+      } else {
+        setActiveGuideTab('android');
+        showToast('Browser menu (⋮) me jaakar "Install app" ya "Add to Home screen" tap karein', 'info');
+      }
     }
-  };
-
-  // Trigger Direct Android APK Download
-  const handleDirectApkDownload = () => {
-    setIsDownloading(true);
-    setDownloadProgress(10);
-
-    const interval = setInterval(() => {
-      setDownloadProgress((prev) => {
-        if (prev >= 90) {
-          clearInterval(interval);
-          return 90;
-        }
-        return prev + 20;
-      });
-    }, 150);
-
-    setTimeout(() => {
-      clearInterval(interval);
-      setDownloadProgress(100);
-
-      // Create downloadable APK file payload
-      const apkContent = `PREMIER 4K Cinema - Android Web-APK Package v2.5.0
-Package: com.premier.cinema4k
-Version: 2.5.0
-Built for: Android 8.0+ (ARM64 / x86_64)
-Features: 4K UHD Streaming, Multi-Server VidLink Pro, Hindi Dual Audio, Live TV IPTV HLS.
-Live Web App URL: https://awanish98.github.io/Premier/
-
-Instuctions:
-1. Tap 'Install' on this APK installer.
-2. If prompted, allow 'Install from Unknown Sources'.
-3. Enjoy unrestricted 4K Cinema on your Android phone or TV.`;
-
-      const blob = new Blob([apkContent], { type: 'application/vnd.android.package-archive' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'PREMIER_4K_Cinema_v2.5.0.apk';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      setIsDownloading(false);
-      showToast('⬇️ PREMIER APK download started! Open the file to install.', 'success');
-    }, 1200);
   };
 
   // Copy app link to clipboard
@@ -114,7 +99,7 @@ Instuctions:
     const url = window.location.origin + window.location.pathname;
     navigator.clipboard.writeText(url).then(() => {
       setCopiedLink(true);
-      showToast('🔗 PREMIER App link copied to clipboard!', 'success');
+      showToast('🔗 PREMIER Web App link copied to clipboard!', 'success');
       setTimeout(() => setCopiedLink(false), 2500);
     });
   };
@@ -141,7 +126,7 @@ Instuctions:
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
-          maxWidth: '680px',
+          maxWidth: '640px',
           maxHeight: '92vh',
           background: 'var(--bg-secondary)',
           borderRadius: '24px',
@@ -163,7 +148,7 @@ Instuctions:
         <div
           style={{
             padding: '1.25rem 1.5rem',
-            background: 'rgba(6, 7, 10, 0.95)',
+            background: 'rgba(6, 7, 10, 0.96)',
             borderBottom: '1px solid var(--border-subtle)',
             display: 'flex',
             alignItems: 'center',
@@ -176,39 +161,40 @@ Instuctions:
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div
               style={{
-                width: '40px',
-                height: '40px',
+                width: '42px',
+                height: '42px',
                 borderRadius: '12px',
                 background: 'linear-gradient(135deg, var(--accent) 0%, #0d121c 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 0 15px var(--accent-glow)',
+                boxShadow: '0 0 16px var(--accent-glow)',
+                flexShrink: 0,
               }}
             >
               <Smartphone size={22} color="#05080b" />
             </div>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                 <h3 style={{ fontSize: '1.15rem', fontWeight: 900, color: '#fff', letterSpacing: '-0.02em' }}>
-                  PREMIER Android App & APK
+                  Install PREMIER Web App
                 </h3>
                 <span
                   style={{
                     fontSize: '0.68rem',
                     fontWeight: 800,
-                    padding: '2px 6px',
-                    borderRadius: '4px',
+                    padding: '2px 7px',
+                    borderRadius: '5px',
                     background: 'var(--badge-bg)',
                     color: 'var(--accent)',
                     border: '1px solid var(--accent)',
                   }}
                 >
-                  v2.5.0
+                  PWA • Fast 4K
                 </span>
               </div>
               <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                Ultra-HD 4K Streaming • 100% Dual Audio • Zero Buffer
+                Direct Mobile & Desktop App • Zero Storage • Ad-Free Cinema
               </p>
             </div>
           </div>
@@ -227,6 +213,7 @@ Instuctions:
               justifyContent: 'center',
               cursor: 'pointer',
               transition: 'background 0.2s ease',
+              flexShrink: 0,
             }}
           >
             <X size={18} />
@@ -234,73 +221,70 @@ Instuctions:
         </div>
 
         {/* Modal Body */}
-        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+        <div style={{ padding: '1.4rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           
-          {/* Main Download Call to Action Box */}
+          {/* Main Install Card */}
           <div
             style={{
-              background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.12) 0%, rgba(13, 21, 39, 0.8) 100%)',
+              background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.14) 0%, rgba(13, 21, 39, 0.85) 100%)',
               border: '1px solid var(--accent)',
-              borderRadius: '16px',
-              padding: '1.25rem',
+              borderRadius: '18px',
+              padding: '1.35rem',
               display: 'flex',
               flexDirection: 'column',
               gap: '1rem',
               position: 'relative',
               overflow: 'hidden',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
                 <Zap size={20} color="var(--accent)" />
-                <span style={{ fontSize: '1rem', fontWeight: 800, color: '#ffffff' }}>
-                  Direct Android APK Package (v2.5.0)
+                <span style={{ fontSize: '1.02rem', fontWeight: 900, color: '#ffffff' }}>
+                  {isStandalone ? 'PREMIER App Running Active' : '1-Tap Mobile & Desktop Install'}
                 </span>
               </div>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
-                Size: ~4.2 MB • Free No Ads
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', background: 'rgba(0,0,0,0.5)', padding: '2px 8px', borderRadius: '999px' }}>
+                0 MB Download • Instant Launch
               </span>
             </div>
 
-            <p style={{ fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.5 }}>
-              Android mobile aur smart TV ke liye direct APK download karein. Fast 4K playback, Hindi Dual Audio tracks, aur Live IPTV support ke sath.
+            <p style={{ fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.9)', lineHeight: 1.55 }}>
+              {isStandalone 
+                ? 'Aap PREMIER Web App standalone mode me use kar rahe hain. Fast 4K playback aur multi-server streaming active hai!' 
+                : 'PREMIER ko apne phone ki Home Screen par install karein. Bina kisi APK download ke instant standalone full-screen cinema app chalu ho jayega.'}
             </p>
 
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <ShimmerButton
-                onClick={handleDirectApkDownload}
-                disabled={isDownloading}
-                style={{ flex: 1, padding: '0.8rem 1.25rem', fontSize: '0.95rem', fontWeight: 800 }}
-              >
-                <Download size={18} />
-                <span>
-                  {isDownloading ? `Downloading (${downloadProgress}%)...` : 'Download Android APK'}
-                </span>
-              </ShimmerButton>
-
-              {deferredPrompt && (
-                <button
+            {/* Primary 1-Tap Install Button */}
+            {!isStandalone && (
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <ShimmerButton
                   onClick={handlePwaInstall}
-                  className="btn-secondary"
-                  style={{
-                    padding: '0.8rem 1.25rem',
-                    fontSize: '0.9rem',
-                    background: 'rgba(255,255,255,0.12)',
-                    borderColor: 'rgba(255,255,255,0.25)',
-                    fontWeight: 700,
+                  style={{ 
+                    flex: 1, 
+                    padding: '0.85rem 1.4rem', 
+                    fontSize: '0.98rem', 
+                    fontWeight: 900,
+                    letterSpacing: '0.01em'
                   }}
                 >
-                  <Smartphone size={18} color="var(--accent)" />
-                  <span>1-Tap Install PWA</span>
-                </button>
-              )}
-            </div>
+                  <Smartphone size={19} />
+                  <span>
+                    {installSuccess 
+                      ? 'Installed Successfully!' 
+                      : deferredPrompt 
+                        ? '📲 1-Tap Install Web App' 
+                        : '📲 Install Web App on Phone'}
+                  </span>
+                </ShimmerButton>
+              </div>
+            )}
 
-            {/* Progress Bar while downloading */}
-            {isDownloading && (
-              <div style={{ width: '100%', height: '4px', background: 'rgba(255,255,255,0.15)', borderRadius: '2px', overflow: 'hidden' }}>
-                <div style={{ width: `${downloadProgress}%`, height: '100%', background: 'var(--accent)', transition: 'width 0.2s ease' }} />
+            {isStandalone && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent)', fontWeight: 800, fontSize: '0.9rem' }}>
+                <Check size={18} />
+                <span>Web App is Installed & Ready!</span>
               </div>
             )}
           </div>
@@ -333,7 +317,7 @@ Instuctions:
                 color: copiedLink ? '#000000' : '#ffffff',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: '8px',
-                padding: '0.35rem 0.75rem',
+                padding: '0.38rem 0.85rem',
                 fontSize: '0.78rem',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -348,19 +332,192 @@ Instuctions:
             </button>
           </div>
 
+          {/* Installation Step-by-Step Guide Tabs */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.75rem' }}>
+              <HelpCircle size={16} color="var(--accent)" />
+              <h4 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                How to Install (Step-by-Step)
+              </h4>
+            </div>
+
+            {/* Guide Tabs Selector */}
+            <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.85rem', background: 'rgba(0,0,0,0.5)', padding: '4px', borderRadius: '12px' }}>
+              {[
+                { id: 'android', label: '📱 Android (Chrome/Brave)' },
+                { id: 'ios', label: '🍏 iPhone / iPad (Safari)' },
+                { id: 'desktop', label: '💻 PC / Laptop' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveGuideTab(tab.id as any)}
+                  style={{
+                    flex: 1,
+                    background: activeGuideTab === tab.id ? 'var(--accent)' : 'transparent',
+                    color: activeGuideTab === tab.id ? '#05080b' : 'var(--text-secondary)',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.5rem 0.35rem',
+                    fontSize: '0.76rem',
+                    fontWeight: activeGuideTab === tab.id ? 900 : 600,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    textAlign: 'center',
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab 1: Android Guide */}
+            {activeGuideTab === 'android' && (
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '14px',
+                  padding: '1.1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.85rem',
+                  fontSize: '0.84rem',
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.55,
+                }}
+              >
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0, border: '1px solid var(--accent)' }}>1</div>
+                  <div>
+                    <span style={{ color: '#fff', fontWeight: 700 }}>Open Browser Menu:</span>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
+                      Chrome ya Brave browser me upar ya neeche right side <strong>3-Dots Menu (<MoreVertical size={13} style={{ display: 'inline', verticalAlign: 'middle' }} />)</strong> par tap karein.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0, border: '1px solid var(--accent)' }}>2</div>
+                  <div>
+                    <span style={{ color: '#fff', fontWeight: 700 }}>Select "Install app" ya "Add to Home screen":</span>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
+                      Menu me <strong>"Install app" (<Download size={13} style={{ display: 'inline', verticalAlign: 'middle' }} />)</strong> ya <strong>"Add to Home screen" (<PlusSquare size={13} style={{ display: 'inline', verticalAlign: 'middle' }} />)</strong> option choose karein.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0, border: '1px solid var(--accent)' }}>3</div>
+                  <div>
+                    <span style={{ color: '#fff', fontWeight: 700 }}>Instant Native App Ready!</span>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
+                      Phone ki home screen par <strong>PREMIER 4K</strong> app icon aa jayega. Full screen 4K OTT without browser frame!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 2: iOS Guide */}
+            {activeGuideTab === 'ios' && (
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '14px',
+                  padding: '1.1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.85rem',
+                  fontSize: '0.84rem',
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.55,
+                }}
+              >
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0, border: '1px solid var(--accent)' }}>1</div>
+                  <div>
+                    <span style={{ color: '#fff', fontWeight: 700 }}>Safari Browser me Kholein:</span>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
+                      iPhone ya iPad par <strong>Safari browser</strong> me yeh link open karein.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0, border: '1px solid var(--accent)' }}>2</div>
+                  <div>
+                    <span style={{ color: '#fff', fontWeight: 700 }}>Tap Share Icon:</span>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
+                      Safari ke bottom bar me <strong>Share button (<Share2 size={13} style={{ display: 'inline', verticalAlign: 'middle' }} />)</strong> par tap karein.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0, border: '1px solid var(--accent)' }}>3</div>
+                  <div>
+                    <span style={{ color: '#fff', fontWeight: 700 }}>"Add to Home Screen" Select Karein:</span>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
+                      List me <strong>"Add to Home Screen" (<PlusSquare size={13} style={{ display: 'inline', verticalAlign: 'middle' }} />)</strong> tap karke "Add" dabayein.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Tab 3: Desktop Guide */}
+            {activeGuideTab === 'desktop' && (
+              <div
+                style={{
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '14px',
+                  padding: '1.1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.85rem',
+                  fontSize: '0.84rem',
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.55,
+                }}
+              >
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0, border: '1px solid var(--accent)' }}>1</div>
+                  <div>
+                    <span style={{ color: '#fff', fontWeight: 700 }}>Click Install in Address Bar:</span>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
+                      Google Chrome / Brave / Edge me URL address bar me right side <strong>Install App (💻 / ⊕)</strong> icon par click karein.
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '0.75rem', flexShrink: 0, border: '1px solid var(--accent)' }}>2</div>
+                  <div>
+                    <span style={{ color: '#fff', fontWeight: 700 }}>Standalone 4K Window:</span>
+                    <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'rgba(255,255,255,0.75)' }}>
+                      PREMIER separate ultra-fast application window me open hoga with zero distraction and HDR playback.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Key Advantages Matrix */}
           <div>
             <h4 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              Why Use PREMIER Mobile App?
+              Why PREMIER Web App is Best?
             </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.65rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(135px, 1fr))', gap: '0.65rem' }}>
               {[
-                { icon: Film, title: 'IMAX 4K HDR', desc: 'Zero Compression' },
+                { icon: Film, title: 'IMAX 4K HDR', desc: 'Zero Lag Playback' },
                 { icon: Sparkles, title: 'Dual Audio', desc: '100% Hindi Dubbed' },
                 { icon: Tv, title: 'Live 24x7 TV', desc: 'HD Sports & News' },
-                { icon: ShieldCheck, title: '0% Ad Clutter', desc: 'Ad-Free Playback' },
-                { icon: Wifi, title: 'Fast Buffer', desc: 'Auto Fallback CDN' },
-                { icon: Layers, title: 'Watchlist Sync', desc: 'Cloud Resume' },
+                { icon: ShieldCheck, title: 'Zero Ads', desc: 'Ad-Free Streams' },
+                { icon: Wifi, title: '0 MB Storage', desc: 'No Memory Used' },
+                { icon: Layers, title: 'Instant Updates', desc: 'Always Latest' },
               ].map((f, idx) => {
                 const Icon = f.icon;
                 return (
@@ -378,141 +535,15 @@ Instuctions:
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--accent)' }}>
                       <Icon size={15} />
-                      <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#ffffff' }}>{f.title}</span>
+                      <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#ffffff' }}>{f.title}</span>
                     </div>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{f.desc}</span>
+                    <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{f.desc}</span>
                   </div>
                 );
               })}
             </div>
           </div>
 
-          {/* Installation Guide Tabs */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.75rem' }}>
-              <HelpCircle size={16} color="var(--accent)" />
-              <h4 style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Installation Guide
-              </h4>
-            </div>
-
-            {/* Guide Tabs Selector */}
-            <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.75rem', background: 'rgba(0,0,0,0.4)', padding: '4px', borderRadius: '10px' }}>
-              {[
-                { id: 'android', label: '📱 Android Phone / TV' },
-                { id: 'ios', label: '🍏 iOS / iPhone' },
-                { id: 'desktop', label: '💻 PC / Laptop' },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveGuideTab(tab.id as any)}
-                  style={{
-                    flex: 1,
-                    background: activeGuideTab === tab.id ? 'var(--accent)' : 'transparent',
-                    color: activeGuideTab === tab.id ? '#05080b' : 'var(--text-secondary)',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '0.45rem',
-                    fontSize: '0.78rem',
-                    fontWeight: activeGuideTab === tab.id ? 800 : 600,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Tab 1: Android Guide */}
-            {activeGuideTab === 'android' && (
-              <div
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: '12px',
-                  padding: '1rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.65rem',
-                  fontSize: '0.82rem',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.5,
-                }}
-              >
-                <div style={{ display: 'flex', gap: '0.6rem' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.72rem', flexShrink: 0 }}>1</span>
-                  <span><strong>Download APK:</strong> Upar diye gaye <strong>"Download Android APK"</strong> button par tap karein.</span>
-                </div>
-                <div style={{ display: 'flex', gap: '0.6rem' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.72rem', flexShrink: 0 }}>2</span>
-                  <span><strong>Open & Install:</strong> Download complete hone ke baad file open karein aur "Install" select karein.</span>
-                </div>
-                <div style={{ display: 'flex', gap: '0.6rem' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.72rem', flexShrink: 0 }}>3</span>
-                  <span><strong>PWA Alternative (Chrome):</strong> Chrome menu (⋮) par tap karein aur <strong>"Install app"</strong> ya <strong>"Add to Home screen"</strong> choose karein.</span>
-                </div>
-              </div>
-            )}
-
-            {/* Tab 2: iOS Guide */}
-            {activeGuideTab === 'ios' && (
-              <div
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: '12px',
-                  padding: '1rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.65rem',
-                  fontSize: '0.82rem',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.5,
-                }}
-              >
-                <div style={{ display: 'flex', gap: '0.6rem' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.72rem', flexShrink: 0 }}>1</span>
-                  <span>iPhone / iPad me Safari browser me yeh page open karein.</span>
-                </div>
-                <div style={{ display: 'flex', gap: '0.6rem' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.72rem', flexShrink: 0 }}>2</span>
-                  <span>Bottom me <strong>Share button (⬆️)</strong> par tap karein.</span>
-                </div>
-                <div style={{ display: 'flex', gap: '0.6rem' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.72rem', flexShrink: 0 }}>3</span>
-                  <span>Scroll karke <strong>"Add to Home Screen" (➕)</strong> tap karein aur "Add" dabayein. PREMIER app aapke phone me native standalone app ki tarah start ho jayega.</span>
-                </div>
-              </div>
-            )}
-
-            {/* Tab 3: Desktop Guide */}
-            {activeGuideTab === 'desktop' && (
-              <div
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: '12px',
-                  padding: '1rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.65rem',
-                  fontSize: '0.82rem',
-                  color: 'var(--text-secondary)',
-                  lineHeight: 1.5,
-                }}
-              >
-                <div style={{ display: 'flex', gap: '0.6rem' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.72rem', flexShrink: 0 }}>1</span>
-                  <span>Google Chrome ya MS Edge me address bar me right side <strong>"Install App" 💻</strong> icon par click karein.</span>
-                </div>
-                <div style={{ display: 'flex', gap: '0.6rem' }}>
-                  <span style={{ width: '20px', height: '20px', borderRadius: '50%', background: 'var(--badge-bg)', color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.72rem', flexShrink: 0 }}>2</span>
-                  <span>Standalone app window me full-screen 4K cinema experience enjoy karein.</span>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </div>

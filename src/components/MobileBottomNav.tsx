@@ -22,7 +22,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
     { id: 'discover', label: 'Discover', icon: Compass },
     { id: 'search', label: 'Search', icon: Search, isAction: true },
     { id: 'watchlist', label: 'Watchlist', icon: Bookmark, badge: watchlist.length },
-    { id: 'apk', label: 'Get APK', icon: Smartphone, isApk: true },
+    { id: 'install', label: 'Install App', icon: Smartphone, isInstall: true },
   ];
 
   return (
@@ -55,7 +55,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           <button
             key={item.id}
             onClick={() => {
-              if (item.isApk && onOpenApkModal) {
+              if (item.isInstall && onOpenApkModal) {
                 onOpenApkModal();
               } else if (item.isAction && onOpenSearch) {
                 onOpenSearch();
@@ -71,9 +71,9 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.2rem',
-              color: item.isApk ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--text-secondary)',
+              color: item.isInstall ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--text-secondary)',
               fontSize: '0.72rem',
-              fontWeight: isActive || item.isApk ? 800 : 500,
+              fontWeight: isActive || item.isInstall ? 800 : 500,
               cursor: 'pointer',
               position: 'relative',
               padding: '0.3rem 0.5rem',
@@ -84,7 +84,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             <div style={{ position: 'relative' }}>
               <Icon 
                 size={20} 
-                color={item.isApk ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--text-secondary)'} 
+                color={item.isInstall ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--text-secondary)'} 
               />
               {item.badge !== undefined && item.badge > 0 && (
                 <span
@@ -107,7 +107,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                   {item.badge}
                 </span>
               )}
-              {item.isApk && (
+              {item.isInstall && (
                 <span
                   style={{
                     position: 'absolute',
@@ -121,7 +121,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                     borderRadius: '3px',
                   }}
                 >
-                  FREE
+                  PWA
                 </span>
               )}
             </div>

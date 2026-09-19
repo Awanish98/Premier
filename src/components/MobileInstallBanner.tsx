@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Smartphone, Download, X } from 'lucide-react';
+import { Smartphone, Sparkles, X } from 'lucide-react';
 
 interface MobileInstallBannerProps {
   onOpenApkModal: () => void;
@@ -9,8 +9,14 @@ export const MobileInstallBanner: React.FC<MobileInstallBannerProps> = ({ onOpen
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Check if running in standalone mode (already installed as PWA)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone;
+    if (isStandalone) {
+      return; // Do not show install banner if already installed
+    }
+
     // Check if dismissed previously in this session
-    const dismissed = sessionStorage.getItem('premier_apk_banner_dismissed');
+    const dismissed = sessionStorage.getItem('premier_install_banner_dismissed');
     if (!dismissed) {
       // Show after 1.5 seconds delay on mobile
       const timer = setTimeout(() => {
@@ -22,7 +28,7 @@ export const MobileInstallBanner: React.FC<MobileInstallBannerProps> = ({ onOpen
 
   const handleDismiss = () => {
     setIsVisible(false);
-    sessionStorage.setItem('premier_apk_banner_dismissed', 'true');
+    sessionStorage.setItem('premier_install_banner_dismissed', 'true');
   };
 
   if (!isVisible) return null;
@@ -69,7 +75,7 @@ export const MobileInstallBanner: React.FC<MobileInstallBannerProps> = ({ onOpen
         <div style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
             <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#ffffff', whiteSpace: 'nowrap' }}>
-              PREMIER App (APK)
+              PREMIER 4K Web App
             </span>
             <span
               style={{
@@ -82,11 +88,11 @@ export const MobileInstallBanner: React.FC<MobileInstallBannerProps> = ({ onOpen
                 border: '1px solid var(--accent)',
               }}
             >
-              v2.5
+              PWA
             </span>
           </div>
           <p style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            Faster 4K streaming & Hindi Dual Audio
+            1-Tap Install • Zero Storage • Faster 4K
           </p>
         </div>
       </div>
@@ -99,7 +105,7 @@ export const MobileInstallBanner: React.FC<MobileInstallBannerProps> = ({ onOpen
             color: 'var(--accent-text)',
             border: 'none',
             borderRadius: '8px',
-            padding: '0.42rem 0.85rem',
+            padding: '0.45rem 0.85rem',
             fontSize: '0.78rem',
             fontWeight: 800,
             cursor: 'pointer',
@@ -109,8 +115,8 @@ export const MobileInstallBanner: React.FC<MobileInstallBannerProps> = ({ onOpen
             boxShadow: '0 2px 10px var(--accent-glow)',
           }}
         >
-          <Download size={13} />
-          <span>Get APK</span>
+          <Sparkles size={13} />
+          <span>Install App</span>
         </button>
 
         <button

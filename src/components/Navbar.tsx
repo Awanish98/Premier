@@ -14,8 +14,7 @@ import {
   Compass,
   Bell,
   User,
-  Smartphone,
-  Download
+  Smartphone
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import type { ThemeMode } from '../types';
@@ -491,14 +490,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* APK / App Install Trigger Button */}
+          {/* Web App PWA Install Trigger Button */}
           {onOpenApkModal && (
             <button
               onClick={onOpenApkModal}
               style={{
-                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.18) 0%, rgba(13, 21, 39, 0.7) 100%)',
-                color: '#4ade80',
-                border: '1px solid rgba(34, 197, 94, 0.4)',
+                background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.16) 0%, rgba(13, 21, 39, 0.7) 100%)',
+                color: 'var(--accent)',
+                border: '1px solid var(--accent)',
                 padding: '0.42rem 0.8rem',
                 borderRadius: '8px',
                 cursor: 'pointer',
@@ -507,25 +506,25 @@ export const Navbar: React.FC<NavbarProps> = ({
                 gap: '0.4rem',
                 fontSize: '0.8rem',
                 fontWeight: 800,
-                boxShadow: '0 0 16px rgba(34, 197, 94, 0.25)',
+                boxShadow: '0 0 16px var(--accent-glow)',
                 transition: 'all 0.2s ease',
               }}
               className="apk-desktop-btn"
-              title="Download Android APK & Install App"
+              title="Install PREMIER Web App (PWA)"
             >
               <Smartphone size={15} />
-              <span className="apk-btn-text">Get APK</span>
+              <span className="apk-btn-text">Install App</span>
               <span
                 style={{
                   fontSize: '0.6rem',
-                  padding: '1px 4px',
+                  padding: '1px 5px',
                   borderRadius: '3px',
-                  background: '#22c55e',
+                  background: 'var(--accent)',
                   color: '#05080b',
                   fontWeight: 900,
                 }}
               >
-                v2.5
+                PWA
               </span>
             </button>
           )}
@@ -597,7 +596,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           }}
           className="animate-fade-in"
         >
-          {/* Featured Mobile APK Install Card */}
+          {/* Featured Mobile Web App Install Card */}
           {onOpenApkModal && (
             <div
               onClick={() => {
@@ -605,8 +604,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
               }}
               style={{
-                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(13, 21, 39, 0.9) 100%)',
-                border: '1px solid rgba(34, 197, 94, 0.4)',
+                background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.16) 0%, rgba(13, 21, 39, 0.9) 100%)',
+                border: '1px solid var(--accent)',
                 borderRadius: '12px',
                 padding: '0.85rem 1rem',
                 display: 'flex',
@@ -614,7 +613,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 justifyContent: 'space-between',
                 cursor: 'pointer',
                 marginBottom: '0.4rem',
-                boxShadow: '0 4px 20px rgba(34, 197, 94, 0.2)',
+                boxShadow: '0 4px 20px var(--accent-glow)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -623,7 +622,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     width: '34px',
                     height: '34px',
                     borderRadius: '8px',
-                    background: '#22c55e',
+                    background: 'var(--accent)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -633,13 +632,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#fff' }}>Download Android APK</span>
-                    <span style={{ fontSize: '0.62rem', background: '#22c55e', color: '#000', fontWeight: 900, padding: '1px 4px', borderRadius: '3px' }}>v2.5</span>
+                    <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#fff' }}>Install PREMIER Web App</span>
+                    <span style={{ fontSize: '0.62rem', background: 'var(--accent)', color: '#000', fontWeight: 900, padding: '1px 5px', borderRadius: '3px' }}>PWA</span>
                   </div>
-                  <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Direct 4K Cinema App Installation</p>
+                  <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Instant 1-Tap Mobile Installation</p>
                 </div>
               </div>
-              <Download size={18} color="#22c55e" />
+              <Sparkles size={18} color="var(--accent)" />
             </div>
           )}
 
