@@ -18,7 +18,10 @@ import {
   Sun,
   Moon,
   ChevronDown,
-  Check
+  Check,
+  Minimize2,
+  Maximize2,
+  Layers
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import type { ThemeMode } from '../types';
@@ -42,6 +45,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [isCapsuleCollapsed, setIsCapsuleCollapsed] = useState(false);
+  const [collapsedDropdownOpen, setCollapsedDropdownOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,6 +84,29 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 2, title: '🦸 Complete MCU Phase 1-5 (46 Titles) Live', time: '20m ago', unread: true },
     { id: 3, title: '⚡ VidLink Pro 4K & AutoEmbed Hindi Active', time: '1h ago', unread: false },
   ];
+
+  const primaryTabs = [
+    { id: 'home', label: 'Home', icon: Flame },
+    { id: 'movies', label: 'Movie', icon: Film },
+    { id: 'tv', label: 'Series', icon: Tv },
+    { id: 'albums', label: 'Originals', icon: Disc },
+    { id: 'livetv', label: 'Live TV', icon: Radio, isLive: true },
+  ];
+
+  const secondaryTabs = [
+    { id: 'dualaudio', label: 'Dual Audio', icon: Sparkles, badge: '🇮🇳 DUAL' },
+    { id: 'anime', label: 'Anime Universe', icon: Sparkles, badge: '4K' },
+    { id: 'discover', label: 'Discover Radar', icon: Compass },
+    { id: 'watchlist', label: `My Watchlist (${watchlist.length})`, icon: Bookmark },
+  ];
+
+  const getActiveTabLabel = () => {
+    const allTabs = [...primaryTabs, ...secondaryTabs];
+    const found = allTabs.find((t) => t.id === activeTab);
+    return found ? found.label : 'Menu';
+  };
+
+  const isSecondaryActive = secondaryTabs.some((t) => t.id === activeTab);
 
   return (
     <header
@@ -173,47 +202,233 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Center: Flix.id Floating Capsule Navigation */}
+        {/* Center: Flix.id Morphing Collapsible Capsule Navigation */}
         <div style={{ display: 'none' }} className="desktop-capsule-nav">
           <style>{`
             @media (min-width: 960px) {
               .desktop-capsule-nav { display: block !important; }
             }
           `}</style>
-          <div className="flix-capsule-bar">
-            <button
-              onClick={() => setActiveTab('movies')}
-              className={`flix-capsule-item ${activeTab === 'movies' ? 'active' : ''}`}
-            >
-              <span>Movie</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('tv')}
-              className={`flix-capsule-item ${activeTab === 'tv' ? 'active' : ''}`}
-            >
-              <span>Series</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('albums')}
-              className={`flix-capsule-item ${activeTab === 'albums' ? 'active' : ''}`}
-            >
-              <span>Originals</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('livetv')}
-              className={`flix-capsule-item ${activeTab === 'livetv' ? 'active' : ''}`}
-            >
-              <span>Live TV</span>
-            </button>
-            <button
-              onClick={onOpenSearch}
-              className="flix-capsule-item"
-              style={{ padding: '0.45rem 0.65rem' }}
-              title="Search"
-            >
-              <Search size={15} />
-            </button>
-          </div>
+          
+          {isCapsuleCollapsed ? (
+            /* Collapsed Dynamic Island Pill */
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => setCollapsedDropdownOpen((prev) => !prev)}
+                className="flix-collapsed-island"
+                title="Click to open menu or expand"
+              >
+                <Layers size={16} color={isDayMode ? '#2563eb' : 'var(--accent)'} />
+                <span style={{ fontSize: '0.84rem', fontWeight: 800 }}>
+                  {getActiveTabLabel()}
+                </span>
+                <ChevronDown size={14} style={{ opacity: 0.7 }} />
+                
+                {/* Expand Pill Action */}
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsCapsuleCollapsed(false);
+                    setCollapsedDropdownOpen(false);
+                  }}
+                  style={{
+                    marginLeft: '0.25rem',
+                    padding: '2px 6px',
+                    borderRadius: '999px',
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    fontSize: '0.65rem',
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '2px',
+                  }}
+                  title="Expand Navigation Dock"
+                >
+                  <Maximize2 size={10} />
+                  <span>Expand</span>
+                </div>
+              </button>
+
+              {/* Collapsed Menu Popover */}
+              {collapsedDropdownOpen && (
+                <div className="flix-dropdown-panel" style={{ width: '220px', left: '50%', transform: 'translateX(-50%)' }}>
+                  <div style={{ padding: '0.35rem 0.55rem', fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                    Quick Navigation
+                  </div>
+                  {[...primaryTabs, ...secondaryTabs].map((item) => {
+                    const Icon = item.icon;
+                    const isActive = activeTab === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setActiveTab(item.id);
+                          setCollapsedDropdownOpen(false);
+                        }}
+                        style={{
+                          width: '100%',
+                          textAlign: 'left',
+                          padding: '0.55rem 0.75rem',
+                          borderRadius: '10px',
+                          background: isActive ? 'var(--accent)' : 'transparent',
+                          color: isActive ? 'var(--accent-text)' : 'var(--text-primary)',
+                          border: 'none',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          fontSize: '0.82rem',
+                          fontWeight: isActive ? 800 : 600,
+                          marginBottom: '2px',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                          <Icon size={15} />
+                          <span>{item.label}</span>
+                        </div>
+                        {isActive && <Check size={14} />}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Expanded Full Capsule Bar */
+            <div className="flix-capsule-bar">
+              {primaryTabs.map((tab) => {
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`flix-capsule-item ${isActive ? 'active' : ''}`}
+                  >
+                    <span>{tab.label}</span>
+                    {tab.isLive && (
+                      <span
+                        style={{
+                          width: '6px',
+                          height: '6px',
+                          borderRadius: '50%',
+                          background: '#ef4444',
+                          boxShadow: '0 0 6px #ef4444',
+                        }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+
+              {/* Expandable More Menu Button */}
+              <div style={{ position: 'relative' }}>
+                <button
+                  onClick={() => setMoreMenuOpen((prev) => !prev)}
+                  className={`flix-capsule-item ${isSecondaryActive ? 'active' : ''}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.3rem',
+                    paddingRight: '0.75rem',
+                  }}
+                  title="More Categories & Watchlist"
+                >
+                  <span>More</span>
+                  <ChevronDown size={13} style={{ transform: moreMenuOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
+                </button>
+
+                {/* More Dropdown Menu */}
+                {moreMenuOpen && (
+                  <div className="flix-dropdown-panel" style={{ width: '230px', right: 0 }}>
+                    <div style={{ padding: '0.35rem 0.55rem', fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                      Additional Hubs
+                    </div>
+                    {secondaryTabs.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = activeTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            setActiveTab(item.id);
+                            setMoreMenuOpen(false);
+                          }}
+                          style={{
+                            width: '100%',
+                            textAlign: 'left',
+                            padding: '0.55rem 0.75rem',
+                            borderRadius: '10px',
+                            background: isActive ? 'var(--accent)' : 'transparent',
+                            color: isActive ? 'var(--accent-text)' : 'var(--text-primary)',
+                            border: 'none',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            fontSize: '0.82rem',
+                            fontWeight: isActive ? 800 : 600,
+                            marginBottom: '2px',
+                            transition: 'all 0.15s ease',
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                            <Icon size={15} />
+                            <span>{item.label}</span>
+                          </div>
+                          {item.badge && (
+                            <span
+                              style={{
+                                fontSize: '0.62rem',
+                                padding: '1px 5px',
+                                borderRadius: '4px',
+                                background: 'rgba(255, 255, 255, 0.15)',
+                                fontWeight: 800,
+                              }}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Quick Search Capsule Button */}
+              <button
+                onClick={onOpenSearch}
+                className="flix-capsule-item"
+                style={{ padding: '0.42rem 0.65rem' }}
+                title="Search (Ctrl + K)"
+              >
+                <Search size={15} />
+              </button>
+
+              {/* Collapse to Island Toggle Button */}
+              <button
+                onClick={() => setIsCapsuleCollapsed(true)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'rgba(255, 255, 255, 0.5)',
+                  cursor: 'pointer',
+                  padding: '0.35rem 0.45rem',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#ffffff')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.5)')}
+                title="Collapse to Compact Island Mode"
+              >
+                <Minimize2 size={13} />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Right: Day/Night Switch + Notifications + Profile Avatar Pill */}
@@ -261,6 +476,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setNotificationsOpen(!notificationsOpen);
                 setThemeDropdownOpen(false);
                 setProfileMenuOpen(false);
+                setMoreMenuOpen(false);
               }}
               style={{
                 background: isDayMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.08)',
@@ -359,6 +575,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setProfileMenuOpen(!profileMenuOpen);
                 setNotificationsOpen(false);
                 setThemeDropdownOpen(false);
+                setMoreMenuOpen(false);
               }}
               style={{
                 display: 'flex',
@@ -479,6 +696,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setThemeDropdownOpen(!themeDropdownOpen);
                 setNotificationsOpen(false);
                 setProfileMenuOpen(false);
+                setMoreMenuOpen(false);
               }}
               style={{
                 background: isDayMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.08)',

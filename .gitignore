@@ -20,3 +20,9 @@ dist-ssr
 *.sw?
 node_nodes_*.txt
 
+# Environment variables
+.env
+.env.*
+.env.local
+
+
