@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Compass, Bookmark, Search, Bot, Smartphone } from 'lucide-react';
+import { Home, Bookmark, Bot, Radio, Film } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface MobileBottomNavProps {
@@ -14,18 +14,16 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   activeTab, 
   setActiveTab, 
   onOpenSearch,
-  onOpenApkModal,
   onOpenAiModal
 }) => {
   const { watchlist, isDayMode } = useTheme();
 
   const items = [
     { id: 'home', label: 'Home', icon: Home },
-    { id: 'discover', label: 'Discover', icon: Compass },
-    { id: 'ai', label: 'Ask AI', icon: Bot, isAi: true, badgeText: 'AI' },
-    { id: 'search', label: 'Search', icon: Search, isAction: true },
+    { id: 'movies', label: 'Movies', icon: Film },
+    { id: 'ai', label: 'Ask AI', icon: Bot, isAi: true, isHero: true },
+    { id: 'livetv', label: 'Live TV', icon: Radio, isLive: true },
     { id: 'watchlist', label: 'Watchlist', icon: Bookmark, badge: watchlist.length },
-    { id: 'install', label: 'Install', icon: Smartphone, isInstall: true },
   ];
 
   return (
@@ -54,15 +52,48 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
       {items.map((item) => {
         const Icon = item.icon;
         const isActive = activeTab === item.id;
+
+        if (item.isHero) {
+          // Elevated Center AI Connoisseur Action Button
+          return (
+            <button
+              key={item.id}
+              onClick={() => {
+                if (onOpenAiModal) onOpenAiModal();
+              }}
+              style={{
+                background: isDayMode 
+                  ? 'linear-gradient(135deg, #2563eb 0%, #38bdf8 100%)' 
+                  : 'linear-gradient(135deg, var(--accent, #95FF50) 0%, #00f0ff 50%, #a855f7 100%)',
+                border: isDayMode ? '2px solid #ffffff' : '2px solid rgba(255, 255, 255, 0.4)',
+                borderRadius: '999px',
+                padding: '0.42rem 0.85rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                color: isDayMode ? '#ffffff' : '#05080b',
+                cursor: 'pointer',
+                boxShadow: isDayMode 
+                  ? '0 6px 18px rgba(37, 99, 235, 0.35)' 
+                  : '0 0 20px var(--accent-glow, rgba(149, 255, 80, 0.6)), 0 4px 14px rgba(0, 0, 0, 0.5)',
+                transform: 'translateY(-6px)',
+                transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                touchAction: 'manipulation',
+              }}
+            >
+              <Bot size={17} color={isDayMode ? '#ffffff' : '#05080b'} />
+              <span style={{ fontSize: '0.74rem', fontWeight: 900, letterSpacing: '0.02em' }}>
+                Ask AI
+              </span>
+            </button>
+          );
+        }
+
         return (
           <button
             key={item.id}
             onClick={() => {
-              if (item.isInstall && onOpenApkModal) {
-                onOpenApkModal();
-              } else if (item.isAi && onOpenAiModal) {
-                onOpenAiModal();
-              } else if (item.isAction && onOpenSearch) {
+              if (onOpenSearch && item.id === 'search') {
                 onOpenSearch();
               } else {
                 setActiveTab(item.id);
@@ -75,19 +106,15 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              gap: '0.2rem',
-              color: item.isAi 
+              gap: '0.18rem',
+              color: isActive 
                 ? (isDayMode ? '#2563eb' : 'var(--accent)') 
-                : item.isInstall 
-                ? 'var(--accent)' 
-                : isActive 
-                ? 'var(--accent)' 
-                : 'var(--text-secondary)',
-              fontSize: '0.72rem',
-              fontWeight: isActive || item.isInstall || item.isAi ? 800 : 500,
+                : (isDayMode ? '#64748b' : 'var(--text-secondary)'),
+              fontSize: '0.7rem',
+              fontWeight: isActive ? 800 : 500,
               cursor: 'pointer',
               position: 'relative',
-              padding: '0.3rem 0.4rem',
+              padding: '0.25rem 0.45rem',
               transition: 'all 0.2s ease',
               touchAction: 'manipulation',
             }}
@@ -96,27 +123,38 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               <Icon 
                 size={20} 
                 color={
-                  item.isAi 
+                  isActive 
                     ? (isDayMode ? '#2563eb' : 'var(--accent)') 
-                    : item.isInstall 
-                    ? 'var(--accent)' 
-                    : isActive 
-                    ? 'var(--accent)' 
-                    : 'var(--text-secondary)'
+                    : (isDayMode ? '#64748b' : 'var(--text-secondary)')
                 } 
               />
+              {item.isLive && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '-2px',
+                    right: '-4px',
+                    width: '7px',
+                    height: '7px',
+                    borderRadius: '50%',
+                    background: '#ef4444',
+                    boxShadow: '0 0 8px #ef4444',
+                    animation: 'pulse 1.2s infinite',
+                  }}
+                />
+              )}
               {item.badge !== undefined && item.badge > 0 && (
                 <span
                   style={{
                     position: 'absolute',
                     top: '-4px',
                     right: '-8px',
-                    background: 'var(--accent)',
-                    color: 'var(--accent-text)',
-                    fontSize: '0.6rem',
+                    background: isDayMode ? '#2563eb' : 'var(--accent)',
+                    color: isDayMode ? '#ffffff' : 'var(--accent-text)',
+                    fontSize: '0.58rem',
                     fontWeight: 900,
-                    width: '16px',
-                    height: '16px',
+                    width: '15px',
+                    height: '15px',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
@@ -124,41 +162,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                   }}
                 >
                   {item.badge}
-                </span>
-              )}
-              {item.badgeText && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: '-5px',
-                    right: '-8px',
-                    background: isDayMode ? '#2563eb' : 'var(--accent)',
-                    color: isDayMode ? '#ffffff' : 'var(--accent-text)',
-                    fontSize: '0.52rem',
-                    fontWeight: 900,
-                    padding: '1px 3px',
-                    borderRadius: '3px',
-                    boxShadow: isDayMode ? 'none' : '0 0 6px var(--accent)',
-                  }}
-                >
-                  {item.badgeText}
-                </span>
-              )}
-              {item.isInstall && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: '-5px',
-                    right: '-10px',
-                    background: 'var(--accent)',
-                    color: 'var(--accent-text)',
-                    fontSize: '0.52rem',
-                    fontWeight: 900,
-                    padding: '1px 3px',
-                    borderRadius: '3px',
-                  }}
-                >
-                  PWA
                 </span>
               )}
             </div>

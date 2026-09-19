@@ -1201,3 +1201,97 @@ body {
   filter: blur(8px) !important;
   pointer-events: none !important;
 }
+
+/* ================= PREMIER ULTRA-PREMIUM MOBILE UI OPTIMIZATIONS ================= */
+@media (max-width: 768px) {
+  /* Sleek Compact Navbar on Mobile */
+  header {
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+  }
+
+  /* Compact Theme Toggle on Small Screens */
+  .theme-btn-text {
+    display: none !important;
+  }
+
+  .nav-theme-toggle-btn {
+    padding: 0.42rem 0.5rem !important;
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    justify-content: center !important;
+  }
+
+  /* Hero Banner Mobile Ergonomics */
+  .hero-banner-root {
+    min-height: clamp(520px, 80vh, 640px) !important;
+    padding: 4.8rem 1rem 1.75rem !important;
+  }
+
+  .hero-badge-hide-mobile {
+    display: none !important;
+  }
+
+  .hero-cast-row,
+  .hero-genres-row {
+    display: none !important;
+  }
+
+  .hero-tagline-row {
+    font-size: 0.76rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .hero-title-text {
+    font-size: clamp(1.8rem, 7.5vw, 2.5rem) !important;
+    margin-bottom: 0.45rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .hero-overview-text {
+    -webkit-line-clamp: 2 !important;
+    font-size: 0.82rem !important;
+    margin-bottom: 0.9rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .hero-actions-row {
+    gap: 0.45rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .hero-play-main-btn {
+    flex: 1 1 auto !important;
+    justify-content: center !important;
+    padding: 0.68rem 1.25rem !important;
+  }
+
+  .hero-trailer-btn {
+    padding: 0.68rem 0.95rem !important;
+  }
+
+  .hero-secondary-btn {
+    display: none !important;
+  }
+
+  /* Mobile Bottom Nav Visibility */
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+
+  /* Mobile Install Banner Ergonomics */
+  .mobile-install-banner {
+    bottom: 74px !important;
+    left: 8px !important;
+    right: 8px !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 12px !important;
+  }
+
+  /* Padding at bottom of main content */
+  main {
+    padding-bottom: 6rem !important;
+  }
+}
+

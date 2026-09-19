@@ -18,11 +18,23 @@ export const MobileInstallBanner: React.FC<MobileInstallBannerProps> = ({ onOpen
     // Check if dismissed previously in this session
     const dismissed = sessionStorage.getItem('premier_install_banner_dismissed');
     if (!dismissed) {
-      // Show after 1.5 seconds delay on mobile
+      const handleScroll = () => {
+        if (window.scrollY > 400) {
+          setIsVisible(true);
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll, { passive: true });
+
+      // Fallback timer (after 8s)
       const timer = setTimeout(() => {
         setIsVisible(true);
-      }, 1500);
-      return () => clearTimeout(timer);
+      }, 8000);
+
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+        clearTimeout(timer);
+      };
     }
   }, []);
 

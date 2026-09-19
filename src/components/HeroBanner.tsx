@@ -144,6 +144,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      className="hero-banner-root"
       style={{
         position: 'relative',
         width: '100%',
@@ -230,7 +231,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
         {/* Main Movie Presentation Area */}
         <div style={{ maxWidth: '820px', width: '100%' }}>
           {/* Top Badges Row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.85rem', flexWrap: 'wrap' }}>
+          <div className="hero-badges-row" style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.65rem', flexWrap: 'wrap' }}>
             {current.platformBadge && (
               <AnimatedBadge variant="accent" icon={<Sparkles size={13} />}>
                 {current.platformBadge} EXCLUSIVE
@@ -248,9 +249,9 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
               style={{
                 background: 'rgba(0, 0, 0, 0.7)',
                 backdropFilter: 'blur(12px)',
-                padding: '0.3rem 0.7rem',
+                padding: '0.25rem 0.6rem',
                 borderRadius: '8px',
-                fontSize: '0.8rem',
+                fontSize: '0.78rem',
                 fontWeight: 800,
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -259,20 +260,21 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
                 border: '1px solid rgba(251, 191, 36, 0.4)',
               }}
             >
-              <Star size={14} fill="#fbbf24" color="#fbbf24" />
+              <Star size={13} fill="#fbbf24" color="#fbbf24" />
               <span>{current.rating.toFixed(1)}</span>
-              <span style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 500, fontSize: '0.72rem' }}>IMDb</span>
+              <span style={{ color: 'rgba(255,255,255,0.4)', fontWeight: 500, fontSize: '0.7rem' }}>IMDb</span>
             </span>
 
             {/* Rotten Tomatoes Score (if present) */}
             {current.rottenTomatoesScore && (
               <span
+                className="hero-badge-hide-mobile"
                 style={{
                   background: 'rgba(239, 68, 68, 0.18)',
                   backdropFilter: 'blur(12px)',
-                  padding: '0.3rem 0.65rem',
+                  padding: '0.25rem 0.55rem',
                   borderRadius: '8px',
-                  fontSize: '0.78rem',
+                  fontSize: '0.76rem',
                   fontWeight: 800,
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -289,25 +291,26 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
             <span
               style={{
                 background: 'rgba(56, 189, 248, 0.15)',
-                padding: '0.25rem 0.6rem',
+                padding: '0.22rem 0.55rem',
                 borderRadius: '6px',
-                fontSize: '0.74rem',
+                fontSize: '0.72rem',
                 fontWeight: 800,
                 color: '#38bdf8',
                 border: '1px solid rgba(56, 189, 248, 0.4)',
                 letterSpacing: '0.04em',
               }}
             >
-              4K UHD • HDR10+ • ATMOS
+              4K UHD • ATMOS
             </span>
 
             {current.ageRating && (
               <span
+                className="hero-badge-hide-mobile"
                 style={{
                   background: 'rgba(255, 255, 255, 0.08)',
-                  padding: '0.25rem 0.5rem',
+                  padding: '0.22rem 0.45rem',
                   borderRadius: '4px',
-                  fontSize: '0.72rem',
+                  fontSize: '0.7rem',
                   fontWeight: 700,
                   color: 'var(--text-secondary)',
                   border: '1px solid rgba(255, 255, 255, 0.15)',
@@ -317,16 +320,16 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
               </span>
             )}
 
-            <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
               {current.releaseYear}
             </span>
             {current.duration && (
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
                 • {current.duration}
               </span>
             )}
             {current.totalSeasons && (
-              <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+              <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
                 • {current.totalSeasons} {current.totalSeasons > 1 ? 'Seasons' : 'Season'}
               </span>
             )}
@@ -335,31 +338,33 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           {/* Tagline */}
           {current.tagline && (
             <div
+              className="hero-tagline-row"
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.4rem',
-                fontSize: '0.88rem',
+                fontSize: '0.84rem',
                 fontWeight: 700,
                 color: accentColor,
-                marginBottom: '0.5rem',
+                marginBottom: '0.35rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
               }}
             >
-              <Flame size={15} />
+              <Flame size={14} />
               <span>{current.tagline}</span>
             </div>
           )}
 
           {/* Main Title */}
           <h1
+            className="hero-title-text"
             style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'clamp(1.75rem, 5.5vw, 4.2rem)',
               fontWeight: 900,
               lineHeight: 1.08,
-              marginBottom: '0.75rem',
+              marginBottom: '0.65rem',
               letterSpacing: '-0.02em',
               textShadow: '0 4px 30px rgba(0,0,0,0.95)',
               color: '#ffffff',
@@ -370,11 +375,12 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
 
           {/* Overview Description */}
           <p
+            className="hero-overview-text"
             style={{
               fontSize: 'clamp(0.85rem, 1.15vw, 1.05rem)',
               color: 'rgba(243, 244, 246, 0.88)',
               lineHeight: 1.55,
-              marginBottom: '1rem',
+              marginBottom: '0.85rem',
               maxWidth: '680px',
               display: '-webkit-box',
               WebkitLineClamp: 3,
@@ -388,7 +394,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
 
           {/* Cast pills */}
           {current.cast && current.cast.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.85rem', flexWrap: 'wrap' }}>
+            <div className="hero-cast-row" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
               <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
                 Starring:
               </span>
@@ -413,7 +419,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           )}
 
           {/* Genres Pills */}
-          <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+          <div className="hero-genres-row" style={{ display: 'flex', gap: '0.35rem', marginBottom: '1.15rem', flexWrap: 'wrap' }}>
             {current.genres.map((g) => (
               <span
                 key={g}
@@ -434,47 +440,48 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           </div>
 
           {/* Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+          <div className="hero-actions-row" style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', flexWrap: 'wrap' }}>
             <ShimmerButton
               onClick={() => onPlay(current)}
-              style={{ fontSize: '0.95rem', padding: '0.75rem 1.8rem', fontWeight: 800 }}
+              className="hero-play-main-btn"
+              style={{ fontSize: '0.92rem', padding: '0.7rem 1.6rem', fontWeight: 800 }}
             >
-              <Play size={18} fill="currentColor" />
+              <Play size={17} fill="currentColor" />
               <span>Watch Stream (4K)</span>
             </ShimmerButton>
 
             {current.trailerUrl && (
               <button
                 onClick={() => setTrailerModalOpen(true)}
-                className="btn-secondary"
+                className="btn-secondary hero-trailer-btn"
                 style={{
-                  fontSize: '0.85rem',
-                  padding: '0.75rem 1.15rem',
+                  fontSize: '0.84rem',
+                  padding: '0.7rem 1.1rem',
                   background: 'rgba(255, 255, 255, 0.12)',
                   borderColor: 'rgba(255, 255, 255, 0.25)',
                 }}
               >
-                <Film size={16} color={accentColor} />
+                <Film size={15} color={accentColor} />
                 <span>Trailer</span>
               </button>
             )}
 
             <button
               onClick={toggleWatchlist}
-              className="btn-secondary"
-              style={{ fontSize: '0.85rem', padding: '0.75rem 1.1rem' }}
+              className="btn-secondary hero-secondary-btn"
+              style={{ fontSize: '0.84rem', padding: '0.7rem 1rem' }}
             >
-              {inWatchlist ? <Check size={16} color="var(--accent)" /> : <Plus size={16} />}
+              {inWatchlist ? <Check size={15} color="var(--accent)" /> : <Plus size={15} />}
               <span>{inWatchlist ? 'Saved' : 'Watchlist'}</span>
             </button>
 
             <button
               onClick={() => onShowDetails(current)}
-              className="btn-secondary"
-              style={{ fontSize: '0.85rem', padding: '0.75rem 1rem' }}
+              className="btn-secondary hero-secondary-btn"
+              style={{ fontSize: '0.84rem', padding: '0.7rem 0.9rem' }}
               title="More Information"
             >
-              <Info size={16} />
+              <Info size={15} />
               <span>Details</span>
             </button>
           </div>

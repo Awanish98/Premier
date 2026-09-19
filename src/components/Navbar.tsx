@@ -387,12 +387,36 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Right: Day/Night Switch + AI Assistant + Notifications + Profile Avatar Pill */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
           
-          {/* Ask AI Smart Assistant Button */}
+          {/* Mobile Search Quick Trigger */}
+          <button
+            onClick={onOpenSearch}
+            className="mobile-quick-search-btn"
+            style={{
+              background: isDayMode ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.08)',
+              border: isDayMode ? '1px solid rgba(15, 23, 42, 0.12)' : '1px solid rgba(255, 255, 255, 0.15)',
+              color: isDayMode ? '#0f172a' : '#ffffff',
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: isDayMode ? '0 2px 8px rgba(15, 23, 42, 0.06)' : 'none',
+              transition: 'all 0.2s ease',
+            }}
+            title="Search Movies, Shows, Anime (Ctrl+K)"
+          >
+            <Search size={16} />
+          </button>
+
+          {/* Ask AI Smart Assistant Button (Desktop Only) */}
           {onOpenAiModal && (
             <button
               onClick={onOpenAiModal}
+              className="desktop-only-ai-btn"
               style={{
                 background: isDayMode 
                   ? 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)' 
@@ -402,7 +426,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 padding: '0.42rem 0.85rem',
                 borderRadius: '999px',
                 cursor: 'pointer',
-                display: 'flex',
+                display: 'none',
                 alignItems: 'center',
                 gap: '0.45rem',
                 fontSize: '0.8rem',
@@ -414,6 +438,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
               title="Open CineBot AI Assistant (Ctrl + J)"
             >
+              <style>{`
+                @media (min-width: 768px) {
+                  .desktop-only-ai-btn { display: flex !important; }
+                  .mobile-quick-search-btn { display: none !important; }
+                }
+              `}</style>
               <Bot size={15} />
               <span>Ask AI</span>
               <span
@@ -434,16 +464,17 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Day / Night Mode 1-Click Instant Switch */}
           <button
             onClick={toggleDayNight}
+            className="nav-theme-toggle-btn"
             style={{
               background: isDayMode ? '#ffffff' : 'rgba(255, 255, 255, 0.08)',
               border: isDayMode ? '1px solid rgba(15, 23, 42, 0.12)' : '1px solid rgba(255, 255, 255, 0.15)',
               color: isDayMode ? '#0f172a' : '#ffffff',
-              padding: '0.42rem 0.8rem',
+              padding: '0.42rem 0.75rem',
               borderRadius: '999px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.45rem',
+              gap: '0.4rem',
               fontSize: '0.8rem',
               fontWeight: 800,
               boxShadow: isDayMode ? '0 4px 14px rgba(15, 23, 42, 0.08)' : '0 2px 10px rgba(0, 0, 0, 0.4)',
@@ -456,12 +487,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             {isDayMode ? (
               <>
                 <Sun size={15} color="#f59e0b" fill="#f59e0b" />
-                <span>Day</span>
+                <span className="theme-btn-text">Day</span>
               </>
             ) : (
               <>
                 <Moon size={15} color="#38bdf8" fill="#38bdf8" />
-                <span>Night</span>
+                <span className="theme-btn-text">Night</span>
               </>
             )}
           </button>
