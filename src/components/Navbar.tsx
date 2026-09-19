@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import type { ThemeMode } from '../types';
+import { AnimatedLogo } from './AnimatedLogo';
 
 interface NavbarProps {
   activeTab: string;
@@ -76,8 +77,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   }, [onOpenSearch, onOpenAiModal]);
 
   const themes: { id: ThemeMode; name: string; color: string; tag: string }[] = [
-    { id: 'day', name: 'Flix Daylight', color: '#d5dfe9', tag: 'Frosted Silk' },
-    { id: 'night', name: 'Flix Obsidian', color: '#06070a', tag: 'Deep Cinema' },
+    { id: 'day', name: 'Premier Daylight', color: '#d5dfe9', tag: 'Frosted Silk' },
+    { id: 'night', name: 'Premier Obsidian', color: '#06070a', tag: 'Deep Cinema' },
     { id: 'cinejoy', name: 'Premier Emerald', color: '#95FF50', tag: 'Electric Lime' },
     { id: 'prime', name: 'Prime Video', color: '#00a8e1', tag: 'Navy / Cyan' },
     { id: 'netflix', name: 'Netflix Red', color: '#e50914', tag: 'Dark / Red' },
@@ -147,65 +148,13 @@ export const Navbar: React.FC<NavbarProps> = ({
           gap: '1rem'
         }}
       >
-        {/* Left: Brand Logo (Flix.id style) */}
+        {/* Left: Brand Logo (PREMIER Animated Logo) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <div 
+          <AnimatedLogo 
+            size="sm"
             onClick={() => setActiveTab('home')}
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.65rem', 
-              cursor: 'pointer',
-              userSelect: 'none'
-            }}
-          >
-            <div 
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '10px',
-                background: isDayMode
-                  ? 'linear-gradient(135deg, #0f172a 0%, #334155 100%)'
-                  : 'linear-gradient(135deg, var(--accent) 0%, #0d121c 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: isDayMode ? '0 4px 14px rgba(15, 23, 42, 0.2)' : '0 0 20px var(--accent-glow)',
-                transition: 'transform 0.2s ease',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.06)')}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-            >
-              <Film size={19} color={isDayMode ? '#ffffff' : (theme === 'cinejoy' ? '#05080b' : '#ffffff')} />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '2px' }}>
-              <span 
-                style={{ 
-                  fontSize: '1.45rem', 
-                  fontWeight: 900, 
-                  letterSpacing: '-0.03em', 
-                  color: isDayMode ? '#0f172a' : '#ffffff',
-                }}
-              >
-                Flix<span style={{ color: isDayMode ? '#2563eb' : 'var(--accent)' }}>.id</span>
-              </span>
-              <span 
-                style={{
-                  fontSize: '0.6rem',
-                  fontWeight: 800,
-                  marginLeft: '6px',
-                  padding: '1px 6px',
-                  borderRadius: '4px',
-                  backgroundColor: isDayMode ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.08)',
-                  color: isDayMode ? '#0f172a' : 'var(--accent)',
-                  border: isDayMode ? '1px solid rgba(15, 23, 42, 0.15)' : '1px solid rgba(255, 255, 255, 0.1)',
-                  letterSpacing: '0.06em'
-                }}
-              >
-                PREMIER
-              </span>
-            </div>
-          </div>
+            animated={true}
+          />
         </div>
 
         {/* Center: Flix.id Morphing Collapsible Capsule Navigation */}
@@ -582,7 +531,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-subtle)' }}>
-                  <span style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--text-primary)' }}>Flix Updates</span>
+                  <span style={{ fontSize: '0.84rem', fontWeight: 800, color: 'var(--text-primary)' }}>Premier Updates</span>
                   <span style={{ fontSize: '0.68rem', color: isDayMode ? '#ffffff' : 'var(--accent-text)', fontWeight: 800, background: isDayMode ? '#0f172a' : 'var(--accent)', padding: '1px 6px', borderRadius: '4px' }}>8 New</span>
                 </div>
                 {notifications.map((n) => (

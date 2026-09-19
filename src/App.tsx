@@ -21,6 +21,7 @@ import { MobileInstallBanner } from './components/MobileInstallBanner';
 import { AiAssistantModal } from './components/AiAssistantModal';
 import { AmbientBackground } from './components/AmbientBackground';
 import { Toast } from './components/Toast';
+import { LoadingScreen } from './components/LoadingScreen';
 import { Footer } from './components/Footer';
 import { Marquee } from './components/magicui/Marquee';
 import { BentoGrid } from './components/magicui/BentoGrid';
@@ -93,6 +94,9 @@ export const AppContent: React.FC = () => {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+      {/* Cinematic Splash Loading Screen on initial launch */}
+      <LoadingScreen />
+
       {/* Dynamic Animated Ambient Background Layer */}
       <AmbientBackground />
 

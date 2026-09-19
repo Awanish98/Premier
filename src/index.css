@@ -1101,5 +1101,103 @@ body {
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08) !important;
 }
 
+/* ================= PREMIER CINEMATIC ANIMATED LOGO & LOADING SCREEN ================= */
+@keyframes premierAuraRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
+@keyframes premierHaloPulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(0.92);
+    opacity: 0.45;
+  }
+}
 
+@keyframes premierEmblemPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes premierShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes premierPulseGlow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.9);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.9;
+  }
+}
+
+@keyframes premierProgressShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.premier-animated .premier-emblem-wrap {
+  animation: premierEmblemPulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.premier-animated .premier-halo-pulse {
+  animation: premierHaloPulse 3.5s ease-in-out infinite;
+}
+
+.premier-animated .premier-orbit-ring {
+  animation: premierAuraRotate 14s linear infinite;
+}
+
+.premier-logo-container {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premier-logo-container:hover {
+  transform: scale(1.03);
+}
+
+.premier-logo-container:hover .premier-brand-text {
+  filter: brightness(1.12);
+}
+
+.premier-loading-overlay {
+  will-change: opacity, transform, filter;
+}
+
+.premier-loading-fadeout {
+  opacity: 0 !important;
+  transform: scale(1.04) !important;
+  filter: blur(8px) !important;
+  pointer-events: none !important;
+}

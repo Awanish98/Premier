@@ -189,7 +189,7 @@ export async function chatWithCinemaAi(
   userPrompt: string,
   history: ChatMessage[] = []
 ): Promise<{ reply: string; recommendedItems: MediaItem[] }> {
-  const systemPrompt = `You are CineBot AI, the ultra-smart, witty, and friendly cinema connoisseur of "PREMIER / Flix.id" streaming platform.
+  const systemPrompt = `You are CineBot AI, the ultra-smart, witty, and friendly cinema connoisseur of the PREMIER streaming platform.
 You assist users in discovering the best movies, web series, anime, dual-audio (Hindi+English) blockbusters, and 24/7 Live TV channels.
 You speak naturally in Hindi, Hinglish, or English based on how the user greets or queries you.
 

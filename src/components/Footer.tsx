@@ -1,6 +1,7 @@
 import React from 'react';
-import { Film, Shield, Heart, Smartphone, Download } from 'lucide-react';
+import { Shield, Heart, Smartphone, Download } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { AnimatedLogo } from './AnimatedLogo';
 
 interface FooterProps {
   onOpenApkModal?: () => void;
@@ -29,24 +30,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApkModal }) => {
         >
           {/* Col 1: Brand Info */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem' }}>
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '8px',
-                  background: 'linear-gradient(135deg, var(--accent) 0%, #0d121c 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 0 12px var(--accent-glow)'
-                }}
-              >
-                <Film size={18} color="var(--accent-text)" />
-              </div>
-              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: 'var(--text-primary)' }}>
-                Flix<span style={{ color: 'var(--accent)' }}>.id</span>
-              </span>
+            <div style={{ marginBottom: '1rem' }}>
+              <AnimatedLogo size="sm" animated={true} />
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1rem' }}>
               Next-generation ultra-premium streaming platform with IMAX 4K UHD, Multi-Server playback, and Dual Audio (Hindi + English).
@@ -134,8 +119,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenApkModal }) => {
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               {[
-                { id: 'day', name: '☀️ Flix Daylight (Frosted Slate)' },
-                { id: 'night', name: '🌙 Flix Obsidian (Deep Cinema)' },
+                { id: 'day', name: '☀️ Premier Daylight (Frosted Slate)' },
+                { id: 'night', name: '🌙 Premier Obsidian (Deep Cinema)' },
                 { id: 'cinejoy', name: '⚡ Premier Emerald' },
                 { id: 'prime', name: '🎬 Prime Video Navy' },
                 { id: 'netflix', name: '🔴 Netflix Red' },
