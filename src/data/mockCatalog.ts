@@ -1128,6 +1128,7 @@ export const MASTER_MEDIA_ITEMS: MediaItem[] = [
 ];
 
 export const LIVE_CHANNELS: LiveChannel[] = [
+  // --- Indian & Hindi Channels ---
   {
     id: 'aaj-tak',
     name: 'Aaj Tak HD',
@@ -1138,7 +1139,7 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     language: 'Hindi',
     resolution: '1080p',
     isLive: true,
-    currentProgram: 'Special Report & Breaking News'
+    currentProgram: 'Special Report & 24x7 Breaking News'
   },
   {
     id: 'abp-news',
@@ -1150,7 +1151,7 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     language: 'Hindi',
     resolution: '1080p',
     isLive: true,
-    currentProgram: 'Desh Ka Mood & Top Headlines'
+    currentProgram: 'Desh Ka Mood & Top National Headlines'
   },
   {
     id: 'ndtv-india',
@@ -1162,7 +1163,7 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     language: 'Hindi',
     resolution: '1080p',
     isLive: true,
-    currentProgram: 'Prime Time with Ravish Kumar Archive & Analysis'
+    currentProgram: 'Prime Time News & Ground Reports'
   },
   {
     id: 'india-tv',
@@ -1177,8 +1178,32 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     currentProgram: 'Aap Ki Adalat & Superfast 100'
   },
   {
+    id: 'zee-news',
+    name: 'Zee News HD',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Zee_News_logo.svg/300px-Zee_News_logo.svg.png',
+    streamUrl: 'https://zeenews.akamaized.net/hls/live/2034079/zeenews/master.m3u8',
+    category: 'Hindi / India',
+    country: 'India',
+    language: 'Hindi',
+    resolution: '1080p',
+    isLive: true,
+    currentProgram: 'DNA Analysis & National Bulletins'
+  },
+  {
+    id: 'news18-india',
+    name: 'News18 India',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/News18_India_logo.svg/300px-News18_India_logo.svg.png',
+    streamUrl: 'https://nw18live.akamaized.net/hls/live/2013898/news18india/master.m3u8',
+    category: 'Hindi / India',
+    country: 'India',
+    language: 'Hindi',
+    resolution: '1080p',
+    isLive: true,
+    currentProgram: 'Sau Baat Ki Ek Baat & Debate'
+  },
+  {
     id: 'dd-sports',
-    name: 'DD Sports HD (Live Cricket & Games)',
+    name: 'DD Sports HD (Live Games & Cricket)',
     logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/DD_Sports_logo.svg/300px-DD_Sports_logo.svg.png',
     streamUrl: 'https://d2q8p4pe5spbak.cloudfront.net/bpk-tv/DDSports/default/index.m3u8',
     category: 'Sports',
@@ -1201,6 +1226,32 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     currentProgram: 'National Entertainment & Cultural Heritage'
   },
   {
+    id: 'wion-news',
+    name: 'WION News HD (India Global)',
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/WION_Logo.svg/300px-WION_Logo.svg.png',
+    streamUrl: 'https://wion.akamaized.net/hls/live/2034080/wion/master.m3u8',
+    category: 'News',
+    country: 'India',
+    language: 'English',
+    resolution: '1080p',
+    isLive: true,
+    currentProgram: 'Gravitas & World Order Analysis'
+  },
+
+  // --- Sports & Action Streams (Including Gist Sources) ---
+  {
+    id: 'skate-phantom-4k',
+    name: 'Skate Phantom Flex 4K Ultra Action',
+    logo: 'https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?w=100&auto=format&fit=crop',
+    streamUrl: 'http://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8',
+    category: 'Sports',
+    country: 'Global',
+    language: 'English',
+    resolution: '4K UHD',
+    isLive: true,
+    currentProgram: 'Phantom High-Speed 1000 FPS Skate Action'
+  },
+  {
     id: 'red-bull-tv',
     name: 'Red Bull TV Extreme Sports',
     logo: 'https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=100&auto=format&fit=crop',
@@ -1208,13 +1259,115 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     category: 'Sports',
     country: 'Austria',
     language: 'English',
-    resolution: '1080p',
+    resolution: '1080p 60fps',
     isLive: true,
-    currentProgram: 'Extreme Action & Motorsport Championship'
+    currentProgram: 'Extreme Action, Cliff Diving & F1 Motorsport'
   },
   {
+    id: 'wowza-live-action',
+    name: 'Wowza Sports & Action Live',
+    logo: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=100&auto=format&fit=crop',
+    streamUrl: 'http://playertest.longtailvideo.com/adaptive/wowzaid3/playlist.m3u8',
+    category: 'Sports',
+    country: 'USA',
+    language: 'English',
+    resolution: '1080p',
+    isLive: true,
+    currentProgram: 'Adaptive Sports Showcase & World Highlights'
+  },
+
+  // --- Movies, Showcase & Cinema Streams (Including Gist Sources) ---
+  {
+    id: 'apple-bipbop-4k',
+    name: 'Apple BipBop 16:9 Multi-Bitrate Cinema',
+    logo: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=100&auto=format&fit=crop',
+    streamUrl: 'https://devimages.apple.com.edgekey.net/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8',
+    category: 'Movies',
+    country: 'USA',
+    language: 'Multi-Audio',
+    resolution: '1080p HDR',
+    isLive: true,
+    currentProgram: 'Apple Master Quality OTT Calibration Stream'
+  },
+  {
+    id: 'sintel-open-cinema',
+    name: 'Sintel 4K Open Cinema Live',
+    logo: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=100&auto=format&fit=crop',
+    streamUrl: 'http://walterebert.com/playground/video/hls/sintel-trailer.m3u8',
+    category: 'Movies',
+    country: 'Netherlands',
+    language: 'English',
+    resolution: '4K Cinema',
+    isLive: true,
+    currentProgram: 'Sintel 4K Fantasy Epic Cinema Theatre'
+  },
+  {
+    id: 'jw-cinema-showcase',
+    name: 'JW Cinema Spotlight Showcase',
+    logo: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=100&auto=format&fit=crop',
+    streamUrl: 'http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8',
+    category: 'Movies',
+    country: 'USA',
+    language: 'English',
+    resolution: '1080p',
+    isLive: true,
+    currentProgram: 'Blockbuster Highlights & Film Fest Showcase'
+  },
+  {
+    id: 'big-buck-bunny-4k',
+    name: 'Big Buck Bunny 4K Cinema Animation',
+    logo: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=100&auto=format&fit=crop',
+    streamUrl: 'https://test-streams.mux.dev/test_001/stream.m3u8',
+    category: 'Movies',
+    country: 'Global',
+    language: 'Surround Sound',
+    resolution: '4K Ultra',
+    isLive: true,
+    currentProgram: 'Blender Foundation 4K Classic Cinema'
+  },
+  {
+    id: 'mux-retro-cinema',
+    name: 'Mux Retro Cinema 24/7',
+    logo: 'https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=100&auto=format&fit=crop',
+    streamUrl: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+    category: 'Movies',
+    country: 'USA',
+    language: 'English',
+    resolution: '1080p',
+    isLive: true,
+    currentProgram: 'Classic Vintage Cinema & Film Noir Sagas'
+  },
+  {
+    id: 'rbs-global-feed',
+    name: 'RBS Global Broadcast Network',
+    logo: 'https://images.unsplash.com/photo-1586899028174-e7098604235b?w=100&auto=format&fit=crop',
+    streamUrl: 'http://cdn-fms.rbs.com.br/vod/hls_sample1_manifest.m3u8',
+    category: 'Entertainment',
+    country: 'Brazil',
+    language: 'Portuguese / Multi',
+    resolution: '720p',
+    isLive: true,
+    currentProgram: 'South American Entertainment & Live Variety'
+  },
+
+  // --- Space & Science Channels ---
+  {
+    id: 'nasa-tv',
+    name: 'NASA TV Space Station Live 4K',
+    logo: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=100&auto=format&fit=crop',
+    streamUrl: 'https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8',
+    category: 'Entertainment',
+    country: 'USA',
+    language: 'English',
+    resolution: '1080p 60fps',
+    isLive: true,
+    currentProgram: 'ISS Earth Orbit Views & Deep Space Exploration'
+  },
+
+  // --- Global International News ---
+  {
     id: 'france-24',
-    name: 'France 24 English',
+    name: 'France 24 English HD',
     logo: 'https://images.unsplash.com/photo-1526470608268-f674ce90ebd4?w=100&auto=format&fit=crop',
     streamUrl: 'https://static.france24.com/live/F24_EN_LO_HLS/live_tv.m3u8',
     category: 'News',
@@ -1222,11 +1375,11 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     language: 'English',
     resolution: '720p',
     isLive: true,
-    currentProgram: 'International News 24/7'
+    currentProgram: 'International News 24/7 & Paris Direct'
   },
   {
     id: 'dw-news',
-    name: 'DW News 24/7',
+    name: 'DW News 24/7 HD',
     logo: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=100&auto=format&fit=crop',
     streamUrl: 'https://dwstream724-lh.akamaihd.net/i/dwtv_en@175908/master.m3u8',
     category: 'News',
@@ -1234,11 +1387,11 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     language: 'English',
     resolution: '1080p',
     isLive: true,
-    currentProgram: 'Journal & European Insights'
+    currentProgram: 'Journal & European Geopolitical Insights'
   },
   {
     id: 'al-jazeera',
-    name: 'Al Jazeera English',
+    name: 'Al Jazeera English HD',
     logo: 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=100&auto=format&fit=crop',
     streamUrl: 'https://live-hls-web-aje.getaj.net/AJE/03.m3u8',
     category: 'News',
@@ -1246,19 +1399,31 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     language: 'English',
     resolution: '720p',
     isLive: true,
-    currentProgram: 'Middle East & World News'
+    currentProgram: 'Middle East & World News Documentaries'
   },
   {
-    id: 'nasa-tv',
-    name: 'NASA TV Space Stream',
-    logo: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=100&auto=format&fit=crop',
-    streamUrl: 'https://ntv1.akamaized.net/hls/live/2014075/NASA-NTV1-HLS/master.m3u8',
-    category: 'Entertainment',
-    country: 'USA',
+    id: 'sky-news-intl',
+    name: 'Sky News International',
+    logo: 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=100&auto=format&fit=crop',
+    streamUrl: 'https://skynewsfeed.akamaized.net/hls/live/2004245/skynews/master.m3u8',
+    category: 'News',
+    country: 'UK',
     language: 'English',
     resolution: '1080p',
     isLive: true,
-    currentProgram: 'ISS Live Feed & Space Discoveries'
+    currentProgram: 'Global Headlines & British Affairs'
+  },
+  {
+    id: 'euronews-world',
+    name: 'Euronews World HD',
+    logo: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=100&auto=format&fit=crop',
+    streamUrl: 'https://euronews-euronews-world-1-au.samsung.wurl.tv/playlist.m3u8',
+    category: 'News',
+    country: 'Europe',
+    language: 'English',
+    resolution: '1080p',
+    isLive: true,
+    currentProgram: 'No Comment & European Daily Digest'
   }
 ];
 

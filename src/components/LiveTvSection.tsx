@@ -6,7 +6,8 @@ import {
   Volume2, 
   VolumeX, 
   Maximize, 
-  RefreshCw
+  RefreshCw,
+  Zap
 } from 'lucide-react';
 import { LIVE_CHANNELS } from '../data/mockCatalog';
 import type { LiveChannel } from '../types';
@@ -28,9 +29,21 @@ export const LiveTvSection: React.FC = () => {
     'All',
     'Hindi / India',
     'Sports',
+    'Movies',
     'News',
     'Entertainment',
     'Global'
+  ];
+
+  // Quick preset shortcuts for instant 1-click loading
+  const quickPresets = [
+    { name: 'Aaj Tak HD', id: 'aaj-tak' },
+    { name: 'DD Sports', id: 'dd-sports' },
+    { name: 'Red Bull Extreme', id: 'red-bull-tv' },
+    { name: 'Skate 4K Flex', id: 'skate-phantom-4k' },
+    { name: 'Apple 4K HDR', id: 'apple-bipbop-4k' },
+    { name: 'Sintel 4K Cinema', id: 'sintel-open-cinema' },
+    { name: 'NASA 4K Live', id: 'nasa-tv' },
   ];
 
   // Initialize and load HLS stream whenever activeChannel changes
@@ -134,9 +147,9 @@ export const LiveTvSection: React.FC = () => {
       category: 'Global',
       country: 'Custom',
       language: 'Live',
-      resolution: 'HD',
+      resolution: '4K / HD',
       isLive: true,
-      currentProgram: 'Custom User Playlist Feed'
+      currentProgram: 'Custom User Stream Feed'
     };
 
     setChannels([customChannel, ...channels]);
@@ -156,63 +169,98 @@ export const LiveTvSection: React.FC = () => {
   });
 
   return (
-    <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '6rem 1.5rem 3rem' }}>
-      {/* Header Title */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+    <div style={{ maxWidth: '1480px', margin: '0 auto', padding: '6rem 1.25rem 3rem' }}>
+      {/* Header Title & Quick Stats */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.3rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.3rem' }}>
             <span className="live-pulse" />
-            <h1 style={{ fontSize: '1.8rem', fontWeight: 800, fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>
-              Live TV Channels (iptv-org)
+            <h1 style={{ fontSize: '1.9rem', fontWeight: 900, fontFamily: 'var(--font-display)', color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+              Live TV Channels & 4K HLS Streams
             </h1>
             <span
               style={{
-                fontSize: '0.75rem',
-                fontWeight: 800,
+                fontSize: '0.72rem',
+                fontWeight: 900,
                 padding: '2px 8px',
                 borderRadius: '6px',
                 background: 'rgba(239, 68, 68, 0.2)',
                 color: '#ef4444',
                 border: '1px solid rgba(239, 68, 68, 0.4)',
+                letterSpacing: '0.05em'
               }}
             >
               24/7 LIVE
             </span>
           </div>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-            Duniya bhar ke popular free-to-air aur live streams ko direct HLS player me dekhein.
+          <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
+            Duniya bhar ke popular free-to-air Indian Hindi news, global sports, cinema streams aur 4K IPTV feeds direct HLS player me dekhein.
           </p>
         </div>
 
         {/* Custom M3U8 Link Input Bar */}
-        <form onSubmit={handleCustomStreamLoad} style={{ display: 'flex', gap: '0.5rem', maxWidth: '420px', width: '100%' }}>
+        <form onSubmit={handleCustomStreamLoad} style={{ display: 'flex', gap: '0.5rem', maxWidth: '440px', width: '100%' }}>
           <input
             type="url"
-            placeholder="Paste any .m3u8 stream link..."
+            placeholder="Paste any custom .m3u8 stream link..."
             value={customM3uUrl}
             onChange={(e) => setCustomM3uUrl(e.target.value)}
             style={{
               flex: 1,
               background: 'rgba(255, 255, 255, 0.06)',
               border: '1px solid var(--border-subtle)',
-              borderRadius: '8px',
-              padding: '0.5rem 0.85rem',
+              borderRadius: '10px',
+              padding: '0.55rem 0.9rem',
               color: '#fff',
-              fontSize: '0.85rem',
+              fontSize: '0.84rem',
               outline: 'none',
             }}
           />
-          <button type="submit" className="btn-accent" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
-            Stream
+          <button type="submit" className="btn-accent" style={{ padding: '0.55rem 1.1rem', fontSize: '0.84rem', fontWeight: 800 }}>
+            Play M3U8
           </button>
         </form>
+      </div>
+
+      {/* Quick Stream Preset Selector Pills */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', overflowX: 'auto', paddingBottom: '0.85rem', marginBottom: '1.25rem', scrollbarWidth: 'none' }}>
+        <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <Zap size={14} /> Quick Feeds:
+        </span>
+        {quickPresets.map((preset) => {
+          const target = channels.find((c) => c.id === preset.id);
+          const isActive = activeChannel.id === preset.id;
+          return (
+            <button
+              key={preset.id}
+              onClick={() => {
+                if (target) setActiveChannel(target);
+              }}
+              style={{
+                background: isActive ? 'var(--accent)' : 'rgba(255, 255, 255, 0.05)',
+                color: isActive ? '#05080b' : 'rgba(255, 255, 255, 0.8)',
+                border: '1px solid',
+                borderColor: isActive ? 'var(--accent)' : 'var(--border-subtle)',
+                borderRadius: '999px',
+                padding: '0.3rem 0.75rem',
+                fontSize: '0.75rem',
+                fontWeight: isActive ? 800 : 600,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {preset.name}
+            </button>
+          );
+        })}
       </div>
 
       {/* Main Grid: Left is Video Player, Right is Channel Selector */}
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }} className="livetv-grid">
         <style>{`
           @media (min-width: 1024px) {
-            .livetv-grid { grid-template-columns: 1.7fr 1fr !important; }
+            .livetv-grid { grid-template-columns: 1.75fr 1fr !important; }
           }
         `}</style>
 
@@ -220,10 +268,10 @@ export const LiveTvSection: React.FC = () => {
         <div
           style={{
             background: 'var(--bg-card)',
-            borderRadius: '16px',
+            borderRadius: '20px',
             border: '1px solid var(--border-subtle)',
             overflow: 'hidden',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -252,17 +300,18 @@ export const LiveTvSection: React.FC = () => {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'rgba(0,0,0,0.6)',
+                  background: 'rgba(0,0,0,0.65)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   color: 'var(--accent)',
-                  gap: '0.5rem',
-                  fontSize: '0.9rem',
+                  gap: '0.6rem',
+                  fontSize: '0.92rem',
+                  fontWeight: 700,
                 }}
               >
                 <RefreshCw size={24} className="animate-spin" />
-                <span>Loading Stream...</span>
+                <span>Buffering Live Stream...</span>
               </div>
             )}
 
@@ -271,21 +320,21 @@ export const LiveTvSection: React.FC = () => {
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'rgba(0,0,0,0.85)',
+                  background: 'rgba(0,0,0,0.88)',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
                   padding: '1.5rem',
                   textAlign: 'center',
-                  gap: '0.75rem',
+                  gap: '0.85rem',
                 }}
               >
-                <div style={{ color: '#ef4444', fontSize: '1.1rem', fontWeight: 700 }}>
+                <div style={{ color: '#ef4444', fontSize: '1.15rem', fontWeight: 800 }}>
                   ⚠️ Live Feed Temporarily Offline or Geo-Restricted
                 </div>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '400px' }}>
-                  Yeh channel is samay response nahi de raha hai ya VPN required hai. Kripya channel list se dusra channel select karein.
+                <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', maxWidth: '420px', lineHeight: 1.5 }}>
+                  Yeh channel is samay response nahi de raha hai ya VPN required hai. Kripya list se dusra stream (jaise Aaj Tak, DD Sports ya Sintel 4K) select karein.
                 </p>
                 <button
                   onClick={() => {
@@ -293,9 +342,9 @@ export const LiveTvSection: React.FC = () => {
                     if (next) setActiveChannel(next);
                   }}
                   className="btn-accent"
-                  style={{ fontSize: '0.85rem', padding: '0.45rem 1rem' }}
+                  style={{ fontSize: '0.85rem', padding: '0.5rem 1.2rem', fontWeight: 800 }}
                 >
-                  Switch Next Channel
+                  Switch Next Stream
                 </button>
               </div>
             )}
@@ -309,18 +358,39 @@ export const LiveTvSection: React.FC = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.6rem',
-                background: 'rgba(0,0,0,0.65)',
-                backdropFilter: 'blur(8px)',
-                padding: '0.35rem 0.75rem',
+                background: 'rgba(0,0,0,0.7)',
+                backdropFilter: 'blur(10px)',
+                padding: '0.35rem 0.8rem',
                 borderRadius: '8px',
                 border: '1px solid rgba(255,255,255,0.15)',
               }}
             >
               <span className="live-pulse" />
-              <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#fff' }}>LIVE</span>
-              <span style={{ color: 'var(--text-muted)' }}>|</span>
-              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0' }}>{activeChannel.name}</span>
+              <span style={{ fontSize: '0.78rem', fontWeight: 900, color: '#fff' }}>LIVE</span>
+              <span style={{ color: 'rgba(255,255,255,0.3)' }}>|</span>
+              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#e2e8f0' }}>{activeChannel.name}</span>
             </div>
+
+            {/* Resolution Badge */}
+            {activeChannel.resolution && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  right: '1rem',
+                  background: 'rgba(0,0,0,0.7)',
+                  backdropFilter: 'blur(10px)',
+                  padding: '0.3rem 0.65rem',
+                  borderRadius: '6px',
+                  border: '1px solid var(--accent)',
+                  color: 'var(--accent)',
+                  fontSize: '0.72rem',
+                  fontWeight: 900,
+                }}
+              >
+                {activeChannel.resolution}
+              </div>
+            )}
           </div>
 
           {/* Player Controls & Current Program Info */}
@@ -341,10 +411,10 @@ export const LiveTvSection: React.FC = () => {
                 src={activeChannel.logo}
                 alt={activeChannel.name}
                 style={{
-                  width: '42px',
-                  height: '42px',
+                  width: '44px',
+                  height: '44px',
                   objectFit: 'contain',
-                  borderRadius: '8px',
+                  borderRadius: '10px',
                   background: 'rgba(255,255,255,0.06)',
                   padding: '4px',
                 }}
@@ -353,7 +423,7 @@ export const LiveTvSection: React.FC = () => {
                 }}
               />
               <div>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                   {activeChannel.name}
                 </h3>
                 <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
@@ -369,7 +439,7 @@ export const LiveTvSection: React.FC = () => {
                   background: 'rgba(255,255,255,0.08)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: '8px',
-                  padding: '0.5rem',
+                  padding: '0.55rem',
                   color: '#fff',
                   cursor: 'pointer',
                 }}
@@ -384,7 +454,7 @@ export const LiveTvSection: React.FC = () => {
                   background: 'rgba(255,255,255,0.08)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: '8px',
-                  padding: '0.5rem',
+                  padding: '0.55rem',
                   color: '#fff',
                   cursor: 'pointer',
                 }}
@@ -400,12 +470,12 @@ export const LiveTvSection: React.FC = () => {
         <div
           style={{
             background: 'var(--bg-card)',
-            borderRadius: '16px',
+            borderRadius: '20px',
             border: '1px solid var(--border-subtle)',
             padding: '1.25rem',
             display: 'flex',
             flexDirection: 'column',
-            maxHeight: '560px',
+            maxHeight: '580px',
           }}
         >
           {/* Category Tabs */}
@@ -416,12 +486,12 @@ export const LiveTvSection: React.FC = () => {
                 onClick={() => setSelectedCategory(cat)}
                 style={{
                   background: selectedCategory === cat ? 'var(--accent)' : 'rgba(255,255,255,0.05)',
-                  color: selectedCategory === cat ? '#fff' : 'var(--text-secondary)',
+                  color: selectedCategory === cat ? '#05080b' : 'var(--text-secondary)',
                   border: 'none',
-                  borderRadius: '6px',
-                  padding: '0.35rem 0.75rem',
-                  fontSize: '0.8rem',
-                  fontWeight: selectedCategory === cat ? 700 : 500,
+                  borderRadius: '8px',
+                  padding: '0.38rem 0.8rem',
+                  fontSize: '0.78rem',
+                  fontWeight: selectedCategory === cat ? 800 : 600,
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
                 }}
@@ -436,24 +506,24 @@ export const LiveTvSection: React.FC = () => {
             <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} />
             <input
               type="text"
-              placeholder="Search channels..."
+              placeholder="Search 24+ live channels..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
                 width: '100%',
                 background: 'rgba(255,255,255,0.04)',
                 border: '1px solid var(--border-subtle)',
-                borderRadius: '8px',
-                padding: '0.5rem 0.85rem 0.5rem 2.2rem',
+                borderRadius: '10px',
+                padding: '0.55rem 0.85rem 0.55rem 2.2rem',
                 color: '#fff',
-                fontSize: '0.85rem',
+                fontSize: '0.84rem',
                 outline: 'none',
               }}
             />
           </div>
 
           {/* Channel Cards Scroll List */}
-          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingRight: '0.25rem' }}>
+          <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', paddingRight: '0.25rem' }} className="custom-scrollbar">
             {filteredChannels.length === 0 ? (
               <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                 No channels found matching query.
@@ -470,7 +540,7 @@ export const LiveTvSection: React.FC = () => {
                       alignItems: 'center',
                       gap: '0.75rem',
                       padding: '0.65rem 0.85rem',
-                      borderRadius: '10px',
+                      borderRadius: '12px',
                       background: isSelected ? 'var(--badge-bg)' : 'rgba(255,255,255,0.02)',
                       border: isSelected ? '1px solid var(--accent)' : '1px solid transparent',
                       cursor: 'pointer',
@@ -487,12 +557,13 @@ export const LiveTvSection: React.FC = () => {
                       src={c.logo}
                       alt={c.name}
                       style={{
-                        width: '32px',
-                        height: '32px',
+                        width: '34px',
+                        height: '34px',
                         objectFit: 'contain',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         background: '#111',
                         padding: '2px',
+                        flexShrink: 0,
                       }}
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1594909122845-11baa439b7bf?w=100&auto=format&fit=crop';
@@ -502,8 +573,8 @@ export const LiveTvSection: React.FC = () => {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                         <h4
                           style={{
-                            fontSize: '0.85rem',
-                            fontWeight: isSelected ? 700 : 600,
+                            fontSize: '0.84rem',
+                            fontWeight: isSelected ? 800 : 600,
                             color: isSelected ? 'var(--accent)' : 'var(--text-primary)',
                             whiteSpace: 'nowrap',
                             overflow: 'hidden',
@@ -514,7 +585,7 @@ export const LiveTvSection: React.FC = () => {
                         </h4>
                         {c.isLive && <span className="live-pulse" style={{ width: '6px', height: '6px' }} />}
                       </div>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                         {c.category} • {c.country}
                       </span>
                     </div>
