@@ -404,10 +404,11 @@ export const DiscoverSection: React.FC<DiscoverSectionProps> = ({
       ) : (
         <>
           <div
+            className="responsive-media-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))',
-              gap: '1.5rem',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+              gap: '1.25rem',
             }}
           >
             {displayedItems.map((item) => (
@@ -415,6 +416,7 @@ export const DiscoverSection: React.FC<DiscoverSectionProps> = ({
                 <ContentCard
                   item={item}
                   aspectRatio="poster"
+                  isGrid={true}
                   onPlay={onPlayMedia}
                   onShowDetails={onShowDetails}
                 />

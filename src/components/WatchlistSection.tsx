@@ -333,15 +333,16 @@ export const WatchlistSection: React.FC<WatchlistSectionProps> = ({ onPlay, onSh
           </div>
         ) : (
           <div
+            className="responsive-media-grid"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))',
-              gap: '1.5rem',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+              gap: '1.25rem',
             }}
           >
             {filteredItems.map((item) => (
               <div key={item.id} style={{ position: 'relative' }}>
-                <ContentCard item={item} onPlay={onPlay} onShowDetails={onShowDetails} />
+                <ContentCard item={item} isGrid={true} onPlay={onPlay} onShowDetails={onShowDetails} />
                 <button
                   onClick={(e) => {
                     e.stopPropagation();

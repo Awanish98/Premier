@@ -147,11 +147,11 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
       style={{
         position: 'relative',
         width: '100%',
-        minHeight: '86vh',
+        minHeight: 'clamp(560px, 85vh, 880px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: '6.5rem 1.5rem 3rem',
+        padding: 'clamp(4.5rem, 8vh, 6.5rem) clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 3vh, 2.5rem)',
         overflow: 'hidden',
         background: '#040508',
       }}
@@ -356,10 +356,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           <h1
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.2rem, 5vw, 4.2rem)',
+              fontSize: 'clamp(1.75rem, 5.5vw, 4.2rem)',
               fontWeight: 900,
-              lineHeight: 1.06,
-              marginBottom: '0.9rem',
+              lineHeight: 1.08,
+              marginBottom: '0.75rem',
               letterSpacing: '-0.02em',
               textShadow: '0 4px 30px rgba(0,0,0,0.95)',
               color: '#ffffff',
@@ -371,10 +371,10 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           {/* Overview Description */}
           <p
             style={{
-              fontSize: 'clamp(0.92rem, 1.15vw, 1.05rem)',
+              fontSize: 'clamp(0.85rem, 1.15vw, 1.05rem)',
               color: 'rgba(243, 244, 246, 0.88)',
-              lineHeight: 1.6,
-              marginBottom: '1.15rem',
+              lineHeight: 1.55,
+              marginBottom: '1rem',
               maxWidth: '680px',
               display: '-webkit-box',
               WebkitLineClamp: 3,
@@ -388,20 +388,20 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
 
           {/* Cast pills */}
           {current.cast && current.cast.length > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-              <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.85rem', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
                 Starring:
               </span>
-              {current.cast.slice(0, 4).map((actor, idx) => (
+              {current.cast.slice(0, 3).map((actor, idx) => (
                 <span
                   key={idx}
                   style={{
-                    fontSize: '0.75rem',
+                    fontSize: '0.72rem',
                     fontWeight: 600,
                     color: 'rgba(255,255,255,0.85)',
                     background: 'rgba(255,255,255,0.06)',
                     backdropFilter: 'blur(8px)',
-                    padding: '0.2rem 0.55rem',
+                    padding: '0.18rem 0.5rem',
                     borderRadius: '6px',
                     border: '1px solid rgba(255,255,255,0.1)',
                   }}
@@ -413,17 +413,17 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           )}
 
           {/* Genres Pills */}
-          <div style={{ display: 'flex', gap: '0.45rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
             {current.genres.map((g) => (
               <span
                 key={g}
                 style={{
-                  fontSize: '0.76rem',
+                  fontSize: '0.72rem',
                   fontWeight: 600,
                   color: 'var(--text-primary)',
                   background: 'rgba(255,255,255,0.08)',
                   backdropFilter: 'blur(10px)',
-                  padding: '0.25rem 0.75rem',
+                  padding: '0.2rem 0.65rem',
                   borderRadius: '999px',
                   border: '1px solid rgba(255, 255, 255, 0.15)',
                 }}
@@ -434,12 +434,12 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
           </div>
 
           {/* Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
             <ShimmerButton
               onClick={() => onPlay(current)}
-              style={{ fontSize: '1rem', padding: '0.8rem 2.2rem', fontWeight: 800 }}
+              style={{ fontSize: '0.95rem', padding: '0.75rem 1.8rem', fontWeight: 800 }}
             >
-              <Play size={20} fill="currentColor" />
+              <Play size={18} fill="currentColor" />
               <span>Watch Stream (4K)</span>
             </ShimmerButton>
 
@@ -448,33 +448,33 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({ items, onPlay, onShowDet
                 onClick={() => setTrailerModalOpen(true)}
                 className="btn-secondary"
                 style={{
-                  fontSize: '0.92rem',
-                  padding: '0.8rem 1.4rem',
+                  fontSize: '0.85rem',
+                  padding: '0.75rem 1.15rem',
                   background: 'rgba(255, 255, 255, 0.12)',
                   borderColor: 'rgba(255, 255, 255, 0.25)',
                 }}
               >
-                <Film size={18} color={accentColor} />
-                <span>Watch Trailer</span>
+                <Film size={16} color={accentColor} />
+                <span>Trailer</span>
               </button>
             )}
 
             <button
               onClick={toggleWatchlist}
               className="btn-secondary"
-              style={{ fontSize: '0.92rem', padding: '0.8rem 1.25rem' }}
+              style={{ fontSize: '0.85rem', padding: '0.75rem 1.1rem' }}
             >
-              {inWatchlist ? <Check size={18} color="var(--accent)" /> : <Plus size={18} />}
-              <span>{inWatchlist ? 'In Watchlist' : 'Add to List'}</span>
+              {inWatchlist ? <Check size={16} color="var(--accent)" /> : <Plus size={16} />}
+              <span>{inWatchlist ? 'Saved' : 'Watchlist'}</span>
             </button>
 
             <button
               onClick={() => onShowDetails(current)}
               className="btn-secondary"
-              style={{ fontSize: '0.92rem', padding: '0.8rem 1.15rem' }}
+              style={{ fontSize: '0.85rem', padding: '0.75rem 1rem' }}
               title="More Information"
             >
-              <Info size={18} />
+              <Info size={16} />
               <span>Details</span>
             </button>
           </div>

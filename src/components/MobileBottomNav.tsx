@@ -1,14 +1,20 @@
 import React from 'react';
-import { Home, Compass, Bookmark, User, Search } from 'lucide-react';
+import { Home, Compass, Bookmark, Search, Smartphone } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface MobileBottomNavProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   onOpenSearch?: () => void;
+  onOpenApkModal?: () => void;
 }
 
-export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, setActiveTab, onOpenSearch }) => {
+export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ 
+  activeTab, 
+  setActiveTab, 
+  onOpenSearch,
+  onOpenApkModal 
+}) => {
   const { watchlist } = useTheme();
 
   const items = [
@@ -16,11 +22,11 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
     { id: 'discover', label: 'Discover', icon: Compass },
     { id: 'search', label: 'Search', icon: Search, isAction: true },
     { id: 'watchlist', label: 'Watchlist', icon: Bookmark, badge: watchlist.length },
-    { id: 'profile', label: 'Profile', icon: User },
+    { id: 'apk', label: 'Get APK', icon: Smartphone, isApk: true },
   ];
 
   return (
-    <div
+    <nav
       className="mobile-bottom-nav"
       style={{
         position: 'fixed',
@@ -32,10 +38,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         borderTop: '1px solid var(--border-subtle)',
-        padding: '0.45rem 0.75rem 0.65rem',
+        paddingTop: '0.45rem',
+        paddingBottom: 'max(0.65rem, env(safe-area-inset-bottom, 0.65rem))',
+        paddingLeft: '0.5rem',
+        paddingRight: '0.5rem',
         display: 'none',
         justifyContent: 'space-around',
         alignItems: 'center',
+        boxShadow: '0 -10px 25px rgba(0, 0, 0, 0.7)',
       }}
     >
       {items.map((item) => {
@@ -45,7 +55,9 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
           <button
             key={item.id}
             onClick={() => {
-              if (item.isAction && onOpenSearch) {
+              if (item.isApk && onOpenApkModal) {
+                onOpenApkModal();
+              } else if (item.isAction && onOpenSearch) {
                 onOpenSearch();
               } else {
                 setActiveTab(item.id);
@@ -59,17 +71,21 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
               flexDirection: 'column',
               alignItems: 'center',
               gap: '0.2rem',
-              color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+              color: item.isApk ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--text-secondary)',
               fontSize: '0.72rem',
-              fontWeight: isActive ? 800 : 500,
+              fontWeight: isActive || item.isApk ? 800 : 500,
               cursor: 'pointer',
               position: 'relative',
               padding: '0.3rem 0.5rem',
               transition: 'all 0.2s ease',
+              touchAction: 'manipulation',
             }}
           >
             <div style={{ position: 'relative' }}>
-              <Icon size={20} color={isActive ? 'var(--accent)' : 'var(--text-secondary)'} />
+              <Icon 
+                size={20} 
+                color={item.isApk ? 'var(--accent)' : isActive ? 'var(--accent)' : 'var(--text-secondary)'} 
+              />
               {item.badge !== undefined && item.badge > 0 && (
                 <span
                   style={{
@@ -91,11 +107,28 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
                   {item.badge}
                 </span>
               )}
+              {item.isApk && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '-5px',
+                    right: '-10px',
+                    background: 'var(--accent)',
+                    color: '#000',
+                    fontSize: '0.52rem',
+                    fontWeight: 900,
+                    padding: '1px 3px',
+                    borderRadius: '3px',
+                  }}
+                >
+                  FREE
+                </span>
+              )}
             </div>
             <span>{item.label}</span>
           </button>
         );
       })}
-    </div>
+    </nav>
   );
 };

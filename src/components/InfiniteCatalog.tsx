@@ -131,10 +131,11 @@ export const InfiniteCatalog: React.FC<InfiniteCatalogProps> = ({
 
       {/* Media Grid */}
       <div
+        className="responsive-media-grid"
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))',
-          gap: '1.5rem',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+          gap: '1.25rem',
           minHeight: '400px',
         }}
       >
@@ -143,6 +144,7 @@ export const InfiniteCatalog: React.FC<InfiniteCatalogProps> = ({
             key={`${item.id}-${idx}`}
             item={item}
             aspectRatio="poster"
+            isGrid={true}
             onPlay={onPlayMedia}
             onShowDetails={onShowDetails}
           />

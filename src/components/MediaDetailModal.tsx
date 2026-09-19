@@ -41,13 +41,13 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
         position: 'fixed',
         inset: 0,
         zIndex: 110,
-        background: 'rgba(0, 0, 0, 0.88)',
+        background: 'rgba(0, 0, 0, 0.9)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1.5rem',
+        padding: 'clamp(0.25rem, 2vw, 1.25rem)',
         overflowY: 'auto',
       }}
       className="animate-fade-in"
@@ -58,7 +58,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
         style={{
           width: '100%',
           maxWidth: '880px',
-          maxHeight: '90vh',
+          maxHeight: '94vh',
           background: 'var(--bg-secondary)',
           borderRadius: '20px',
           border: '1px solid var(--border-subtle)',
@@ -74,8 +74,8 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: '1.25rem',
-            right: '1.25rem',
+            top: '1rem',
+            right: '1rem',
             zIndex: 30,
             background: 'rgba(0,0,0,0.6)',
             border: '1px solid rgba(255,255,255,0.2)',
@@ -94,7 +94,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
         </button>
 
         {/* Hero Backdrop Banner Area */}
-        <div style={{ position: 'relative', width: '100%', height: '320px', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100%', height: 'clamp(230px, 32vh, 320px)', overflow: 'hidden' }}>
           <img
             src={item.backdropPath || item.posterPath}
             alt={item.title}
@@ -112,12 +112,12 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
           <div
             style={{
               position: 'absolute',
-              bottom: '1.5rem',
-              left: '1.75rem',
-              right: '1.75rem',
+              bottom: '1rem',
+              left: 'clamp(1rem, 3vw, 1.75rem)',
+              right: 'clamp(1rem, 3vw, 1.75rem)',
               display: 'flex',
               alignItems: 'flex-end',
-              gap: '1.5rem',
+              gap: '1rem',
             }}
           >
             {/* Small Poster thumbnail */}
@@ -125,8 +125,8 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
               src={item.posterPath}
               alt={item.title}
               style={{
-                width: '100px',
-                height: '145px',
+                width: 'clamp(70px, 15vw, 100px)',
+                height: 'clamp(105px, 22vw, 145px)',
                 objectFit: 'cover',
                 borderRadius: '10px',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.8)',
@@ -136,7 +136,7 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
             />
 
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem', flexWrap: 'wrap' }}>
                 {item.platformBadge && (
                   <AnimatedBadge variant="accent">
                     {item.platformBadge}

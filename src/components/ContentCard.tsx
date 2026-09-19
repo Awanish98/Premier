@@ -9,6 +9,7 @@ interface ContentCardProps {
   onPlay: (item: MediaItem) => void;
   onShowDetails?: (item: MediaItem) => void;
   aspectRatio?: 'poster' | 'backdrop';
+  isGrid?: boolean;
 }
 
 export const ContentCard: React.FC<ContentCardProps> = ({
@@ -16,6 +17,7 @@ export const ContentCard: React.FC<ContentCardProps> = ({
   onPlay,
   onShowDetails,
   aspectRatio = 'poster',
+  isGrid = false,
 }) => {
   const { isInWatchlist, addToWatchlist, removeFromWatchlist } = useTheme();
   const inWatchlist = isInWatchlist(item.id);
@@ -39,9 +41,9 @@ export const ContentCard: React.FC<ContentCardProps> = ({
       gradientOpacity={0.2}
       className="media-card-magic"
       style={{
-        flex: isPoster ? '0 0 195px' : '0 0 310px',
-        width: isPoster ? '195px' : '310px',
-        height: isPoster ? '300px' : '185px',
+        flex: isGrid ? 'none' : isPoster ? '0 0 190px' : '0 0 300px',
+        width: isGrid ? '100%' : isPoster ? '190px' : '300px',
+        height: isPoster ? '290px' : '185px',
         position: 'relative',
         borderRadius: '14px',
         cursor: 'pointer',

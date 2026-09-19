@@ -13,7 +13,9 @@ import {
   Disc,
   Compass,
   Bell,
-  User
+  User,
+  Smartphone,
+  Download
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import type { ThemeMode } from '../types';
@@ -22,9 +24,15 @@ interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   onOpenSearch: () => void;
+  onOpenApkModal?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenSearch }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  activeTab, 
+  setActiveTab, 
+  onOpenSearch,
+  onOpenApkModal 
+}) => {
   const { theme, setTheme, watchlist, showToast } = useTheme();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -462,6 +470,45 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenS
             )}
           </div>
 
+          {/* APK / App Install Trigger Button */}
+          {onOpenApkModal && (
+            <button
+              onClick={onOpenApkModal}
+              style={{
+                background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.18) 0%, rgba(13, 21, 39, 0.6) 100%)',
+                color: 'var(--accent)',
+                border: '1px solid var(--accent)',
+                padding: '0.45rem 0.85rem',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                fontSize: '0.82rem',
+                fontWeight: 800,
+                boxShadow: '0 0 14px var(--accent-glow)',
+                transition: 'all 0.2s ease',
+              }}
+              className="apk-desktop-btn"
+              title="Download Android APK & Install App"
+            >
+              <Smartphone size={16} />
+              <span className="apk-btn-text">Get APK</span>
+              <span
+                style={{
+                  fontSize: '0.62rem',
+                  padding: '1px 5px',
+                  borderRadius: '3px',
+                  background: 'var(--accent)',
+                  color: '#05080b',
+                  fontWeight: 900,
+                }}
+              >
+                v2.5
+              </span>
+            </button>
+          )}
+
           {/* Profile Button */}
           <button
             onClick={() => setActiveTab('profile')}
@@ -522,12 +569,58 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab, onOpenS
             background: 'var(--glass-bg)',
             backdropFilter: 'blur(28px)',
             borderBottom: '1px solid var(--border-subtle)',
-            padding: '1rem 1.5rem 1.5rem',
+            padding: '1rem 1.25rem 1.5rem',
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.4rem',
+            gap: '0.5rem',
           }}
         >
+          {/* Featured Mobile APK Install Card */}
+          {onOpenApkModal && (
+            <div
+              onClick={() => {
+                onOpenApkModal();
+                setMobileMenuOpen(false);
+              }}
+              style={{
+                background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.15) 0%, rgba(13, 21, 39, 0.9) 100%)',
+                border: '1px solid var(--accent)',
+                borderRadius: '12px',
+                padding: '0.85rem 1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                cursor: 'pointer',
+                marginBottom: '0.25rem',
+                boxShadow: '0 4px 20px var(--accent-glow)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div
+                  style={{
+                    width: '34px',
+                    height: '34px',
+                    borderRadius: '8px',
+                    background: 'var(--accent)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Smartphone size={18} color="#05080b" />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#fff' }}>Download Android APK</span>
+                    <span style={{ fontSize: '0.62rem', background: 'var(--accent)', color: '#000', fontWeight: 900, padding: '1px 4px', borderRadius: '3px' }}>v2.5</span>
+                  </div>
+                  <p style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>Direct 4K Cinema App Installation</p>
+                </div>
+              </div>
+              <Download size={18} color="var(--accent)" />
+            </div>
+          )}
+
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;

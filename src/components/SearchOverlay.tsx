@@ -60,13 +60,13 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
         position: 'fixed',
         inset: 0,
         zIndex: 120,
-        background: 'rgba(5, 7, 12, 0.92)',
+        background: 'rgba(5, 7, 12, 0.94)',
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '3rem 1.5rem 2rem',
+        padding: 'clamp(1.25rem, 4vh, 3rem) clamp(0.75rem, 3vw, 1.5rem) 2rem',
         overflowY: 'auto',
       }}
       className="animate-fade-in"
@@ -79,30 +79,30 @@ export const SearchOverlay: React.FC<SearchOverlayProps> = ({
           maxWidth: '850px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '1.5rem',
+          gap: '1.25rem',
         }}
       >
         {/* Search Header Bar */}
         <div style={{ position: 'relative', width: '100%' }}>
           <Search
-            size={22}
+            size={20}
             color="var(--accent)"
-            style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)' }}
+            style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }}
           />
           <input
             ref={inputRef}
             type="text"
-            placeholder="Search all Movies, TV Shows, Anime & Live Channels..."
+            placeholder="Search Movies, TV Shows, Anime & Live TV..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             style={{
               width: '100%',
               background: 'rgba(255, 255, 255, 0.08)',
               border: '1px solid var(--accent)',
-              borderRadius: '16px',
-              padding: '1.1rem 3.5rem 1.1rem 3.2rem',
+              borderRadius: '14px',
+              padding: '0.9rem 3.2rem 0.9rem 2.8rem',
               color: '#fff',
-              fontSize: '1.1rem',
+              fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
               outline: 'none',
               boxShadow: '0 0 30px var(--accent-glow)',
             }}

@@ -1,8 +1,12 @@
 import React from 'react';
-import { Film, Shield, Heart } from 'lucide-react';
+import { Film, Shield, Heart, Smartphone, Download } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenApkModal?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenApkModal }) => {
   const { theme, setTheme } = useTheme();
 
   return (
@@ -47,7 +51,7 @@ export const Footer: React.FC = () => {
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.6, marginBottom: '1rem' }}>
               Next-generation ultra-premium streaming platform with IMAX 4K UHD, Multi-Server playback, and Dual Audio (Hindi + English).
             </p>
-            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
               <span style={{ fontSize: '0.7rem', padding: '3px 8px', borderRadius: '4px', background: 'var(--badge-bg)', color: 'var(--accent)', fontWeight: 700 }}>
                 PREMIER Core
               </span>
@@ -58,6 +62,31 @@ export const Footer: React.FC = () => {
                 Dual Audio Engine
               </span>
             </div>
+
+            {/* Direct APK Button in Footer */}
+            {onOpenApkModal && (
+              <button
+                onClick={onOpenApkModal}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(149, 255, 80, 0.15) 0%, rgba(13, 21, 39, 0.8) 100%)',
+                  border: '1px solid var(--accent)',
+                  color: 'var(--accent)',
+                  borderRadius: '8px',
+                  padding: '0.5rem 0.9rem',
+                  fontSize: '0.82rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  boxShadow: '0 0 12px var(--accent-glow)',
+                }}
+              >
+                <Smartphone size={16} />
+                <span>Download Android APK (v2.5)</span>
+                <Download size={14} />
+              </button>
+            )}
           </div>
 
           {/* Col 2: Features & Navigation */}
@@ -105,6 +134,7 @@ export const Footer: React.FC = () => {
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
               {[
+                { id: 'cinejoy', name: 'Premier Emerald' },
                 { id: 'prime', name: 'Prime Video Navy' },
                 { id: 'netflix', name: 'Netflix Red' },
                 { id: 'disney', name: 'Disney+ / Hotstar Cobalt' },
@@ -147,7 +177,7 @@ export const Footer: React.FC = () => {
           }}
         >
           <div>
-            © {new Date().getFullYear()} CineVerse Streaming Hub. Built for pair-programming demonstration.
+            © {new Date().getFullYear()} PREMIER 4K Cinema. All rights reserved.
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
             Powered with <Heart size={14} color="#ef4444" fill="#ef4444" /> for seamless streaming.

@@ -67,13 +67,13 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
         position: 'fixed',
         inset: 0,
         zIndex: 100,
-        background: 'rgba(0, 0, 0, 0.88)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
+        background: 'rgba(0, 0, 0, 0.9)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: isTheater ? '0' : '1.5rem',
+        padding: isTheater ? '0' : 'clamp(0.25rem, 2vw, 1.25rem)',
         overflowY: 'auto',
       }}
       className="animate-fade-in"
@@ -85,7 +85,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
           width: '100%',
           maxWidth: isTheater ? '100vw' : '1200px',
           height: isTheater ? '100vh' : 'auto',
-          maxHeight: isTheater ? '100vh' : '92vh',
+          maxHeight: isTheater ? '100vh' : '96vh',
           background: 'var(--bg-secondary)',
           borderRadius: isTheater ? '0' : '16px',
           border: isTheater ? 'none' : '1px solid var(--border-subtle)',
@@ -101,13 +101,13 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
         {/* Modal Header */}
         <div
           style={{
-            padding: '0.85rem 1.25rem',
+            padding: '0.75rem 1rem',
             background: 'var(--bg-card)',
             borderBottom: '1px solid var(--border-subtle)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '1rem',
+            gap: '0.75rem',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
@@ -207,7 +207,7 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
             background: '#000000',
             aspectRatio: isTheater ? 'auto' : '16/9',
             flex: isTheater ? 1 : 'none',
-            minHeight: isTheater ? '0' : '420px',
+            minHeight: isTheater ? '0' : 'clamp(200px, 35vh, 440px)',
           }}
         >
           <iframe

@@ -1,0 +1,36 @@
+{
+  "name": "PREMIER - 4K Cinema & Dual Audio Streaming",
+  "short_name": "PREMIER",
+  "description": "Ultra-Premium 4K Streaming Hub for Movies, TV Shows, Anime & Dual Audio (Hindi + English).",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#06070a",
+  "theme_color": "#95FF50",
+  "orientation": "any",
+  "categories": ["entertainment", "movies", "video"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Trending Movies",
+      "url": "./#movies",
+      "description": "Watch 4K Blockbusters"
+    },
+    {
+      "name": "Dual Audio",
+      "url": "./#dualaudio",
+      "description": "Hindi Dubbed & English Hits"
+    },
+    {
+      "name": "Live TV Channels",
+      "url": "./#livetv",
+      "description": "24x7 Live IPTV Streaming"
+    }
+  ]
+}

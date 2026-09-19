@@ -14,6 +14,8 @@ import { ProfileSection } from './components/ProfileSection';
 import { WatchlistSection } from './components/WatchlistSection';
 import { SearchOverlay } from './components/SearchOverlay';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { ApkDownloadModal } from './components/ApkDownloadModal';
+import { MobileInstallBanner } from './components/MobileInstallBanner';
 import { AmbientBackground } from './components/AmbientBackground';
 import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
@@ -36,6 +38,7 @@ export const AppContent: React.FC = () => {
   const [activeMedia, setActiveMedia] = useState<MediaItem | null>(null);
   const [detailMedia, setDetailMedia] = useState<MediaItem | null>(null);
   const [searchOpen, setSearchOpen] = useState<boolean>(false);
+  const [apkModalOpen, setApkModalOpen] = useState<boolean>(false);
   const { continueWatching } = useTheme();
 
   // Scroll to top when active tab changes
@@ -75,6 +78,7 @@ export const AppContent: React.FC = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenSearch={() => setSearchOpen(true)}
+        onOpenApkModal={() => setApkModalOpen(true)}
       />
 
       {/* Main Streaming Platform Viewport */}
@@ -487,10 +491,20 @@ export const AppContent: React.FC = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onOpenSearch={() => setSearchOpen(true)}
+        onOpenApkModal={() => setApkModalOpen(true)}
+      />
+
+      {/* Floating Mobile APK Install Banner */}
+      <MobileInstallBanner onOpenApkModal={() => setApkModalOpen(true)} />
+
+      {/* Standalone Android APK & PWA Download Modal */}
+      <ApkDownloadModal
+        isOpen={apkModalOpen}
+        onClose={() => setApkModalOpen(false)}
       />
 
       {/* Global Footer */}
-      <Footer />
+      <Footer onOpenApkModal={() => setApkModalOpen(true)} />
     </div>
   );
 };
