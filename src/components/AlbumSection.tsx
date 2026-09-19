@@ -286,14 +286,14 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
             position: 'fixed',
             inset: 0,
             zIndex: 120,
-            background: 'rgba(0, 0, 0, 0.92)',
-            backdropFilter: 'blur(28px)',
-            WebkitBackdropFilter: 'blur(28px)',
+            background: 'rgba(0, 0, 0, 0.94)',
+            backdropFilter: 'blur(32px)',
+            WebkitBackdropFilter: 'blur(32px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: 'clamp(0.5rem, 2vw, 1.5rem)',
-            overflowY: 'auto',
+            padding: 'clamp(0.5rem, 2.5vh, 1.75rem) clamp(0.5rem, 2vw, 1.25rem)',
+            overflow: 'hidden',
           }}
           className="animate-fade-in"
           onClick={() => setActiveAlbum(null)}
@@ -302,28 +302,36 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
             onClick={(e) => e.stopPropagation()}
             style={{
               width: '100%',
-              maxWidth: '1100px',
-              maxHeight: '94vh',
+              maxWidth: '1150px',
+              height: '92vh',
+              maxHeight: '92vh',
               background: 'var(--bg-secondary)',
               borderRadius: '24px',
               border: '1px solid var(--border-subtle)',
-              boxShadow: '0 25px 70px rgba(0,0,0,0.95), 0 0 50px var(--accent-glow)',
+              boxShadow: '0 30px 90px rgba(0,0,0,0.95), 0 0 50px var(--accent-glow)',
               overflowY: 'auto',
+              overscrollBehavior: 'contain',
+              scrollBehavior: 'smooth',
+              WebkitOverflowScrolling: 'touch',
               position: 'relative',
               display: 'flex',
               flexDirection: 'column',
             }}
+            className="custom-scrollbar"
           >
-            {/* Close Button */}
+            {/* Close Button - Sticky Float */}
             <button
               onClick={() => setActiveAlbum(null)}
               style={{
-                position: 'absolute',
-                top: '1.25rem',
-                right: '1.25rem',
-                zIndex: 40,
-                background: 'rgba(0,0,0,0.7)',
-                border: '1px solid rgba(255,255,255,0.2)',
+                position: 'sticky',
+                top: '1rem',
+                right: '1rem',
+                alignSelf: 'flex-end',
+                marginRight: '1.25rem',
+                marginBottom: '-46px',
+                zIndex: 60,
+                background: 'rgba(6, 7, 10, 0.85)',
+                border: '1px solid rgba(255,255,255,0.25)',
                 color: '#fff',
                 borderRadius: '50%',
                 width: '42px',
@@ -332,11 +340,22 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.8)',
                 transition: 'all 0.2s ease',
               }}
               title="Close Album"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.1)';
+                e.currentTarget.style.borderColor = 'var(--accent)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)';
+              }}
             >
-              <X size={22} />
+              <X size={20} />
             </button>
 
             {/* Album Header Banner */}
@@ -344,11 +363,12 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
               style={{
                 position: 'relative',
                 width: '100%',
-                minHeight: '300px',
-                padding: 'clamp(1.5rem, 4vw, 3rem)',
+                minHeight: '320px',
+                padding: 'clamp(2.5rem, 5vw, 3.5rem) clamp(1.5rem, 4vw, 3rem) 2.5rem',
                 display: 'flex',
                 alignItems: 'flex-end',
                 borderBottom: '1px solid var(--border-subtle)',
+                flexShrink: 0,
               }}
             >
               <img
@@ -466,15 +486,21 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
               </div>
             </div>
 
-            {/* Album Controls: Search, Phase Filters, Sorting, and View Switcher */}
+            {/* Sticky Album Controls: Search, Phase Filters, Sorting, and View Switcher */}
             <div
               style={{
-                padding: '1.25rem 1.75rem',
-                background: 'rgba(0, 0, 0, 0.3)',
+                position: 'sticky',
+                top: 0,
+                zIndex: 40,
+                padding: '1rem 1.75rem',
+                background: 'rgba(13, 18, 28, 0.97)',
+                backdropFilter: 'blur(24px)',
+                WebkitBackdropFilter: 'blur(24px)',
                 borderBottom: '1px solid var(--border-subtle)',
+                boxShadow: '0 8px 30px rgba(0,0,0,0.6)',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '1rem',
+                gap: '0.85rem',
               }}
             >
               {/* Search Bar & View Mode Toggle */}
@@ -488,7 +514,7 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
                 >
                   <Search
                     size={18}
-                    color="var(--text-muted)"
+                    color="var(--accent)"
                     style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }}
                   />
                   <input
@@ -745,7 +771,7 @@ export const AlbumSection: React.FC<AlbumSectionProps> = ({
             </div>
 
             {/* Tracklist / Movie List Display */}
-            <div style={{ padding: '1.75rem', flex: 1, overflowY: 'auto' }}>
+            <div style={{ padding: '1.75rem', flex: 1, overflow: 'visible' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <Layers size={18} color="var(--accent)" />

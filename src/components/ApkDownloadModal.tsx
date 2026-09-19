@@ -125,14 +125,14 @@ Instuctions:
         position: 'fixed',
         inset: 0,
         zIndex: 130,
-        background: 'rgba(3, 4, 7, 0.92)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
+        background: 'rgba(3, 4, 7, 0.94)',
+        backdropFilter: 'blur(28px)',
+        WebkitBackdropFilter: 'blur(28px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1rem',
-        overflowY: 'auto',
+        padding: 'clamp(0.5rem, 2.5vh, 1.5rem) clamp(0.5rem, 2vw, 1.25rem)',
+        overflow: 'hidden',
       }}
       className="animate-fade-in"
       onClick={onClose}
@@ -148,10 +148,14 @@ Instuctions:
           border: '1px solid var(--border-subtle)',
           boxShadow: '0 25px 60px rgba(0, 0, 0, 0.95), 0 0 50px var(--accent-glow)',
           overflowY: 'auto',
+          overscrollBehavior: 'contain',
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
         }}
+        className="custom-scrollbar"
       >
         <BorderBeam size={280} duration={10} colorFrom="var(--accent)" colorTo="#38bdf8" />
 

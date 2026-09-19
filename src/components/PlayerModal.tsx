@@ -67,14 +67,14 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
         position: 'fixed',
         inset: 0,
         zIndex: 100,
-        background: 'rgba(0, 0, 0, 0.9)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        background: 'rgba(0, 0, 0, 0.94)',
+        backdropFilter: 'blur(28px)',
+        WebkitBackdropFilter: 'blur(28px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: isTheater ? '0' : 'clamp(0.25rem, 2vw, 1.25rem)',
-        overflowY: 'auto',
+        overflow: 'hidden',
       }}
       className="animate-fade-in"
       onClick={onClose}
@@ -83,18 +83,22 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
-          maxWidth: isTheater ? '100vw' : '1200px',
+          maxWidth: isTheater ? '100vw' : '1240px',
           height: isTheater ? '100vh' : 'auto',
           maxHeight: isTheater ? '100vh' : '96vh',
           background: 'var(--bg-secondary)',
-          borderRadius: isTheater ? '0' : '16px',
+          borderRadius: isTheater ? '0' : '18px',
           border: isTheater ? 'none' : '1px solid var(--border-subtle)',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px var(--accent-glow)',
+          boxShadow: '0 25px 60px -12px rgba(0, 0, 0, 0.9), 0 0 40px var(--accent-glow)',
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
+          overflowY: 'auto',
+          overscrollBehavior: 'contain',
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
           position: 'relative',
         }}
+        className="custom-scrollbar"
       >
         {!isTheater && <BorderBeam size={300} duration={10} colorFrom="var(--accent)" colorTo="#38bdf8" />}
 
@@ -480,10 +484,14 @@ export const PlayerModal: React.FC<PlayerModalProps> = ({ item, onClose }) => {
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))',
                   gap: '0.5rem',
-                  maxHeight: '140px',
+                  maxHeight: '150px',
                   overflowY: 'auto',
-                  padding: '0.25rem',
+                  overscrollBehavior: 'contain',
+                  scrollBehavior: 'smooth',
+                  WebkitOverflowScrolling: 'touch',
+                  padding: '0.35rem',
                 }}
+                className="custom-scrollbar"
               >
                 {(currentSeasonEpisodes.length > 0
                   ? currentSeasonEpisodes

@@ -41,14 +41,14 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
         position: 'fixed',
         inset: 0,
         zIndex: 110,
-        background: 'rgba(0, 0, 0, 0.9)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
+        background: 'rgba(0, 0, 0, 0.94)',
+        backdropFilter: 'blur(28px)',
+        WebkitBackdropFilter: 'blur(28px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 'clamp(0.25rem, 2vw, 1.25rem)',
-        overflowY: 'auto',
+        padding: 'clamp(0.5rem, 2.5vh, 1.75rem) clamp(0.5rem, 2vw, 1.25rem)',
+        overflow: 'hidden',
       }}
       className="animate-fade-in"
       onClick={onClose}
@@ -57,15 +57,19 @@ export const MediaDetailModal: React.FC<MediaDetailModalProps> = ({ item, onClos
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
-          maxWidth: '880px',
-          maxHeight: '94vh',
+          maxWidth: '900px',
+          maxHeight: '92vh',
           background: 'var(--bg-secondary)',
           borderRadius: '20px',
           border: '1px solid var(--border-subtle)',
-          boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px var(--accent-glow)',
+          boxShadow: '0 30px 80px rgba(0, 0, 0, 0.95), 0 0 40px var(--accent-glow)',
           overflowY: 'auto',
+          overscrollBehavior: 'contain',
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
           position: 'relative',
         }}
+        className="custom-scrollbar"
       >
         <BorderBeam size={260} duration={12} colorFrom="var(--accent)" colorTo="#f59e0b" />
 

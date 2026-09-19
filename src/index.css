@@ -112,10 +112,17 @@
   --header-grad: linear-gradient(180deg, rgba(7, 4, 16, 0.98) 0%, rgba(7, 4, 16, 0) 100%);
 }
 
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(149, 255, 80, 0.35) transparent;
 }
 
 body {
@@ -129,26 +136,61 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
   transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
 }
 
-/* Scrollbar Customization */
+/* Premium Scrollbar Customization */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: rgba(6, 7, 10, 0.5);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.25s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* Custom Scrollbar Utility */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) rgba(0, 0, 0, 0.2);
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hover);
 }
 
 /* Glassmorphic Container */
@@ -262,15 +304,17 @@ body {
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 30px var(--accent-glow);
 }
 
-/* Custom Horizontal Scrolling Container */
+/* Custom Smooth Horizontal Scrolling Row Container */
 .row-scroll-container {
   display: flex;
   gap: 1.15rem;
   overflow-x: auto;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   padding: 0.75rem 0.25rem 1.25rem;
   scrollbar-width: none;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
 }
 
 .row-scroll-container::-webkit-scrollbar {
